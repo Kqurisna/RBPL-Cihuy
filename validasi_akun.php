@@ -25,8 +25,7 @@ if ($data) {
     }
 } else {
 
-    echo "<script>
-    alert('Username atau Password salah');
-    window.location='login.php';
-    </script>";
+    // Jika login gagal / tidak berhasil
+    header("Location: index.php?error=1");
+    exit();
 }

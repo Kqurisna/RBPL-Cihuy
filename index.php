@@ -279,7 +279,16 @@
       <button type="submit" class="btn-login">Masuk</button>
 
     </form>
-
+    <?php
+    if (isset($_GET['error'])) {
+    ?>
+      <br>
+      <p style="color:red; text-align:center; margin-bottom:15px; font-size:14px;">
+        Username atau password salah, mohon masukkan dengan benar
+      </p>
+    <?php
+    }
+    ?>
     <div class="divider">— Atau masuk dengan —</div>
 
   </div>
