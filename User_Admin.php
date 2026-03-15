@@ -253,22 +253,21 @@
 </head>
 
 <body>
-  <!-- HEADER -->
   <div class="header">
     <h2>Beranda</h2>
     <div class="logout-btn">⮕</div>
     <div class="header-circle-big"></div>
     <div class="header-circle-big_2">
-      <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      <a href="index.php">
+        <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      </a>
     </div>
     <div class="header-circle-small"></div>
     <div class="header-circle-small_2"></div>
     <div class="header-circle-small_3"></div>
   </div>
 
-  <!-- CONTENT -->
   <div class="container">
-    <!-- Welcome -->
     <div class="welcome-card">
       <div class="welcome-circle"></div>
       <div class="welcome-circle_2"></div>

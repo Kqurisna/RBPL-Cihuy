@@ -251,7 +251,9 @@
     <div class="logout-btn">⮕</div>
     <div class="header-circle-big"></div>
     <div class="header-circle-big_2">
-      <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      <a href="index.php">
+        <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      </a>
     </div>
     <div class="header-circle-small"></div>
     <div class="header-circle-small_2"></div>
