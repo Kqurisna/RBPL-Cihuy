@@ -10,13 +10,11 @@ WHERE username='$username' AND password='$password'");
 
 $data = mysqli_fetch_assoc($query);
 
-/////// jika akun ditemukan ///////
 if ($data) {
 
     $_SESSION['username'] = $data['username'];
     $_SESSION['role'] = $data['role'];
 
-    /////// CEK ROLE ///////
 
     if ($data['role'] == "admin_gudang") {
         header("Location: User_Admin.php");
@@ -27,7 +25,6 @@ if ($data) {
     }
 } else {
 
-    /////// JIKA LOGIN GAGAL ///////
     echo "<script>
     alert('Username atau Password salah');
     window.location='login.php';
