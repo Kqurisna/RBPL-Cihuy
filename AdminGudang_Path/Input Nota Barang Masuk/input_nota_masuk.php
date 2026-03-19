@@ -460,6 +460,18 @@
         .minus_btn {
             transition: 0.15s;
         }
+
+        .error-input {
+            border: 2px solid red !important;
+        }
+
+        .chip.error {
+            border-color: red;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 
@@ -494,22 +506,22 @@
                 <h3 class="section-title">Informasi Barang Masuk</h3>
 
                 <div class="form-group">
-                    <label>Nomer Nota</label>
-                    <input type="text" name="nomer_nota">
+                    <label>Nomer Nota<span style="color:red">*</span></label>
+                    <input type="text" name="nomer_nota" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Tanggal Nota</label>
-                    <input type="date" name="tanggal_nota">
+                    <label>Tanggal Nota<span style="color:red">*</span></label>
+                    <input type="date" name="tanggal_nota" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Nama Supplier</label>
-                    <input type="text" name="supplier">
+                    <label>Nama Supplier<span style="color:red">*</span></label>
+                    <input type="text" name="supplier" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Jenis Barang</label>
+                    <label>Jenis Barang <span style="color:red">*</span></label>
 
                     <div class="chip-container">
                         <span class="chip">Material Bangunan</span>
@@ -519,6 +531,12 @@
                         <span class="chip">Alat Pertukangan</span>
                         <span class="chip">Kayu & Olahan</span>
                     </div>
+
+                    <input type="hidden" name="jenis_barang" id="jenisBarangInput">
+
+                    <small id="errorJenis" style="color:red; display:none;">
+                        Wajib pilih minimal 1 jenis barang!
+                    </small>
                 </div>
 
                 <div class="btn-group">
@@ -544,12 +562,12 @@
 
                                 <div class="form-group">
                                     <label>Nama Barang ke-1</label>
-                                    <input type="text" name="barang[]">
+                                    <input type="text" name="barang[]" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Jumlah barang ke-1</label>
-                                    <input type="number" name="jumlah[]" class="input-number">
+                                    <input type="number" name="jumlah[]" class="input-number" required>
                                 </div>
                                 <div class="success-line"></div>
 
@@ -576,7 +594,7 @@
 
                     <p class="upload-text">Unggah Foto Nota</p>
                     <p class="upload-subtext">(JPG / PNG, maks. 5 MB)</p>
-                    <input type="file" id="fileInput" name="foto_nota" accept="image/*" hidden>
+                    <input type="file" id="fileInput" name="foto_nota" accept="image/*" hidden required>
                 </div>
 
                 <img id="previewImage"
@@ -660,12 +678,12 @@
         div.innerHTML = `
             <div class="form-group">
                 <label>Nama Barang ke-${count + 1}</label>
-                <input type="text" name="barang[]">
+                <input type="text" name="barang[]" required>
             </div>
 
             <div class="form-group">
                 <label>Jumlah Barang ke-${count + 1}</label>
-                <input type="number" name="jumlah[]" class="input-number">
+                <input type="number" name="jumlah[]" class="input-number" required>
             </div>
         `;
 
@@ -712,6 +730,115 @@
         if (e.target.classList.contains("input-number")) {
             if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
                 e.preventDefault();
+            }
+        }
+    });
+    const inputJenis = document.getElementById("jenisBarangInput");
+    const errorMsg = document.getElementById("errorJenis");
+
+    let selectedItems = [];
+
+    chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+
+            const value = chip.innerText;
+
+            if (selectedItems.includes(value)) {
+                selectedItems = selectedItems.filter(item => item !== value);
+                chip.classList.remove("active");
+            } else {
+                selectedItems.push(value);
+                chip.classList.add("active");
+            }
+
+            inputJenis.value = selectedItems.join(",");
+        });
+    });
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
+        let firstInvalid = null;
+
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                if (!firstInvalid) {
+                    firstInvalid = input;
+                }
+            }
+        });
+
+        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
+            const chipContainer = document.querySelector(".chip-container");
+
+            e.preventDefault();
+
+            chipContainer.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            return;
+        }
+
+        if (firstInvalid) {
+            e.preventDefault();
+
+            firstInvalid.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            firstInvalid.focus();
+        }
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        let firstError = null;
+
+        const inputs = document.querySelectorAll("input[required], textarea[required]");
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+
+                input.classList.add("error-input");
+
+                if (!firstError) {
+                    firstError = input;
+                }
+
+            } else {
+                input.classList.remove("error-input");
+            }
+        });
+
+        if (selectedItems.length === 0) {
+
+            errorMsg.style.display = "block";
+
+            const chipContainer = document.querySelector(".chip-container");
+
+            chips.forEach(c => c.classList.add("error"));
+
+            if (!firstError) {
+                firstError = chipContainer;
+            }
+
+        } else {
+            errorMsg.style.display = "none";
+            chips.forEach(c => c.classList.remove("error"));
+        }
+
+        if (firstError) {
+            e.preventDefault();
+
+            firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
+                firstError.focus();
             }
         }
     });
