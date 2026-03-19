@@ -295,9 +295,11 @@
         </div>
         <div class="menu-title">Input Nota Barang Masuk</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="AdminGudang_Path/Input Nota Barang Masuk/input_nota_masuk.php">
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
 
     <!-- Menu 2 -->

@@ -25,7 +25,6 @@
       position: relative;
     }
 
-    /* background */
     .bg-wrapper {
       position: fixed;
       inset: 0;
@@ -237,7 +236,7 @@
 
     <h2>Selamat Datang</h2>
 
-    <form action="validasi_akun.php" method="POST">
+    <form action="input_data.php" method="GET">
 
       <div class="input-group">
         <label><strong>Username</strong></label>
@@ -295,10 +294,8 @@
 
 
   <script>
-    ///// ambil input password
     const passwordInput = document.getElementById("password");
 
-    ///// ambil icon mata
     const togglePassword = document.getElementById("togglePassword");
 
     togglePassword.addEventListener("click", function() {

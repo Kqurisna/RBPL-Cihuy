@@ -287,9 +287,11 @@
         </div>
         <div class="menu-title">Pengecekkan Barang Fisik</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="Kasir_Path/Pengecekkan Barang FIsik/cek_barang_fisik.php">
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">
