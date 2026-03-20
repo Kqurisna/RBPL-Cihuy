@@ -142,21 +142,6 @@
       color: #4b5563;
       line-height: 1.6;
     }
-
-    @media (max-width: 480px) {
-      .header h2 {
-        font-size: 16px;
-      }
-
-      .back-btn {
-        width: 34px;
-        height: 34px;
-      }
-
-      .success-title {
-        font-size: 20px;
-      }
-    }
   </style>
 </head>
 
