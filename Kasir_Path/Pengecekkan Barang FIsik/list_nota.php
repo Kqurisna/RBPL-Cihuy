@@ -201,7 +201,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota ORDER BY id_nota DESC");
                 </a>
             </div>
 
-            <h2>Input Nota Barang Masuk</h2>
+            <h2>Pengecekkan Barang Fisik</h2>
         </div>
 
         <div class="header-circle-big"></div>

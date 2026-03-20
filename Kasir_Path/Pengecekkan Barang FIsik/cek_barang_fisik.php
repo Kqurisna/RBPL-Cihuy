@@ -612,7 +612,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     <div class="header-left">
 
       <div class="back-btn">
-        <a href="../../User_Admin.php" class="back-link">
+        <a href="../Pengecekkan Barang FIsik/list_nota.php" class="back-link">
           <img src="../../UI_GENERAL/logo_back.png" alt="Back">
         </a>
       </div>
