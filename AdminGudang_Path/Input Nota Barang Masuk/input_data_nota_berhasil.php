@@ -158,7 +158,6 @@
             color: #4b5563;
             line-height: 1.6;
         }
-
     </style>
 </head>
 

@@ -720,8 +720,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                       </div>
 
                       <input type="hidden" name="status_barang[<?= $no ?>]" id="statusInput<?= $no ?>" value="">
-
-                      <input type="hidden" name="status_barang[<?= $no ?>]" id="statusInput<?= $no ?>" value="sesuai">
                     </div>
 
                     <div id="keluhanBox<?= $no ?>" class="keluhan-box">
@@ -737,12 +735,17 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
                           <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
 
-                          <p class="upload-text">Unggah Foto Nota</p>
+                          <p class="upload-text">Unggah Foto Bukti</p>
                           <p class="upload-subtext">(JPG / PNG, maks. 5 MB)</p>
-                          <input type="file" id="fileInput" name="foto_nota" accept="image/*" hidden required>
+                          <input
+                            type="file"
+                            id="fileInput<?= $no ?>"
+                            name="foto_bukti[<?= $no ?>]"
+                            accept="image/*"
+                            hidden>
                         </div>
 
-                        <img id="previewImage"
+                        <img id="previewImage<?= $no ?>"
                           style="display:none; width:100%; margin-top:10px; border-radius:10px;">
                       </div>
                     </div>
@@ -758,19 +761,28 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
           </div>
         </div>
       </div>
+      <div style="padding: 10px 30px 10px;">
+        <button type="submit" name="submit" class="btn-login">Simpan Hasil Pemeriksaan</button>
+      </div>
   </form>
 </body>
 
 </html>
 <script>
-  document.getElementById("fileInput").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById("previewImage");
+  let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
 
-    if (file) {
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-    }
+  document.querySelectorAll("input[type='file']").forEach(input => {
+    input.addEventListener("change", function(e) {
+
+      const file = e.target.files[0];
+      const id = this.id.replace("fileInput", "");
+      const preview = document.getElementById("previewImage" + id);
+
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
   });
   const chips = document.querySelectorAll(".chip");
   chips.forEach(chip => {
@@ -797,8 +809,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
   let count = 1;
 
   const container = document.getElementById("inputBarangContainer");
-  const btnTambah = document.getElementById("tambahBarang");
-  const btnHapus = document.getElementById("hapusBarang");
 
   function updateLabels() {
     const items = container.querySelectorAll(".item");
@@ -843,62 +853,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     });
   }
 
-  btnTambah.onclick = function() {
-
-    const div = document.createElement("div");
-    div.classList.add("item");
-
-    div.innerHTML = `
-            <div class="form-group">
-                <label>Nama Barang ke-${count + 1}</label>
-                <input type="text" name="barang[]" required>
-            </div>
-
-            <div class="form-group">
-                <label>Jumlah Barang ke-${count + 1}</label>
-                <input type="number" name="jumlah[]" class="input-number" required>
-            </div>
-        `;
-
-    container.appendChild(div);
-
-    updateLabels();
-    updateMinusState();
-    updateDivider();
-  };
-
-  btnHapus.onclick = function() {
-
-    const items = container.querySelectorAll(".item");
-
-    if (items.length === 1) return;
-
-    const lastItem = items[items.length - 1];
-
-    lastItem.classList.add("fade-out");
-
-    setTimeout(() => {
-      container.removeChild(lastItem);
-
-      updateLabels();
-      updateMinusState();
-      updateDivider();
-    }, 250);
-  };
-
-  updateLabels();
-  updateMinusState();
-  updateDivider();
-
-  document.getElementById("fileInput").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById("previewImage");
-
-    if (file) {
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-    }
-  });
   document.addEventListener("keydown", function(e) {
     if (e.target.classList.contains("input-number")) {
       if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
@@ -909,23 +863,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
   const inputJenis = document.getElementById("jenisBarangInput");
   const errorMsg = document.getElementById("errorJenis");
 
-  let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
-  chips.forEach(chip => {
-    chip.addEventListener("click", () => {
-
-      const value = chip.innerText;
-
-      if (selectedItems.includes(value)) {
-        selectedItems = selectedItems.filter(item => item !== value);
-        chip.classList.remove("active");
-      } else {
-        selectedItems.push(value);
-        chip.classList.add("active");
-      }
-
-      inputJenis.value = selectedItems.join(",");
-    });
-  });
 
   document.querySelector("form").addEventListener("submit", function(e) {
 
@@ -963,6 +900,19 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
       firstInvalid.focus();
     }
+  });
+  document.querySelectorAll("input[type='file']").forEach(input => {
+    input.addEventListener("change", function(e) {
+
+      const file = e.target.files[0];
+      const id = this.id.replace("fileInput", "");
+      const preview = document.getElementById("previewImage" + id);
+
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
   });
   document.querySelector("form").addEventListener("submit", function(e) {
 
@@ -1014,20 +964,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       }
     }
   });
-
-  function toggleKeluhan(no) {
-    let radios = document.getElementsByName('status_barang[' + no + ']');
-    let box = document.getElementById('keluhanBox' + no);
-
-    for (let i = 0; i < radios.length; i++) {
-      if (radios[i].checked && radios[i].value === 'cacat') {
-        box.style.display = 'block';
-        return;
-      }
-    }
-
-    box.style.display = 'none';
-  }
 
   function setStatus(no, status, el) {
 

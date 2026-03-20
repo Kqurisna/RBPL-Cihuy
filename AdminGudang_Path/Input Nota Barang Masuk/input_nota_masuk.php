@@ -604,7 +604,7 @@
 
         </div>
 
-        <div style="padding: 0 30px 30px;">
+        <div style="padding: 0 30px 15px;">
             <button type="submit" name="submit" class="btn-login">Submit Data Nota</button>
         </div>
 
