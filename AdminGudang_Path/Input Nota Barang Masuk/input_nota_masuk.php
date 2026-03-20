@@ -497,7 +497,7 @@
 
     </div>
 
-    <form action="proses_validasi_input.php" method="GET" enctype="multipart/form-data">
+    <form action="proses_validasi_input.php" method="POST" enctype="multipart/form-data">
 
         <div class="container">
 
