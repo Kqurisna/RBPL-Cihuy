@@ -196,7 +196,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota ORDER BY id_nota DESC");
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="../../User_Kasir.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>

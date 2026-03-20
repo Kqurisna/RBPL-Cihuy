@@ -287,7 +287,7 @@
         </div>
         <div class="menu-title">Pengecekkan Barang Fisik</div>
       </div>
-      <a href="Kasir_Path/Pengecekkan Barang FIsik/cek_barang_fisik.php">
+      <a href="Kasir_Path/Pengecekkan Barang FIsik/list_nota.php">
         <div class="menu-arrow">
           <img src="UI_GENERAL/logo_foward.png" alt="" />
         </div>
