@@ -165,7 +165,10 @@
   <div class="header">
     <div class="header-left">
       <div class="back-btn">
-        <img src="../asset_kasir/logo_back.png" alt="">
+        <a href="../../User_Kasir.php">
+
+          <img src="../asset_kasir/logo_back.png" alt="">
+        </a>
       </div>
       <h2>Pengecekkan Barang Fisik</h2>
     </div>

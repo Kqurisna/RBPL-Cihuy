@@ -24,8 +24,6 @@ if ($data) {
         header("Location: User_Manajer.php");
     }
 } else {
-
-    // Jika login gagal / tidak berhasil
     header("Location: index.php?error=1");
     exit();
 }

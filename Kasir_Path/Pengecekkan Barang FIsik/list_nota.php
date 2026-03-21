@@ -1,7 +1,7 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
-$query = mysqli_query($koneksi, "SELECT * FROM nota ORDER BY id_nota DESC");
+$query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' ORDER BY created_at DESC");
 ?>
 <!doctype html>
 <html lang="id">

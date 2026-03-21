@@ -236,7 +236,7 @@
 
     <h2>Selamat Datang</h2>
 
-    <form action="input_data.php" method="GET">
+    <form action="validasi_akun.php" method="POST">
 
       <div class="input-group">
         <label><strong>Username</strong></label>
