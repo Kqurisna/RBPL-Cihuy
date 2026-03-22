@@ -731,8 +731,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                       <div class="form-group">
                         <label>Upload Foto Bukti</label>
 
-                        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-
+                        <div class="upload-box" onclick="document.getElementById('fileInput<?= $no ?>').click()">
                           <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
 
                           <p class="upload-text">Unggah Foto Bukti</p>
@@ -770,20 +769,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 </html>
 <script>
   let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
-
-  document.querySelectorAll("input[type='file']").forEach(input => {
-    input.addEventListener("change", function(e) {
-
-      const file = e.target.files[0];
-      const id = this.id.replace("fileInput", "");
-      const preview = document.getElementById("previewImage" + id);
-
-      if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
-      }
-    });
-  });
   const chips = document.querySelectorAll(".chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {

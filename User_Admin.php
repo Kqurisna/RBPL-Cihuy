@@ -324,7 +324,9 @@
         <div class="menu-title">Lihat Hasil Pemeriksaan Barang</div>
       </div>
       <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
+        <a href="AdminGudang_Path/Lihat Hasil Pemeriksaan Barang/lihat_list_nota.php">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </a>
       </div>
     </div>
 
