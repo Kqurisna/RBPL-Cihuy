@@ -55,8 +55,23 @@
       cursor: pointer;
     }
 
-    .back-btn img {
-      width: 20px;
+    .back-link {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .back-link img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+      transition: 0.2s;
     }
 
     .header-circle-big {
@@ -140,23 +155,6 @@
       color: #4b5563;
       line-height: 1.6;
     }
-
-    @media (max-width:480px) {
-
-      .header h2 {
-        font-size: 16px;
-      }
-
-      .back-btn {
-        width: 34px;
-        height: 34px;
-      }
-
-      .success-title {
-        font-size: 20px;
-      }
-
-    }
   </style>
 </head>
 
@@ -165,7 +163,7 @@
   <div class="header">
     <div class="header-left">
       <div class="back-btn">
-        <a href="../../User_Kasir.php">
+        <a href="../../User_Kasir.php" class="back-link">
 
           <img src="../asset_kasir/logo_back.png" alt="">
         </a>
