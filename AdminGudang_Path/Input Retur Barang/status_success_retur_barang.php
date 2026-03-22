@@ -183,13 +183,13 @@
         </div>
 
         <div class="success-title">
-            <p>Berhasil Menyimpan Data</p>
+            <p>Berhasil Menyimpan Data Retur</p>
         </div>
 
         <div class="success-line"></div>
 
         <div class="success-desc">
-            Kondisi pemeriksaan barang fisik telah tersimpan dengan baik
+            Data retur barang telah berhasil disimpan dan siap diproses lebih lanjut ke pihak supplier
         </div>
 
     </div>
