@@ -311,7 +311,9 @@
         <div class="menu-title">Input Retur Barang</div>
       </div>
       <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
+        <a href="AdminGudang_Path/Input Retur Barang/list_nota_retur.php">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </a>
       </div>
     </div>
 
