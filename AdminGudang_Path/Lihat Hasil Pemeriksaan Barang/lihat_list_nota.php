@@ -5,7 +5,8 @@ $query = mysqli_query($koneksi, "
   SELECT * FROM nota 
   WHERE status IN ('sesuai', 'cacat') 
   ORDER BY tanggal_nota DESC
-"); ?>
+");
+$jumlahData = mysqli_num_rows($query); ?>
 <!doctype html>
 <html lang="id">
 
@@ -189,6 +190,52 @@ $query = mysqli_query($koneksi, "
         html {
             scroll-behavior: smooth;
         }
+
+        .empty-container {
+            min-height: 70vh;
+            /* bikin center vertikal */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            padding: 20px;
+        }
+
+        .empty-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .empty-icon img {
+            width: 70px;
+            height: 70px;
+            opacity: 0.8;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .empty-line {
+            width: 120px;
+            height: 3px;
+            background: #48b5c1;
+            margin: 12px 0;
+            border-radius: 3px;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: #6b7280;
+            max-width: 260px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -215,27 +262,52 @@ $query = mysqli_query($koneksi, "
     </div>
 
     <div class="container">
-        <?php while ($data = mysqli_fetch_assoc($query)) { ?>
-            <div class="form-card">
 
-                <h3 class="section-title">Nota</h3>
+        <?php if ($jumlahData > 0) { ?>
 
-                <div class="form-group">
-                    <label>Nomer Nota<span style="color:red">*</span></label>
-                    <input type="text" name="nomer_nota" value="<?= $data['nomor_nota'] ?>" readonly>
+            <?php while ($data = mysqli_fetch_assoc($query)) { ?>
+                <div class="form-card">
+
+                    <h3 class="section-title">Nota</h3>
+
+                    <div class="form-group">
+                        <label>Nomer Nota<span style="color:red">*</span></label>
+                        <input type="text" value="<?= $data['nomor_nota'] ?>" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Nota<span style="color:red">*</span></label>
+                        <input type="date" value="<?= $data['tanggal_nota'] ?>" readonly>
+                    </div>
+
+                    <div class="circle" onclick="goToDetail(<?= $data['id_nota'] ?>)">
+                        <img src="../../Kasir_Path/asset_kasir/logo_masuk_id.png">
+                    </div>
+
+                </div>
+                <br>
+            <?php } ?>
+
+        <?php } else { ?>
+
+            <div class="empty-container">
+                <div class="empty-icon">
+                    <img src="../../UI_GENERAL/logo_x.png">
                 </div>
 
-                <div class="form-group">
-                    <label>Tanggal Nota<span style="color:red">*</span></label>
-                    <input type="date" name="tanggal_nota" value="<?= $data['tanggal_nota'] ?>" readonly>
-                </div>
-                <div class="circle" onclick="goToDetail(<?= $data['id_nota'] ?>)">
-                    <img src="../../Kasir_Path/asset_kasir/logo_masuk_id.png" alt="">
+                <div class="empty-title">
+                    Tidak ada data barang yang sudah di cek dari Kasir Toko
                 </div>
 
+                <div class="empty-line"></div>
+
+                <div class="empty-desc">
+                    Belum ada hasil pemeriksaan yang tersimpan
+                </div>
             </div>
-            <br>
+
         <?php } ?>
+
     </div>
 </body>
 
