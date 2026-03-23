@@ -53,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Gagal simpan barang: " . $conn->error);
         }
     }
-    // Ke halaman sukses
     header("Location: input_data_nota_berhasil.php");
     exit();
 }

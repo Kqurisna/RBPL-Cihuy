@@ -6,6 +6,7 @@ $query = mysqli_query($koneksi, "
     FROM nota n
     JOIN validasi_kasir v ON n.id_nota = v.id_nota
     WHERE v.hasil = 'cacat'
+    AND n.status_retur = 'belum'
     ORDER BY n.tanggal_nota DESC
 "); ?>
 <!doctype html>
