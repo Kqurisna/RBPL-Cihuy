@@ -198,7 +198,7 @@
       padding: 14px;
       border: none;
       border-radius: 26px;
-      background: linear-gradient(90deg, #5bb7c5, #3f7aa3);
+      background-color: #67A2CD;
       color: white;
       font-size: 15px;
       font-weight: 600;
@@ -210,6 +210,14 @@
       margin: 28px 0;
       font-size: 13px;
       color: #8fa1b3;
+    }
+
+    h5 {
+      text-align: right;
+      margin-top: 21px;
+      margin-bottom: 21px;
+      font-size: 13px;
+      color: #48B5C1;
     }
   </style>
 </head>
@@ -274,7 +282,7 @@
 
         </div>
       </div>
-
+      <h5>Lupa Password ?</h5>
       <button type="submit" class="btn-login">Masuk</button>
 
     </form>
