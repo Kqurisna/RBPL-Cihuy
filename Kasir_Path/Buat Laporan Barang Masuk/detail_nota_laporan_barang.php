@@ -10,7 +10,17 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
 $validasiList = [];
 $queryValidasi = mysqli_query($koneksi, "SELECT * FROM validasi_kasir WHERE id_nota = $id_nota ORDER BY id_validasi ASC");
+$queryRetur = mysqli_query($koneksi, "
+    SELECT rd.* 
+    FROM retur_detail rd
+    JOIN retur r ON rd.id_retur = r.id_retur
+    WHERE r.id_nota = $id_nota
+");
 
+$returList = [];
+while ($r = mysqli_fetch_assoc($queryRetur)) {
+    $returList[$r['id_detail']] = $r;
+}
 while ($v = mysqli_fetch_assoc($queryValidasi)) {
     $validasiList[] = $v;
 } ?>
@@ -597,12 +607,14 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             width: 100%;
             border-radius: 16px;
             border: none;
+            min-height: 20px;
             background: #e9edf2;
             padding: 10px 15px;
             font-size: 12px;
             font-weight: 500;
             outline: none;
             resize: none;
+            line-height: 1.2;
         }
 
         .section-title {
@@ -715,7 +727,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
     </div>
 
-    <form action="input_data_retur.php" method="POST" enctype="multipart/form-data">
+    <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <div class="container">
 
@@ -808,15 +820,20 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                         </div>
 
                                         <?php if ($status == 'cacat') { ?>
+                                            <?php
+                                            $idDetail = $detail['id_detail'];
+                                            $dataRetur = isset($returList[$idDetail]) ? $returList[$idDetail] : null;
+                                            ?>
                                             <input type="hidden" name="id_detail[]" value="<?= $detail['id_detail'] ?>">
 
                                             <div class="form-group">
                                                 <label>Jumlah Retur</label>
                                                 <input type="number"
                                                     name="jumlah_retur[]"
+                                                    value="<?= $dataRetur ? $dataRetur['jumlah_retur'] : '' ?>"
                                                     min="0"
                                                     max="<?= $detail['jumlah_barang'] ?>"
-                                                    placeholder="Masukkan jumlah retur">
+                                                    <?= $dataRetur ? 'readonly' : '' ?>>
                                             </div>
                                             <div class="keluhan-box" style="display:block;">
 
@@ -833,7 +850,32 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                                         </div>
                                                     </div>
                                                 <?php } ?>
+                                                <div class="form-group">
+                                                    <label>Tanggapan & Tindak Lanjut Supplier</label>
+                                                    <textarea
+                                                        name="tanggapan_supplier"
+                                                        class="textarea"
+                                                        placeholder="Contoh: Supplier menyetujui penggantian barang..."
+                                                        required></textarea>
+                                                </div>
 
+                                                <div class="form-group">
+                                                    <label>Lampiran Bukti (Opsional)</label>
+
+                                                    <div class="upload-box" onclick="document.getElementById('lampiranInput<?= $no ?>').click()">
+                                                        <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
+                                                        <p class="upload-text">Upload PDF / Gambar</p>
+
+                                                        <input
+                                                            type="file"
+                                                            id="lampiranInput<?= $no ?>"
+                                                            name="lampiran_supplier[<?= $no ?>]"
+                                                            accept=".jpg,.jpeg,.png,.pdf"
+                                                            hidden>
+                                                        <img id="previewImage<?= $no ?>"
+                                                            style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         <?php } ?>
                                         <div class="success-line"></div>
@@ -850,7 +892,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             </div>
             <div style="margin-top: 25px; text-align:center;">
                 <button type="submit" class="btn-retur">
-                    Simpan Data Retur
+                    Simpan Hasil Laporan
                 </button>
             </div>
     </form>
@@ -980,12 +1022,20 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         input.addEventListener("change", function(e) {
 
             const file = e.target.files[0];
-            const id = this.id.replace("fileInput", "");
-            const preview = document.getElementById("previewImage" + id);
+            const no = this.id.replace("lampiranInput", "");
+            const preview = document.getElementById("previewImage" + no);
 
             if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = "block";
+
+                if (file.type.startsWith("image/")) {
+
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = "block";
+
+                } else {
+                    preview.style.display = "block";
+                    preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+                }
             }
         });
     });
@@ -1101,4 +1151,8 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
+    document.querySelectorAll('.textarea').forEach(el => {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    })
 </script>
