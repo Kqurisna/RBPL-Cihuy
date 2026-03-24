@@ -692,7 +692,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                     <div class="card-dots_2_1"><span></span></div>
                     <div class="card-dots_2_2"><span></span></div>
                     <div class="card-dots_2_3"><span></span></div>
-
+                    <input type="hidden" name="id_detail[<?= $no ?>]" value="<?= $detail['id_detail'] ?>">
                     <div class="form-group">
                       <label>Nama Barang ke-<?= $no ?></label>
                       <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>

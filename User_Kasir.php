@@ -301,9 +301,11 @@
         </div>
         <div class="menu-title">Buat Laporan Barang Masuk</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="Kasir_path/Buat Laporan Barang Masuk/list_nota_laporan_barang.php">
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">

@@ -22,15 +22,14 @@ if (isset($_POST['id_detail'])) {
         $jumlah_retur = $_POST['jumlah_retur'][$index];
 
         $q = mysqli_query($koneksi, "
-            SELECT * FROM detail_barang WHERE id_detail = '$id_detail'
+            SELECT * FROM detail_barang 
+            WHERE id_detail = '$id_detail'
         ");
         $d = mysqli_fetch_assoc($q);
 
         $v = mysqli_query($koneksi, "
             SELECT * FROM validasi_kasir 
-            WHERE id_nota = '$id_nota'
-            ORDER BY id_validasi ASC
-            LIMIT $index,1
+            WHERE id_detail = '$id_detail'
         ");
         $validasi = mysqli_fetch_assoc($v);
 
