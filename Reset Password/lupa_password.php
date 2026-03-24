@@ -230,7 +230,7 @@
     <div class="login-card">
 
         <div class="avatar">
-            <img src="../asset/icon_lock.png">
+            <img src="../asset/logo_lock_2.png">
         </div>
 
         <h2>Lupa Password</h2>

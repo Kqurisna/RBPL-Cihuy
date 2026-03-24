@@ -3,11 +3,6 @@ $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $username = isset($_POST['username']) ? trim($_POST['username']) : "";
 
-if ($username == "") {
-    header("Location: lupa_password.php?error=1");
-    exit;
-}
-
 $username = mysqli_real_escape_string($koneksi, $username);
 
 $query = mysqli_query($koneksi, "

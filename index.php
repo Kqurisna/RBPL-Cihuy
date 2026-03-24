@@ -219,6 +219,10 @@
       font-size: 13px;
       color: #48B5C1;
     }
+
+    a {
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -282,7 +286,9 @@
 
         </div>
       </div>
-      <h5>Lupa Password ?</h5>
+      <a href="Reset Password/lupa_password.php">
+        <h5>Lupa Password ?</h5>
+      </a>
       <button type="submit" class="btn-login">Masuk</button>
 
     </form>
