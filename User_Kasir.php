@@ -361,7 +361,7 @@
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
-          <img src="UI_KASIR/logo_add_kasir.png" alt="" />
+          <img src="UI_KASIR/logo_plus_ver2.png" alt="" />
         </div>
         <div class="menu-title">Buat Laporan Barang Masuk</div>
       </div>
