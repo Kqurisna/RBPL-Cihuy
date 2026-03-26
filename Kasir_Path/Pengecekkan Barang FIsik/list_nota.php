@@ -189,7 +189,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
 
         .empty-container {
             min-height: 70vh;
-            /* bikin center vertikal */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -231,6 +230,22 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
             color: #6b7280;
             max-width: 260px;
             line-height: 1.5;
+        }
+
+        .form-card {
+            opacity: 0;
+            transform: translateY(25px) scale(0.97);
+            transition: all 0.5s ease;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition-delay: 0.05s;
+        }
+
+        .form-card {
+            will-change: transform, opacity;
         }
     </style>
 </head>
@@ -313,4 +328,28 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
     function goToDetail(id) {
         window.location.href = "cek_barang_fisik.php?id=" + id;
     }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+
+                if (entry.isIntersecting) {
+
+                    setTimeout(() => {
+                        entry.target.classList.add("show");
+                    }, index * 80);
+
+                    observer.unobserve(entry.target);
+                }
+
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => observer.observe(card));
+
+    });
 </script>

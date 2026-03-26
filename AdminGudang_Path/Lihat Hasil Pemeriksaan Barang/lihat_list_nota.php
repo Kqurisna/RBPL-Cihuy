@@ -338,6 +338,18 @@ $jumlahData = mysqli_num_rows($query); ?>
                 transform: translateY(0);
             }
         }
+
+        .form-card {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: all 0.5s ease;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition-delay: 0.05s;
+        }
     </style>
 </head>
 
@@ -509,4 +521,29 @@ $jumlahData = mysqli_num_rows($query); ?>
 
         return false;
     }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+
+                    // delay biar muncul satu-satu
+                    setTimeout(() => {
+                        entry.target.classList.add("show");
+                    }, index * 100);
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+
+    });
 </script>

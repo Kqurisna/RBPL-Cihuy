@@ -251,6 +251,22 @@ $query = mysqli_query($koneksi, "
             width: 45px;
             height: 45px;
         }
+
+        .form-card {
+            opacity: 0;
+            transform: translateY(25px) scale(0.97);
+            transition: all 0.5s ease;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition-delay: 0.05s;
+        }
+
+        .form-card {
+            will-change: transform, opacity;
+        }
     </style>
 </head>
 
@@ -261,7 +277,7 @@ $query = mysqli_query($koneksi, "
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="../../User_Kasir.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
@@ -335,4 +351,28 @@ $query = mysqli_query($koneksi, "
     function goToDetail(id) {
         window.location.href = "detail_nota_laporan_barang.php?id=" + id;
     }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+
+                if (entry.isIntersecting) {
+
+                    setTimeout(() => {
+                        entry.target.classList.add("show");
+                    }, index * 80);
+
+                    observer.unobserve(entry.target);
+                }
+
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => observer.observe(card));
+
+    });
 </script>
