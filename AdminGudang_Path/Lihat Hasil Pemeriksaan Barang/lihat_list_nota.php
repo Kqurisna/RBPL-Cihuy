@@ -1,11 +1,21 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
-
-$query = mysqli_query($koneksi, "
-  SELECT * FROM nota 
-  WHERE status IN ('sesuai', 'cacat') 
-  ORDER BY tanggal_nota DESC
-");
+$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : null;
+$mode_bulan = isset($_GET['mode']) ? $_GET['mode'] : null;
+if ($filter_bulan) {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status IN ('sesuai', 'cacat')
+        AND DATE_FORMAT(tanggal_nota, '%Y-%m') = '$filter_bulan'
+        ORDER BY tanggal_nota DESC
+    ");
+} else {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status IN ('sesuai', 'cacat') 
+        ORDER BY tanggal_nota DESC
+    ");
+}
 $jumlahData = mysqli_num_rows($query); ?>
 <!doctype html>
 <html lang="id">
@@ -236,6 +246,98 @@ $jumlahData = mysqli_num_rows($query); ?>
             max-width: 260px;
             line-height: 1.5;
         }
+
+        .time-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.4s ease;
+        }
+
+        .time-info,
+        .caption-time,
+        .time-text {
+            transition: all 0.4s ease;
+        }
+
+        .time-info {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background-color: #6AD2DE;
+            position: relative;
+            right: -5px;
+            top: -3px;
+        }
+
+        .time-line {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #3f7aa3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .time-text.with-icon {
+            margin-bottom: 3px;
+        }
+
+        .time-text.no-icon {
+            margin-bottom: 8px;
+        }
+
+        .caption-time {
+            height: 3px;
+            width: 100px;
+            border-radius: 20px;
+            background-color: #6AD2DE;
+            margin-bottom: 10px;
+        }
+
+        .img_rubah_filter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-time {
+            width: 22px;
+            height: 22px;
+            position: relative;
+            top: 3px;
+            right: -20px;
+        }
+
+        .mode-bulan .time-info {
+            background-color: #4597a0;
+        }
+
+        .mode-bulan .caption-time {
+            background-color: #4597a0;
+        }
+
+        .mode-bulan .time-text {
+            color: #3f7aa3;
+        }
+
+        .fade-slide {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -260,14 +362,90 @@ $jumlahData = mysqli_num_rows($query); ?>
         <div class="header-circle-small_3"></div>
 
     </div>
-
     <div class="container">
 
         <?php if ($jumlahData > 0) { ?>
 
-            <?php while ($data = mysqli_fetch_assoc($query)) { ?>
-                <div class="form-card">
+            <?php
+            $tanggal_sebelumnya = null;
+            $isFirst = true;
 
+            while ($data = mysqli_fetch_assoc($query)) {
+
+                $tanggal_sekarang = $data['tanggal_nota'];
+
+                $bulan = date("n", strtotime($tanggal_sekarang));
+
+                $map_width = [
+                    1 => 84,
+                    2 => 88,
+                    3 => 72,
+                    4 => 58,
+                    5 => 55,
+                    6 => 62,
+                    7 => 58,
+                    8 => 76,
+                    9 => 100,
+                    10 => 81,
+                    11 => 96,
+                    12 => 96
+                ];
+
+                $width = isset($map_width[$bulan]) ? $map_width[$bulan] : 80;
+
+                if ($mode_bulan == 'bulan') {
+                    $final_width = $width;
+                } else {
+                    $final_width = 130;
+                }
+                if ($mode_bulan == 'bulan') {
+                    $group_sekarang = date("Y-m", strtotime($tanggal_sekarang));
+                } else {
+                    $group_sekarang = $tanggal_sekarang;
+                }
+
+                if ($group_sekarang != $tanggal_sebelumnya) { ?>
+
+                    <div class="time-wrapper fade-slide <?= $mode_bulan == 'bulan' ? 'mode-bulan' : '' ?>">
+                        <div class="time-info"></div>
+
+                        <div class="time-line">
+                            <div class="time-text <?= $isFirst ? 'with-icon' : 'no-icon' ?>">
+                                <span>
+                                    <?php
+                                    if ($mode_bulan == 'bulan') {
+                                        echo date("F Y", strtotime($tanggal_sekarang));
+                                    } else {
+                                        echo date("d F Y", strtotime($tanggal_sekarang));
+                                    }
+                                    ?>
+                                </span>
+                                <div class="img_rubah_filter">
+                                    <?php if ($isFirst) { ?>
+                                        <?php if ($mode_bulan == 'bulan') { ?>
+                                            <a href="?">
+                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time" title="Kembali ke mode tanggal">
+                                            </a>
+                                        <?php } else { ?>
+                                            <a href="?mode=bulan" onclick="return smoothSwitch(event, this.href)">
+                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time" title="Ubah ke mode bulan">
+                                            </a>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <div class="caption-time" style="width: <?= $final_width ?>px;"></div>
+                        </div>
+                    </div>
+
+                <?php
+                    $tanggal_sebelumnya = $group_sekarang;
+                    $isFirst = false;
+                }
+                ?>
+
+                <div class="form-card">
                     <h3 class="section-title">Nota</h3>
 
                     <div class="form-group">
@@ -283,9 +461,9 @@ $jumlahData = mysqli_num_rows($query); ?>
                     <div class="circle" onclick="goToDetail(<?= $data['id_nota'] ?>)">
                         <img src="../../Kasir_Path/asset_kasir/logo_masuk_id.png">
                     </div>
-
                 </div>
                 <br>
+
             <?php } ?>
 
         <?php } else { ?>
@@ -315,5 +493,20 @@ $jumlahData = mysqli_num_rows($query); ?>
 <script>
     function goToDetail(id) {
         window.location.href = "lihat_hasil_pemeriksaan.php?id=" + id;
+    }
+
+    function smoothSwitch(e, url) {
+        e.preventDefault();
+
+        document.querySelectorAll('.time-wrapper').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(10px)";
+        });
+
+        setTimeout(() => {
+            window.location.href = url;
+        }, 250);
+
+        return false;
     }
 </script>

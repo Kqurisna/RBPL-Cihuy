@@ -183,7 +183,7 @@
 
     <div class="success-container">
         <div class="success-icon">
-            <img src="../asset_admingudang/Icon.png" alt="" />
+            <img src="../asset_admingudang/logo_done.png" alt="" />
         </div>
 
         <div class="success-title">
