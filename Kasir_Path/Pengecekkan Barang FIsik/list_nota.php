@@ -247,6 +247,12 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
         .form-card {
             will-change: transform, opacity;
         }
+
+        .form-card.exit {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 
@@ -326,7 +332,18 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
 </html>
 <script>
     function goToDetail(id) {
-        window.location.href = "cek_barang_fisik.php?id=" + id;
+
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("exit");
+            }, index * 50);
+        });
+
+        setTimeout(() => {
+            window.location.href = "cek_barang_fisik.php?id=" + id;
+        }, 300);
     }
     document.addEventListener("DOMContentLoaded", function() {
 
