@@ -472,6 +472,22 @@
         html {
             scroll-behavior: smooth;
         }
+
+        .form-card {
+            opacity: 0;
+            transform: translateY(25px) scale(0.97);
+            transition: all 0.5s ease;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition-delay: 0.05s;
+        }
+
+        .form-card {
+            will-change: transform, opacity;
+        }
     </style>
 </head>
 
@@ -841,5 +857,18 @@
                 firstError.focus();
             }
         }
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 100);
+
+        });
+
     });
 </script>
