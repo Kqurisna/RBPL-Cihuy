@@ -195,7 +195,6 @@ $query = mysqli_query($koneksi, "
 
         .empty-container {
             min-height: 70vh;
-            /* bikin center vertikal */
             display: flex;
             flex-direction: column;
             justify-content: center;

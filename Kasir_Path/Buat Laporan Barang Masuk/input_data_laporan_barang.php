@@ -22,33 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id_retur = $dataRetur['id_retur'];
     } else {
         mysqli_query($koneksi, "
-        INSERT INTO retur (id_nota, tanggal_input)
-        VALUES ('$id_nota', NOW())
-    ");
-
+            INSERT INTO retur (id_nota, tanggal_input)
+            VALUES ('$id_nota', NOW())
+        ");
         $id_retur = mysqli_insert_id($koneksi);
     }
 
     $folder = "uploads/lampiran/";
-
     if (!is_dir($folder)) {
         mkdir($folder, 0777, true);
     }
 
     if (isset($_FILES['lampiran_supplier'])) {
-
         foreach ($_FILES['lampiran_supplier']['name'] as $i => $fileName) {
 
             if ($fileName == "") continue;
 
             $tmpName = $_FILES['lampiran_supplier']['tmp_name'][$i];
-
             $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
 
-            if (!in_array($ext, $allowed)) {
-                continue;
-            }
+            $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+            if (!in_array($ext, $allowed)) continue;
 
             $newName = "lampiran_" . uniqid() . "_" . $i . "." . $ext;
 
@@ -57,13 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
-
-    mysqli_query($koneksi, "
-        INSERT INTO retur (id_nota, tanggal_input)
-        VALUES ('$id_nota', NOW())
-    ");
-
-    $id_retur = mysqli_insert_id($koneksi);
 
     foreach ($id_detail_list as $i => $id_detail) {
 
@@ -83,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ");
 
     mysqli_query($koneksi, "
-    UPDATE nota 
-    SET 
-        status = 'retur',
-        status_laporan = 'menunggu'
-    WHERE id_nota = '$id_nota'
-");
+        UPDATE nota 
+        SET 
+            status = 'cacat',
+            status_laporan = 'menunggu'
+        WHERE id_nota = '$id_nota'
+    ");
 
     header("Location: status_success_laporan_barang_masuk.php");
     exit;

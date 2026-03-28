@@ -700,7 +700,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../Lihat Hasil Pemeriksaan Barang/lihat_list_nota.php" class="back-link">
+                <a href="../Input Retur Barang/lihat_list_nota.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
@@ -723,7 +723,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             <div class="form-card">
                 <div class="form-group">
                     <label>Nomer Nota</label>
-                    <input type="text" name="nomer_nota" value="<?= $dataNota['nomor_nota'] ?>" readonly>
+                    <input type="text" name="nomor_nota" value="<?= $dataNota['nomor_nota'] ?>" readonly>
                 </div>
 
                 <div class="form-group">

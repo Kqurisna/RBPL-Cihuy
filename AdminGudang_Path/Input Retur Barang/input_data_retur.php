@@ -2,11 +2,10 @@
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $id_nota       = $_POST['id_nota'];
-$nomor_nota    = $_POST['nomer_nota'];
-$tanggal_nota  = $_POST['tanggal_nota'];
-$supplier      = $_POST['supplier'];
-$jenis_barang  = $_POST['jenis_barang'];
-
+$nomor_nota   = $_POST['nomor_nota'] ?? '';
+$tanggal_nota = $_POST['tanggal_nota'] ?? '';
+$supplier     = $_POST['supplier'] ?? '';
+$jenis_barang = $_POST['jenis_barang'] ?? '';
 mysqli_query($koneksi, "
     INSERT INTO retur (id_nota, nomor_nota, tanggal_nota, supplier, jenis_barang)
     VALUES ('$id_nota', '$nomor_nota', '$tanggal_nota', '$supplier', '$jenis_barang')
