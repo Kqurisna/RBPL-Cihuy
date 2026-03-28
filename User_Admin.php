@@ -249,6 +249,70 @@
         padding: 20px 15px;
       }
     }
+
+    .form-card.exit {
+      opacity: 0;
+      transform: translateX(-100px);
+      transition: all 0.3s ease;
+    }
+
+    .menu-card {
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      transition:
+        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.5s ease;
+      will-change: transform, opacity;
+    }
+
+    .menu-card.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .menu-icon img {
+      opacity: 0;
+      transform: scale(0.5) rotate(-12deg);
+      transition:
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.4s ease,
+        filter 0.25s ease;
+    }
+
+    .menu-card.show .menu-icon img {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .menu-card:hover .menu-icon img {
+      transform: scale(1.18) rotate(6deg);
+    }
+
+    .menu-card:hover .menu-icon img[src*="achive"] {
+      transform: scale(1.25) rotate(-6deg);
+    }
+
+    .menu-card:active {
+      transform: scale(0.97);
+    }
+
+    .menu-icon img:active {
+      filter: brightness(0.6) contrast(1.1);
+      transform: scale(0.9) rotate(0deg);
+    }
+
+    .menu-icon {
+      transition: transform 0.25s ease;
+    }
+
+    .menu-card:hover .menu-icon {
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 
@@ -287,7 +351,6 @@
       </div>
     </div>
 
-    <!-- Menu 1 -->
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
@@ -302,7 +365,6 @@
       </a>
     </div>
 
-    <!-- Menu 2 -->
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
@@ -317,7 +379,6 @@
       </div>
     </div>
 
-    <!-- Menu 3 -->
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
@@ -332,11 +393,10 @@
       </div>
     </div>
 
-    <!-- Menu 4 -->
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
-          <img src="UI_ADMIN/logo_menu_open.png" alt="" />
+          <img src="UI_ADMIN/logo_archiv_admin.png" alt="" />
         </div>
         <div class="menu-title">Arsip Nota & Pembayaran</div>
       </div>
@@ -348,3 +408,16 @@
 </body>
 
 </html>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+
+    const cards = document.querySelectorAll(".menu-card");
+
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add("show");
+      }, index * 120);
+    });
+
+  });
+</script>
