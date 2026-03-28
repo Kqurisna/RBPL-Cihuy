@@ -385,7 +385,6 @@ $jumlahData = mysqli_num_rows($query); ?>
             while ($data = mysqli_fetch_assoc($query)) {
 
                 $tanggal_sekarang = $data['tanggal_nota'];
-
                 $bulan = date("n", strtotime($tanggal_sekarang));
 
                 $map_width = [
@@ -403,19 +402,48 @@ $jumlahData = mysqli_num_rows($query); ?>
                     12 => 96
                 ];
 
-                $width = isset($map_width[$bulan]) ? $map_width[$bulan] : 80;
-
                 if ($mode_bulan == 'bulan') {
-                    $final_width = $width;
+                    $text = date("F Y", strtotime($tanggal_sekarang));
                 } else {
-                    $final_width = 130;
-                }
-                if ($mode_bulan == 'bulan') {
-                    $group_sekarang = date("Y-m", strtotime($tanggal_sekarang));
-                } else {
-                    $group_sekarang = $tanggal_sekarang;
+                    $text = date("d F Y", strtotime($tanggal_sekarang));
                 }
 
+                if ($mode_bulan == 'bulan') {
+
+                    $final_width = isset($map_width[$bulan]) ? $map_width[$bulan] : 80;
+                } else {
+
+                    $char_length = mb_strlen($text);
+
+                    $final_width = ($char_length * 6) + 20;
+
+                    $adjust = [
+                        1  => -6,
+                        2  => -7,
+                        3  => -8,
+                        4  => -12,
+                        5  => -8,
+                        6  => -6,
+                        7  => -8,
+                        8  => -5,
+                        9  => -4,
+                        10 => -8,
+                        11 => -4,
+                        12 => -4
+                    ];
+
+                    $final_width += ($adjust[$bulan] ?? 0);
+
+                    if (isset($adjust[$bulan])) {
+                        $final_width += $adjust[$bulan];
+                    }
+
+                    $final_width = max(65, $final_width);
+                }
+
+                $group_sekarang = ($mode_bulan == 'bulan')
+                    ? date("Y-m", strtotime($tanggal_sekarang))
+                    : $tanggal_sekarang;
                 if ($group_sekarang != $tanggal_sebelumnya) { ?>
 
                     <div class="time-wrapper fade-slide <?= $mode_bulan == 'bulan' ? 'mode-bulan' : '' ?>">
