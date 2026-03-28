@@ -203,7 +203,6 @@ $jumlahData = mysqli_num_rows($query); ?>
 
         .empty-container {
             min-height: 70vh;
-            /* bikin center vertikal */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -310,8 +309,17 @@ $jumlahData = mysqli_num_rows($query); ?>
             width: 22px;
             height: 22px;
             position: relative;
+
+        }
+
+        .icon-time.mode-tanggal {
             top: 3px;
             right: -20px;
+        }
+
+        .icon-time.mode-bulan {
+            top: 3px;
+            right: -35px;
         }
 
         .mode-bulan .time-info {
@@ -464,11 +472,11 @@ $jumlahData = mysqli_num_rows($query); ?>
                                     <?php if ($isFirst) { ?>
                                         <?php if ($mode_bulan == 'bulan') { ?>
                                             <a href="?">
-                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time" title="Kembali ke mode tanggal">
+                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time <?= $mode_bulan == 'bulan' ? 'mode-bulan' : 'mode-tanggal' ?>" title="Kembali ke mode tanggal">
                                             </a>
                                         <?php } else { ?>
                                             <a href="?mode=bulan" onclick="return smoothSwitch(event, this.href)">
-                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time" title="Ubah ke mode bulan">
+                                                <img src="../../UI_ADMIN/logo_swap.png" class="icon-time <?= $mode_bulan == 'bulan' ? 'mode-bulan' : 'mode-tanggal' ?>" title="Ubah ke mode bulan">
                                             </a>
                                         <?php } ?>
                                     <?php } ?>
