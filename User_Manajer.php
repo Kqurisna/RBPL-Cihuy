@@ -350,9 +350,11 @@
         </div>
         <div class="menu-title">Review Laporan Barang Masuk</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="Manajer_Path/Review Laporan Barang Masuk/list_nota_laporan_masuk.php">
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
   </div>
 </body>
