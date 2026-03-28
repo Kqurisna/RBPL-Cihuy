@@ -565,7 +565,6 @@ $jumlahData = mysqli_num_rows($query); ?>
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
 
-                    // delay biar muncul satu-satu
                     setTimeout(() => {
                         entry.target.classList.add("show");
                     }, index * 100);
