@@ -23,7 +23,15 @@ while ($r = mysqli_fetch_assoc($queryRetur)) {
 }
 while ($v = mysqli_fetch_assoc($queryValidasi)) {
     $validasiList[] = $v;
-} ?>
+}
+$queryTanggapan = mysqli_query($koneksi, "
+    SELECT ts.*, r.id_nota
+    FROM tanggapan_supplier ts
+    JOIN retur r ON ts.id_retur = r.id_retur
+    WHERE r.id_nota = $id_nota
+");
+
+$tanggapanData = mysqli_fetch_assoc($queryTanggapan); ?>
 <!doctype html>
 <html lang="id">
 
@@ -661,10 +669,15 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
         .modal-content {
             margin: auto;
+            transition: transform 0.15s ease;
             display: block;
             max-width: 90%;
             max-height: 85vh;
             border-radius: 12px;
+            touch-action: manipulation;
+            transition: transform 0.3s ease;
+            transform-origin: center;
+            cursor: zoom-in;
         }
 
         .close {
@@ -878,18 +891,16 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                                 <div class="form-group">
                                                     <label>Lampiran Bukti (Opsional)</label>
 
-                                                    <div class="upload-box" onclick="document.getElementById('lampiranInput<?= $no ?>').click()">
-                                                        <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
-                                                        <p class="upload-text">Upload PDF / Gambar</p>
+                                                    <div class="form-group">
+                                                        <label>Bukti Tanggapan Supplier</label>
 
-                                                        <input
-                                                            type="file"
-                                                            id="lampiranInput<?= $no ?>"
-                                                            name="lampiran_supplier[<?= $no ?>]"
-                                                            accept=".jpg,.jpeg,.png,.pdf"
-                                                            hidden>
-                                                        <img id="previewImage<?= $no ?>"
-                                                            style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                                                        <?php if (!empty($tanggapanData['lampiran'])) { ?>
+                                                            <div class="img-preview" onclick="openModal(this)">
+                                                                <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $tanggapanData['lampiran'] ?>">
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <p style="font-size:13px; color:#9ca3af;">Belum ada bukti dari admin gudang</p>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1155,15 +1166,6 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
     });
 
-    function openModal(el) {
-        const img = el.querySelector("img");
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImg");
-
-        modal.style.display = "block";
-        modalImg.src = img.src;
-    }
-
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
@@ -1182,6 +1184,152 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             }, index * 100);
 
         });
+
+    });
+
+
+    function openModal(el) {
+        const img = el.querySelector("img");
+        const modal = document.getElementById("imageModal");
+
+        modal.style.display = "block";
+        modalImg.src = img.src;
+
+        scale = 1;
+        posX = 0;
+        isZoomed = false;
+
+        modalImg.style.transform = "scale(1) translateX(0px)";
+        modalImg.style.cursor = "zoom-in";
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const modalImg = document.getElementById("modalImg");
+
+        let lastTap = 0;
+        let isZoomed = false;
+        let scale = 1;
+        let posX = 0;
+
+        modalImg.addEventListener("dblclick", function() {
+
+            if (!isZoomed) {
+
+                scale = 2;
+                posX = 0;
+
+                modalImg.style.transform = `scale(${scale}) translateX(0px)`;
+                modalImg.style.cursor = "grab";
+
+                isZoomed = true;
+
+            } else {
+
+                scale = 1;
+                posX = 0;
+
+                modalImg.style.transform = "scale(1) translateX(0px)";
+                modalImg.style.cursor = "zoom-in";
+
+                isZoomed = false;
+            }
+
+        });
+        let startX = 0;
+        let isDragging = false;
+
+        modalImg.addEventListener("mousedown", function(e) {
+            if (!isZoomed) return;
+
+            isDragging = true;
+            startX = e.clientX - posX;
+
+            modalImg.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", function(e) {
+            if (!isDragging) return;
+
+            posX = e.clientX - startX;
+
+            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
+        });
+
+        document.addEventListener("mouseup", function() {
+            isDragging = false;
+
+            if (isZoomed) {
+                modalImg.style.cursor = "grab";
+            }
+        });
+        modalImg.addEventListener("touchstart", function(e) {
+            if (!isZoomed) return;
+
+            const touch = e.touches[0];
+
+            isDragging = true;
+            startX = touch.clientX - posX;
+        });
+
+        modalImg.addEventListener("touchmove", function(e) {
+            if (!isDragging) return;
+
+            const touch = e.touches[0];
+
+            posX = touch.clientX - startX;
+
+            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
+        });
+
+        modalImg.addEventListener("touchend", function() {
+            isDragging = false;
+        });
+
+        modalImg.addEventListener("touchend", function(e) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+
+            if (tapLength < 300 && tapLength > 0) {
+                zoomHandler(e);
+                e.preventDefault();
+            }
+
+            lastTap = currentTime;
+        });
+
+        function zoomHandler(e) {
+
+            if (!isZoomed) {
+
+                const rect = modalImg.getBoundingClientRect();
+
+                let x = 50;
+                let y = 50;
+
+                if (e.changedTouches) {
+                    const touch = e.changedTouches[0];
+                    x = ((touch.clientX - rect.left) / rect.width) * 100;
+                    y = ((touch.clientY - rect.top) / rect.height) * 100;
+                } else {
+                    x = ((e.clientX - rect.left) / rect.width) * 100;
+                    y = ((e.clientY - rect.top) / rect.height) * 100;
+                }
+
+                modalImg.style.transformOrigin = `${x}% ${y}%`;
+                modalImg.style.transform = "scale(2)";
+                modalImg.style.cursor = "zoom-out";
+
+                isZoomed = true;
+
+            } else {
+
+                modalImg.style.transform = "scale(1)";
+                modalImg.style.transformOrigin = "center";
+                modalImg.style.cursor = "zoom-in";
+
+                isZoomed = false;
+            }
+        }
 
     });
 </script>
