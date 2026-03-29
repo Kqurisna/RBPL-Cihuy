@@ -358,6 +358,12 @@ $jumlahData = mysqli_num_rows($query); ?>
             transform: translateY(0) scale(1);
             transition-delay: 0.05s;
         }
+
+        .form-card.exit {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 
@@ -540,7 +546,18 @@ $jumlahData = mysqli_num_rows($query); ?>
 </html>
 <script>
     function goToDetail(id) {
-        window.location.href = "lihat_hasil_pemeriksaan.php?id=" + id;
+
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("exit");
+            }, index * 50);
+        });
+
+        setTimeout(() => {
+            window.location.href = "lihat_hasil_pemeriksaan.php?id=" + id;
+        }, 300);
     }
 
     function smoothSwitch(e, url) {
