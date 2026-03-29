@@ -408,7 +408,7 @@
     <div class="menu-card">
       <div class="menu-left">
         <div class="menu-icon">
-          <img src="UI_ADMIN/logo_archiv_admin.png" alt="" />
+          <img src="UI_ADMIN/logo_image.png" alt="" />
         </div>
         <div class="menu-title">Input Konfirmasi Retur Supplier</div>
       </div>
