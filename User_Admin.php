@@ -404,6 +404,20 @@
         <img src="UI_GENERAL/logo_foward.png" alt="" />
       </div>
     </div>
+
+    <div class="menu-card">
+      <div class="menu-left">
+        <div class="menu-icon">
+          <img src="UI_ADMIN/logo_archiv_admin.png" alt="" />
+        </div>
+        <div class="menu-title">Input Konfirmasi Retur Supplier</div>
+      </div>
+      <div class="menu-arrow">
+        <a href="AdminGudang_Path/Input Konfirmasi Retur Supplier/list_nota_status_retur.php">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </a>
+      </div>
+    </div>
   </div>
 </body>
 
