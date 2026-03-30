@@ -660,8 +660,8 @@ while ($t = mysqli_fetch_assoc($queryTanggapan)) {
 
             padding: 14px 4px 10px 15px;
             text-align: left;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 300;
 
             outline: none;
             resize: none;
@@ -678,8 +678,8 @@ while ($t = mysqli_fetch_assoc($queryTanggapan)) {
 
             padding: 10px 4px 10px 15px;
             text-align: left;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 300;
 
             outline: none;
             resize: none;
@@ -839,7 +839,7 @@ while ($t = mysqli_fetch_assoc($queryTanggapan)) {
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="list_nota_laporan_barang.php" class="back-link">
+                <a href="list_nota_laporan_masuk.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
