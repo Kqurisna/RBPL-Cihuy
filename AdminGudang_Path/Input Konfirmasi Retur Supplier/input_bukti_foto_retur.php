@@ -34,25 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lampiranFinal = "";
 
-    if (isset($_FILES['lampiran_supplier'])) {
+    if (isset($_FILES['foto_retur'])) {
 
-        foreach ($_FILES['lampiran_supplier']['name'] as $i => $fileName) {
+        $fileName = $_FILES['foto_retur']['name'];
 
-            if ($fileName == "") continue;
+        if ($fileName != "") {
 
-            $tmpName = $_FILES['lampiran_supplier']['tmp_name'][$i];
+            $tmpName = $_FILES['foto_retur']['tmp_name'];
             $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-            $allowed = ['jpg', 'jpeg', 'png'];
+            $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
 
-            if (!in_array($ext, $allowed)) {
-                continue;
-            }
+            if (in_array($ext, $allowed)) {
 
-            $newName = "tanggapan_" . time() . "_" . $i . "." . $ext;
+                $newName = "tanggapan_" . time() . "." . $ext;
 
-            if (move_uploaded_file($tmpName, $folder . $newName)) {
-                $lampiranFinal = $newName;
+                if (move_uploaded_file($tmpName, $folder . $newName)) {
+                    $lampiranFinal = $newName;
+                }
             }
         }
     }
