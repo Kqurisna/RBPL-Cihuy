@@ -2,7 +2,7 @@
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $query = mysqli_query($koneksi, "
-   SELECT * FROM nota WHERE status!='menunggu' ORDER BY tanggal_nota DESC
+   SELECT * FROM nota WHERE status_laporan!='menunggu' ORDER BY tanggal_nota DESC
 "); ?>
 <!doctype html>
 <html lang="id">
