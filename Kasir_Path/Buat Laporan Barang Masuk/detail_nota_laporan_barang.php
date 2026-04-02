@@ -31,7 +31,8 @@ $queryTanggapan = mysqli_query($koneksi, "
     WHERE r.id_nota = $id_nota
 ");
 
-$tanggapanData = mysqli_fetch_assoc($queryTanggapan); ?>
+$tanggapanData = mysqli_fetch_assoc($queryTanggapan);
+?>
 <!doctype html>
 <html lang="id">
 
@@ -743,12 +744,12 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan); ?>
         }
 
         .form-group_2 {
-            margin-top: 15px;
-            margin-bottom: 18px;
+            margin-top: 2px;
+            margin-bottom: 10px;
         }
 
         .form-group_2 label {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 800;
             display: block;
             margin-bottom: 5px;

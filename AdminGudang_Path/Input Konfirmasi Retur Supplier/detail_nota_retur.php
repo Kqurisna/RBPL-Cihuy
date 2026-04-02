@@ -23,6 +23,14 @@ while ($r = mysqli_fetch_assoc($queryRetur)) {
 }
 while ($v = mysqli_fetch_assoc($queryValidasi)) {
     $validasiList[] = $v;
+}
+$adaCacat = false;
+
+foreach ($validasiList as $v) {
+    if (($v['hasil'] ?? '') == 'cacat') {
+        $adaCacat = true;
+        break;
+    }
 } ?>
 <!doctype html>
 <html lang="id">
@@ -715,6 +723,129 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         .form-card {
             will-change: transform, opacity;
         }
+
+        .welcome-card_3 {
+            margin-top: 50px;
+        }
+
+        .form-card_2 {
+            margin-top: 10px;
+            background: #8FB5D0;
+            padding: 20px 20px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .form-group_2 {
+            margin-top: 2px;
+            margin-bottom: 10px;
+        }
+
+        .form-group_2 label {
+            font-size: 15px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .form-group_2 input {
+            width: 100%;
+            height: 36px;
+            border-radius: 16px;
+            border: none;
+            background: #e9edf2;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .form-card_2 .textarea {
+            width: 100%;
+            border-radius: 16px;
+            border: none;
+            min-height: 120px;
+            background: #ffffff;
+
+            padding: 14px 4px 10px 15px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 500;
+
+            outline: none;
+            resize: none;
+
+            line-height: 1.4;
+        }
+
+        .empty-text {
+            font-size: 13px;
+            color: #e5e7eb;
+        }
+
+        .box_1 {
+            position: absolute;
+            width: 42px;
+            height: 42px;
+            background: #6AD2DE;
+            right: 20px;
+            top: -32px;
+            transform: rotate(18deg);
+        }
+
+        .box_2 {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #86D9E2;
+            right: 75px;
+            top: -27px;
+            transform: rotate(18deg);
+        }
+
+        .box_3 {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: #BBE6EB;
+            right: 123px;
+            top: -24px;
+            transform: rotate(18deg);
+        }
+
+        .upload-box {
+            margin-top: 15px;
+            background: #e5e5e5;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+
+        .upload-box:hover {
+            background: #dcdcdc;
+        }
+
+        .upload-icon {
+            width: 40px;
+            margin-bottom: 10px;
+            opacity: 0.6;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+
+        .upload-subtext {
+            font-size: 13px;
+            color: #b0b0b0;
+        }
     </style>
 </head>
 
@@ -867,23 +998,6 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                                     </div>
                                                 <?php } ?>
 
-                                                <div class="form-group">
-                                                    <label>Lampiran Bukti Percakapan dengan Pihak Supplier</label>
-
-                                                    <div class="upload-box" onclick="document.getElementById('lampiranInput<?= $no ?>').click()">
-                                                        <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
-                                                        <p class="upload-text">Upload PDF / Gambar</p>
-
-                                                        <input
-                                                            type="file"
-                                                            id="lampiranInput<?= $no ?>"
-                                                            name="lampiran_supplier[<?= $no ?>]"
-                                                            accept=".jpg,.jpeg,.png,.pdf"
-                                                            hidden>
-                                                        <img id="previewImage<?= $no ?>"
-                                                            style="display:none; width:100%; margin-top:10px; border-radius:10px;">
-                                                    </div>
-                                                </div>
                                             </div>
                                         <?php } ?>
                                         <div class="success-line"></div>
@@ -893,10 +1007,47 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                     $no++;
                                 }
                                 ?>
+
                             </div>
                         </div>
                     </div>
                 </div>
+                <?php if ($adaCacat) { ?>
+
+                    <div class="welcome-card_3">
+                        <div class="form-card_2">
+
+                            <!-- dekorasi -->
+                            <div class="box_1"></div>
+                            <div class="box_2"></div>
+                            <div class="box_3"></div>
+
+                            <div class="form-group_2">
+                                <label>Bukti Tanggapan Supplier</label>
+
+                                <div class="upload-box" id="uploadBoxRetur">
+                                    <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
+
+                                    <p class="upload-text">Upload Foto / PDF</p>
+                                    <p class="upload-subtext">Format: JPG, PNG, PDF</p>
+
+                                    <input
+                                        type="file"
+                                        id="fotoRetur"
+                                        name="foto_retur"
+                                        accept=".jpg,.jpeg,.png,.pdf"
+                                        style="display:none;">
+
+                                    <img id="previewRetur"
+                                        style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                <?php } ?>
             </div>
             <div style="margin-top: 25px; text-align:center;">
                 <button type="submit" class="btn-retur">
@@ -1174,6 +1325,38 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             }, index * 100);
 
         });
+
+    });
+    const uploadBox = document.getElementById("uploadBoxRetur");
+    const inputFile = document.getElementById("fotoRetur");
+
+    uploadBox.addEventListener("click", () => {
+        inputFile.click();
+    });
+    inputFile.addEventListener("change", function(e) {
+
+        const file = e.target.files[0];
+        const preview = document.getElementById("previewRetur");
+
+        if (file) {
+
+            if (file.type.startsWith("image/")) {
+                preview.src = URL.createObjectURL(file);
+            } else {
+                preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+            }
+
+            preview.style.display = "block";
+        }
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        const file = document.getElementById("fotoRetur").files[0];
+
+        if (<?= $adaCacat ? 'true' : 'false' ?> && !file) {
+            alert("Wajib upload bukti tanggapan supplier!");
+            e.preventDefault();
+        }
 
     });
 </script>
