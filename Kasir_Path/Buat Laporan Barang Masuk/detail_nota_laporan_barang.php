@@ -249,6 +249,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
+            pointer-events: none;
         }
 
         .chip.active {
@@ -1021,12 +1022,10 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                     <div class="welcome-card_3">
                         <div class="form-card_2">
 
-                            <!-- dekorasi -->
                             <div class="box_1"></div>
                             <div class="box_2"></div>
                             <div class="box_3"></div>
 
-                            <!-- TANGGAPAN -->
                             <div class="form-group_2">
                                 <label>Tanggapan & Tindak Lanjut Supplier</label>
 
@@ -1037,7 +1036,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                     required><?= $tanggapanData['tanggapan'] ?? '' ?></textarea>
                             </div>
 
-                            <!-- BUKTI -->
                             <div class="form-group">
                                 <div class="form-group_2">
                                     <label>Bukti Tanggapan Supplier</label>
