@@ -602,6 +602,10 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     .section-title {
       margin-bottom: 10px;
     }
+
+    [id^="previewImage"] {
+      cursor: zoom-in;
+    }
   </style>
 </head>
 
@@ -784,6 +788,36 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
         <button type="submit" name="submit" class="btn-login">Simpan Hasil Pemeriksaan</button>
       </div>
   </form>
+  <div id="imageModal" style="
+    display:none;
+    position:fixed;
+    z-index:9999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+">
+
+    <span id="closeModal" style="
+        position:absolute;
+        top:20px;
+        right:30px;
+        font-size:30px;
+        color:white;
+        cursor:pointer;
+        font-weight:bold;
+    ">×</span>
+
+    <img id="modalImage" style="
+        max-width:90%;
+        max-height:90%;
+        border-radius:10px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    ">
+  </div>
 </body>
 
 </html>
@@ -1021,5 +1055,28 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       return;
     }
 
+  });
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const closeModal = document.getElementById("closeModal");
+
+  document.querySelectorAll("[id^='previewImage']").forEach(img => {
+    img.addEventListener("click", function() {
+
+      if (this.src) {
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+      }
+    });
+  });
+
+  closeModal.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
   });
 </script>
