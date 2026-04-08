@@ -771,22 +771,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
   let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
   const chips = document.querySelectorAll(".chip");
   chips.forEach(chip => {
-    chip.addEventListener("click", () => {
-
-      const value = chip.innerText;
-
-      if (selectedItems.includes(value)) {
-        selectedItems = selectedItems.filter(item => item !== value);
-        chip.classList.remove("active");
-      } else {
-        selectedItems.push(value);
-        chip.classList.add("active");
-      }
-
-      document.getElementById("jenisBarangInput").value = selectedItems.join(",");
-    });
-  });
-  chips.forEach(chip => {
     if (selectedItems.includes(chip.innerText)) {
       chip.classList.add("active");
     }
