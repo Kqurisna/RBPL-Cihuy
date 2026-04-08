@@ -744,8 +744,28 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                             hidden>
                         </div>
 
-                        <img id="previewImage<?= $no ?>"
-                          style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                        <div style="position: relative; margin-top:10px;">
+                          <img id="previewImage<?= $no ?>"
+                            style="display:none; width:100%; border-radius:10px;">
+
+                          <span id="removeImageBtn<?= $no ?>"
+                            style="
+                              display:none;
+                              position:absolute;
+                              top:8px;
+                              right:8px;
+                              background:white;
+                              color:#5bb7c5;
+                              border-radius:50%;
+                              width:25px;
+                              height:25px;
+                              text-align:center;
+                              line-height:25px;
+                              cursor:pointer;
+                              font-weight:bold;
+                            ">
+                            ×</span>
+                        </div>
                       </div>
                     </div>
                     <div class="success-line"></div>
@@ -875,12 +895,32 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
       const file = e.target.files[0];
       const id = this.id.replace("fileInput", "");
+
       const preview = document.getElementById("previewImage" + id);
+      const removeBtn = document.getElementById("removeImageBtn" + id);
 
       if (file) {
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
+        removeBtn.style.display = "block";
       }
+    });
+  });
+
+  document.querySelectorAll("[id^='removeImageBtn']").forEach(btn => {
+    btn.addEventListener("click", function() {
+
+      const id = this.id.replace("removeImageBtn", "");
+
+      const preview = document.getElementById("previewImage" + id);
+      const fileInput = document.getElementById("fileInput" + id);
+
+      preview.src = "";
+      preview.style.display = "none";
+
+      this.style.display = "none";
+
+      fileInput.value = "";
     });
   });
   document.querySelector("form").addEventListener("submit", function(e) {
