@@ -816,9 +816,10 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                                 <label>Jumlah Retur</label>
                                                 <input type="number"
                                                     name="jumlah_retur[]"
+                                                    class="input-number"
                                                     min="0"
                                                     max="<?= $detail['jumlah_barang'] ?>"
-                                                    placeholder="Masukkan jumlah retur">
+                                                    placeholder="Masukkan jumlah retur" required>
                                             </div>
                                             <div class="keluhan-box" style="display:block;">
 
@@ -1103,4 +1104,24 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
+    document.addEventListener("keydown", function(e) {
+        if (e.target.classList.contains("input-number")) {
+
+            if (
+                e.key === 'e' ||
+                e.key === 'E' ||
+                e.key === '+' ||
+                e.key === '-' ||
+                e.key === '.' ||
+                e.key === ','
+            ) {
+                e.preventDefault();
+            }
+        }
+    });
+    document.querySelectorAll(".input-number").forEach(input => {
+        input.addEventListener("input", function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    });
 </script>
