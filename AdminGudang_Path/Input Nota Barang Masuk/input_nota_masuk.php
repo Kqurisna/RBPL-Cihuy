@@ -613,8 +613,27 @@
                     <input type="file" id="fileInput" name="foto_nota" accept="image/*" hidden required>
                 </div>
 
-                <img id="previewImage"
-                    style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                <div style="position: relative; margin-top:10px;">
+                    <img id="previewImage"
+                        style="display:none; width:100%; border-radius:10px;">
+
+                    <span id="removeImageBtn"
+                        style="
+                            display:none;
+                            position:absolute;
+                            top:8px;
+                            right:8px;
+                            background:white;
+                            color:#5bb7c5;
+                            border-radius:50%;
+                            width:25px;
+                            height:25px;
+                            text-align:center;
+                            line-height:25px;
+                            cursor:pointer;
+                            font-weight:bold;
+                        ">×</span>
+                </div>
 
             </div>
 
@@ -630,6 +649,27 @@
 
 </html>
 <script>
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("previewImage");
+    const removeBtn = document.getElementById("removeImageBtn");
+
+    fileInput.addEventListener("change", function(e) {
+        const file = e.target.files[0];
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = "block";
+            removeBtn.style.display = "block";
+        }
+    });
+
+    removeBtn.addEventListener("click", function() {
+        preview.src = "";
+        preview.style.display = "none";
+        removeBtn.style.display = "none";
+
+        fileInput.value = "";
+    });
     const chips = document.querySelectorAll(".chip");
     chips.forEach(chip => {
         chip.addEventListener("click", () => {
