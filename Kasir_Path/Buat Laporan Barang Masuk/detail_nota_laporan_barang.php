@@ -913,13 +913,11 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                     <?php
                                     $no = 1;
 
-                                    // Ambil semua detail jadi array
                                     $detailList = [];
                                     while ($d = mysqli_fetch_assoc($queryDetail)) {
                                         $detailList[] = $d;
                                     }
 
-                                    // Cek apakah ada barang cacat
                                     $adaCacat = false;
                                     foreach ($validasiList as $v) {
                                         if (($v['hasil'] ?? '') == 'cacat') {
@@ -928,7 +926,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                         }
                                     }
 
-                                    // LOOP TAMPIL BARANG
                                     foreach ($detailList as $index => $detail) {
 
                                         $validasi = $validasiList[$index] ?? null;
