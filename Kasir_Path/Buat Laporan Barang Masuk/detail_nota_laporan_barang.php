@@ -1047,8 +1047,8 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                             <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $tanggapanData['lampiran'] ?>">
                                         </div>
                                     <?php } else { ?>
-                                        <p style="font-size:13px; color:#9ca3af;">
-                                            Belum ada bukti dari admin gudang
+                                        <p style="font-size:13px; color: #ef4444;">
+                                            Belum ada bukti dari <strong>Admin Gudang</strong>
                                         </p>
                                     <?php } ?>
 
