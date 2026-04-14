@@ -1061,6 +1061,30 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                         </div>
                     </div>
 
+                <?php } else { ?>
+                    <div class="welcome-card_3">
+                        <div class="form-card_2">
+
+                            <div class="box_1"></div>
+                            <div class="box_2"></div>
+                            <div class="box_3"></div>
+
+                            <div class="form-group">
+                                <div class="form-group_2">
+                                    <?php if (!empty($dataNota['foto_nota'])) { ?>
+                                        <div class="form-group">
+                                            <label>Foto Nota</label>
+                                            <div class="img-preview" onclick="openModal(this)">
+                                                <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
                 <?php } ?>
 
             </div>
