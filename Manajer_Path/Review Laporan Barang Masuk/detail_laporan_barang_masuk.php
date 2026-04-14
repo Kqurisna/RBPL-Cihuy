@@ -37,6 +37,13 @@ $queryTanggapan = mysqli_query($koneksi, "
 while ($t = mysqli_fetch_assoc($queryTanggapan)) {
     $tanggapanList[$t['id_detail']] = $t;
 }
+$adaCacat = false;
+foreach ($validasiList as $v) {
+    if (($v['hasil'] ?? '') == 'cacat') {
+        $adaCacat = true;
+        break;
+    }
+}
 ?>
 <!doctype html>
 <html lang="id">
@@ -991,30 +998,88 @@ while ($t = mysqli_fetch_assoc($queryTanggapan)) {
                         </div>
                     </div>
                 </div>
-                <div class="welcome-card_3">
-                    <div class="form-card_2">
-                        <div class="box_1"><span></span></div>
-                        <div class="box_2"><span></span></div>
-                        <div class="box_3"><span></span></div>
-                        <div class="form-group_2">
-                            <label>Tanggapan & Tindak Lanjut Supplier</label>
-                            <textarea class="textarea" readonly><?= $dataTanggapan ? $dataTanggapan['tanggapan'] : 'Belum ada tanggapan' ?></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group_2">
-                                <label>Bukti Tanggapan Supplier</label>
+                <?php
+                $pathFoto = "../../AdminGudang_Path/Input Nota Barang Masuk/" . $dataNota['foto_nota'];
+                ?>
 
-                                <?php if ($dataTanggapan && !empty($dataTanggapan['lampiran'])) { ?>
-                                    <div class="img-preview" onclick="openModal(this)">
-                                        <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $dataTanggapan['lampiran'] ?>">
-                                    </div>
-                                <?php } else { ?>
-                                    <p style="font-size:13px; color:#9ca3af;">Belum ada bukti dari admin gudang</p>
-                                <?php } ?>
+                <?php if ($adaCacat) { ?>
+
+                    <div class="welcome-card_3">
+                        <div class="form-card_2">
+
+                            <div class="box_1"></div>
+                            <div class="box_2"></div>
+                            <div class="box_3"></div>
+
+                            <div class="form-group_2">
+                                <label>Tanggapan & Tindak Lanjut Supplier</label>
+                                <textarea class="textarea" readonly>
+<?= $dataTanggapan ? $dataTanggapan['tanggapan'] : 'Belum ada tanggapan' ?>
+                </textarea>
                             </div>
+
+                            <div class="form-group">
+                                <div class="form-group_2">
+                                    <label>Bukti Tanggapan Supplier</label>
+
+                                    <?php if ($dataTanggapan && !empty($dataTanggapan['lampiran'])) { ?>
+                                        <div class="img-preview" onclick="openModal(this)">
+                                            <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $dataTanggapan['lampiran'] ?>">
+                                        </div>
+                                    <?php } else { ?>
+                                        <p style="font-size:13px; color:#9ca3af;">
+                                            Belum ada bukti dari admin gudang
+                                        </p>
+                                    <?php } ?>
+
+                                    <!-- FOTO NOTA -->
+                                    <?php if (!empty($dataNota['foto_nota']) && file_exists($pathFoto)) { ?>
+                                        <div class="form-group">
+                                            <label>Foto Nota</label>
+                                            <div class="img-preview" onclick="openModal(this)">
+                                                <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <p style="font-size:13px; color:#ef4444;">
+                                            Foto nota tidak tersedia
+                                        </p>
+                                    <?php } ?>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
+
+                <?php } else { ?>
+
+                    <div class="welcome-card_3">
+                        <div class="form-card_2">
+
+                            <div class="box_1"></div>
+                            <div class="box_2"></div>
+                            <div class="box_3"></div>
+
+                            <div class="form-group_2">
+                                <label>Foto Nota</label>
+
+                                <?php if (!empty($dataNota['foto_nota']) && file_exists($pathFoto)) { ?>
+                                    <div class="img-preview" onclick="openModal(this)">
+                                        <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
+                                    </div>
+                                <?php } else { ?>
+                                    <p style="font-size:13px; color:#ef4444;">
+                                        Foto nota tidak tersedia
+                                    </p>
+                                <?php } ?>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                <?php } ?>
             </div>
             <div style="margin-top: 25px; text-align:center;">
                 <button type="submit" class="btn-retur">
