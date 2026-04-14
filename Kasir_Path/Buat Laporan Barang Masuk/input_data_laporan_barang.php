@@ -13,7 +13,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jumlah_retur_list = $_POST['jumlah_retur'] ?? [];
 
     $tanggapan = $_POST['tanggapan_supplier'] ?? '';
+
+    $folder = "uploads/lampiran/";
+    if (!is_dir($folder)) {
+        mkdir($folder, 0777, true);
+    }
+
     $lampiran = "";
+
+    if (isset($_FILES['lampiran_supplier']) && $_FILES['lampiran_supplier']['name'][0] != "") {
+
+        $fileName = $_FILES['lampiran_supplier']['name'][0];
+        $tmpName = $_FILES['lampiran_supplier']['tmp_name'][0];
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+
+        if (in_array($ext, $allowed)) {
+
+            $newName = "lampiran_" . time() . "." . $ext;
+
+            if (move_uploaded_file($tmpName, $folder . $newName)) {
+                $lampiran = $newName;
+            }
+        }
+    }
+
+    if ($lampiran == "") {
+        $lampiran = NULL;
+    }
 
     $cek = mysqli_query($koneksi, "SELECT * FROM retur WHERE id_nota = '$id_nota'");
 
@@ -28,30 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id_retur = mysqli_insert_id($koneksi);
     }
 
-    $folder = "uploads/lampiran/";
-    if (!is_dir($folder)) {
-        mkdir($folder, 0777, true);
-    }
-
-    if (isset($_FILES['lampiran_supplier'])) {
-        foreach ($_FILES['lampiran_supplier']['name'] as $i => $fileName) {
-
-            if ($fileName == "") continue;
-
-            $tmpName = $_FILES['lampiran_supplier']['tmp_name'][$i];
-            $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-            $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
-            if (!in_array($ext, $allowed)) continue;
-
-            $newName = "lampiran_" . uniqid() . "_" . $i . "." . $ext;
-
-            if (move_uploaded_file($tmpName, $folder . $newName)) {
-                $lampiran = $newName;
-            }
-        }
-    }
-
     foreach ($id_detail_list as $i => $id_detail) {
 
         $jumlah_retur = isset($jumlah_retur_list[$i]) ? intval($jumlah_retur_list[$i]) : 0;
@@ -64,10 +68,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    mysqli_query($koneksi, "
+    $cekTanggapan = mysqli_query($koneksi, "
+    SELECT * FROM tanggapan_supplier 
+    WHERE id_retur = '$id_retur'
+");
+
+    if (mysqli_num_rows($cekTanggapan) > 0) {
+
+        if ($lampiran != NULL) {
+            mysqli_query($koneksi, "
+            UPDATE tanggapan_supplier 
+            SET tanggapan = '$tanggapan', lampiran = '$lampiran'
+            WHERE id_retur = '$id_retur'
+        ");
+        } else {
+            mysqli_query($koneksi, "
+            UPDATE tanggapan_supplier 
+            SET tanggapan = '$tanggapan'
+            WHERE id_retur = '$id_retur'
+        ");
+        }
+    } else {
+
+        mysqli_query($koneksi, "
         INSERT INTO tanggapan_supplier (id_retur, tanggapan, lampiran)
         VALUES ('$id_retur', '$tanggapan', '$lampiran')
     ");
+    }
 
     mysqli_query($koneksi, "
         UPDATE nota 

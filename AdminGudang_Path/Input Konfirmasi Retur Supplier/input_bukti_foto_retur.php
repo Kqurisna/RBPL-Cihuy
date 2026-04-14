@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         UPDATE nota 
         SET 
             status = 'cacat',
-            status_laporan = 'menunggu'
+            status_laporan = 'belum_diajukan'
         WHERE id_nota = '$id_nota'
     ");
 
