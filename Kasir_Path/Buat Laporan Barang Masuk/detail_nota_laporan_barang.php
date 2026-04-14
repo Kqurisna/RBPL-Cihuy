@@ -856,6 +856,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
     </div>
 
     <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <input type="hidden" name="foto_nota" value="<?= $dataNota['foto_nota'] ?>">
         <div class="container">
 
