@@ -3,7 +3,7 @@ $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $query = mysqli_query($koneksi, "
     SELECT * FROM nota 
-    WHERE status_laporan IN ('menunggu','ditolak')
+    WHERE status_laporan IN ('menunggu','ditolak','disetujui')
     ORDER BY created_at DESC
 "); ?>
 <!doctype html>
@@ -256,6 +256,29 @@ $query = mysqli_query($koneksi, "
             transform: translateX(-100px);
             transition: all 0.3s ease;
         }
+
+        .status-label {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            padding-bottom: 1px;
+        }
+
+        .status-menunggu {
+            border-bottom: 2px solid #5BE0E7;
+        }
+
+        .status-ditolak {
+            border-bottom: 2px solid #40189F;
+
+        }
+
+        .status-setuju {
+            border-bottom: 2px solid #5DADC1;
+
+        }
     </style>
 </head>
 
@@ -287,8 +310,25 @@ $query = mysqli_query($koneksi, "
         <?php if (mysqli_num_rows($query) > 0) { ?>
 
             <?php while ($data = mysqli_fetch_assoc($query)) { ?>
-                <div class="form-card">
+                <?php
+                $statusText = "";
+                $statusClass = "";
 
+                if ($data['status_laporan'] == 'menunggu') {
+                    $statusText = "Menunggu Persetujuan";
+                    $statusClass = "status-menunggu";
+                } elseif ($data['status_laporan'] == 'ditolak') {
+                    $statusText = "Ditolak";
+                    $statusClass = "status-ditolak";
+                } elseif ($data['status_laporan'] == 'disetujui') {
+                    $statusText = "Sudah Disetujui";
+                    $statusClass = "status-setuju";
+                }
+                ?>
+                <div class="form-card">
+                    <div class="status-label <?= $statusClass ?>">
+                        <?= $statusText ?>
+                    </div>
                     <h3 class="section-title">Nota</h3>
 
                     <div class="form-group">
