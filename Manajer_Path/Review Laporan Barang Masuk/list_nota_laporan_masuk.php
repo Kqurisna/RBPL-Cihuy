@@ -1,11 +1,34 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
-$query = mysqli_query($koneksi, "
-    SELECT * FROM nota 
-    WHERE status_laporan IN ('menunggu','ditolak','disetujui')
-    ORDER BY created_at DESC
-"); ?>
+$filter = $_GET['filter'] ?? '';
+
+if ($filter == 'menunggu') {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status_laporan = 'menunggu'
+        ORDER BY created_at DESC
+    ");
+} elseif ($filter == 'ditolak') {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status_laporan = 'ditolak'
+        ORDER BY created_at DESC
+    ");
+} elseif ($filter == 'disetujui') {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status_laporan = 'disetujui'
+        ORDER BY created_at DESC
+    ");
+} else {
+    $query = mysqli_query($koneksi, "
+        SELECT * FROM nota 
+        WHERE status_laporan IN ('menunggu','ditolak','disetujui')
+        ORDER BY created_at DESC
+    ");
+}
+?>
 <!doctype html>
 <html lang="id">
 
@@ -279,6 +302,28 @@ $query = mysqli_query($koneksi, "
             border-bottom: 2px solid #5DADC1;
 
         }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .filter-btn {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            padding-bottom: 3px;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .filter-btn:hover {
+            color: #3f7aa3;
+            border-bottom: 2px solid #3f7aa3;
+        }
     </style>
 </head>
 
@@ -304,7 +349,11 @@ $query = mysqli_query($koneksi, "
 
     </div>
 
-
+    <div class="filter-container">
+        <a href="?filter=menunggu" class="filter-btn">Menunggu Persetujuan</a>
+        <a href="?filter=ditolak" class="filter-btn">Ditolak</a>
+        <a href="?filter=disetujui" class="filter-btn">Sudah Disetujui</a>
+    </div>
     <div class="container">
 
         <?php if (mysqli_num_rows($query) > 0) { ?>
