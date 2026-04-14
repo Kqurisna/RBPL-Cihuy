@@ -856,7 +856,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
     </div>
 
     <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
+        <input type="hidden" name="foto_nota" value="<?= $dataNota['foto_nota'] ?>">
         <div class="container">
 
             <div class="form-card">
@@ -1046,8 +1046,16 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                             Belum ada bukti dari <strong>Admin Gudang</strong>
                                         </p>
                                     <?php } ?>
-
+                                    <?php if (!empty($dataNota['foto_nota'])) { ?>
+                                        <div class="form-group">
+                                            <label>Foto Nota</label>
+                                            <div class="img-preview" onclick="openModal(this)">
+                                                <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
+
                             </div>
 
                         </div>
@@ -1330,16 +1338,10 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
     function openModal(el) {
         const img = el.querySelector("img");
         const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
 
         modal.style.display = "block";
         modalImg.src = img.src;
-
-        scale = 1;
-        posX = 0;
-        isZoomed = false;
-
-        modalImg.style.transform = "scale(1) translateX(0px)";
-        modalImg.style.cursor = "zoom-in";
     }
     document.addEventListener("DOMContentLoaded", function() {
 
