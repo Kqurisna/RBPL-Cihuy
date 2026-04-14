@@ -2,7 +2,9 @@
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $filter = $_GET['filter'] ?? '';
-
+$chooseMenunggu = ($filter == 'menunggu') ? 'btn-choose-menunggu' : '';
+$chooseDitolak = ($filter == 'ditolak') ? 'btn-choose-ditolak' : '';
+$chooseDisetujui = ($filter == 'disetujui') ? 'btn-choose-disetujui' : '';
 if ($filter == 'menunggu') {
     $query = mysqli_query($koneksi, "
         SELECT * FROM nota 
@@ -306,7 +308,7 @@ if ($filter == 'menunggu') {
         .filter-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             margin: 20px 0;
         }
 
@@ -314,15 +316,71 @@ if ($filter == 'menunggu') {
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
-            color: #6b7280;
             padding-bottom: 3px;
             border-bottom: 2px solid transparent;
-            transition: 0.2s;
+            transition: all 0.25s ease;
+            transform: scale(1);
         }
 
-        .filter-btn:hover {
-            color: #3f7aa3;
-            border-bottom: 2px solid #3f7aa3;
+        .btn-choose-menunggu,
+        .btn-choose-ditolak,
+        .btn-choose-disetujui {
+            transition: all 0.25s ease;
+            transform: scale(1.05);
+        }
+
+        .btn-choose-menunggu {
+            box-shadow: 0 2px 8px rgba(0, 188, 212, 0.2);
+        }
+
+        .btn-choose-ditolak {
+            box-shadow: 0 2px 8px rgba(64, 24, 159, 0.2);
+        }
+
+        .btn-choose-disetujui {
+            box-shadow: 0 2px 8px rgba(93, 173, 193, 0.2);
+        }
+
+        .filter-btn.menunggu {
+            color: #000000;
+        }
+
+        .filter-btn.menunggu:hover {
+            border-bottom: 2px solid #5BE0E7;
+        }
+
+        .filter-btn.ditolak {
+            color: #000000;
+        }
+
+        .filter-btn.ditolak:hover {
+            border-bottom: 2px solid #40189F;
+        }
+
+        .filter-btn.disetujui {
+            color: #000000;
+        }
+
+        .filter-btn.disetujui:hover {
+            border-bottom: 2px solid #5DADC1;
+        }
+
+        .btn-choose-menunggu {
+            border: 2px solid #00bcd4;
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+
+        .btn-choose-ditolak {
+            border: 2px solid #40189F;
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+
+        .btn-choose-disetujui {
+            border: 2px solid #5DADC1;
+            border-radius: 6px;
+            padding: 2px 6px;
         }
     </style>
 </head>
@@ -350,9 +408,9 @@ if ($filter == 'menunggu') {
     </div>
 
     <div class="filter-container">
-        <a href="?filter=menunggu" class="filter-btn">Menunggu Persetujuan</a>
-        <a href="?filter=ditolak" class="filter-btn">Ditolak</a>
-        <a href="?filter=disetujui" class="filter-btn">Sudah Disetujui</a>
+        <a href="?filter=menunggu" class="filter-btn menunggu <?= $chooseMenunggu ?>">Menunggu Persetujuan</a>
+        <a href="?filter=ditolak" class="filter-btn ditolak <?= $chooseDitolak ?>">Ditolak</a>
+        <a href="?filter=disetujui" class="filter-btn disetujui <?= $chooseDisetujui ?>">Sudah Disetujui</a>
     </div>
     <div class="container">
 
@@ -399,20 +457,34 @@ if ($filter == 'menunggu') {
             <?php } ?>
 
         <?php } else { ?>
+            <?php
+            $judul = "Tidak ada laporan barang masuk";
+            $deskripsi = "Belum ada laporan barang masuk dari <strong>Kasir Toko</strong>";
 
+            if ($filter == 'menunggu') {
+                $judul = "Tidak ada laporan menunggu persetujuan";
+                $deskripsi = "Belum ada laporan yang menunggu persetujuan";
+            } elseif ($filter == 'ditolak') {
+                $judul = "Tidak ada laporan ditolak";
+                $deskripsi = "Belum ada laporan yang ditolak";
+            } elseif ($filter == 'disetujui') {
+                $judul = "Tidak ada laporan disetujui";
+                $deskripsi = "Belum ada laporan yang sudah disetujui";
+            }
+            ?>
             <div class="empty-container">
                 <div class="empty-icon">
                     <img src="../../UI_GENERAL/logo_x.png" alt="">
                 </div>
 
                 <div class="empty-title">
-                    Tidak ada laporan barang masuk
+                    <?= $judul ?>
                 </div>
 
                 <div class="empty-line"></div>
 
                 <div class="empty-desc">
-                    Belum ada laporan barang masuk dari <strong>Kasir Toko</strong>
+                    <?= $deskripsi ?>
                 </div>
             </div>
 
