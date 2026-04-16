@@ -488,6 +488,11 @@
         .form-card {
             will-change: transform, opacity;
         }
+
+        .container h3.section-title-nota {
+            font-size: 15px;
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -528,7 +533,10 @@
 
                 <div class="form-group">
                     <label>Tanggal Nota<span style="color:red">*</span></label>
-                    <input type="date" name="tanggal_nota" required>
+                    <input type="date" name="tanggal_nota" id="tanggalNota" required>
+                    <small id="errorTanggal" style="color:red; display:none;">
+                        Tidak bisa menginputkan tanggal di masa depan!
+                    </small>
                 </div>
 
                 <div class="form-group">
@@ -602,7 +610,7 @@
 
             <div class="form-card">
 
-                <h3 class="section-title">Lampiran Foto Nota</h3>
+                <h3 class="section-title-nota">Lampiran Foto Nota<span style="color:red">*</span></h3>
 
                 <div class="upload-box" onclick="document.getElementById('fileInput').click()">
 
@@ -813,43 +821,6 @@
 
     document.querySelector("form").addEventListener("submit", function(e) {
 
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
-
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
-            }
-        });
-
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
-
-            e.preventDefault();
-
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
-
         let firstError = null;
 
         const inputs = document.querySelectorAll("input[required], textarea[required]");
@@ -909,6 +880,55 @@
             }, index * 100);
 
         });
+
+    });
+    const tanggalInput = document.getElementById("tanggalNota");
+    const errorTanggal = document.getElementById("errorTanggal");
+
+    // Ambil tanggal WIB
+    function getTodayWIB() {
+        return new Date().toLocaleDateString("en-CA", {
+            timeZone: "Asia/Jakarta"
+        });
+    }
+
+    // Set batas max di calendar
+    tanggalInput.max = getTodayWIB();
+
+    // VALIDASI REAL-TIME (saat user pilih tanggal)
+    tanggalInput.addEventListener("input", function() {
+        const inputDate = tanggalInput.value;
+        const today = getTodayWIB();
+
+        if (inputDate > today) {
+            tanggalInput.classList.add("error-input");
+            errorTanggal.style.display = "block";
+        } else {
+            tanggalInput.classList.remove("error-input");
+            errorTanggal.style.display = "none";
+        }
+    });
+
+
+    // VALIDASI SAAT SUBMIT (backup)
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        const inputDate = tanggalInput.value;
+        const today = getTodayWIB();
+
+        if (inputDate > today) {
+            e.preventDefault();
+
+            tanggalInput.classList.add("error-input");
+            errorTanggal.style.display = "block";
+
+            tanggalInput.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            tanggalInput.focus();
+        }
 
     });
 </script>
