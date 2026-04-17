@@ -885,17 +885,14 @@
     const tanggalInput = document.getElementById("tanggalNota");
     const errorTanggal = document.getElementById("errorTanggal");
 
-    // Ambil tanggal WIB
     function getTodayWIB() {
         return new Date().toLocaleDateString("en-CA", {
             timeZone: "Asia/Jakarta"
         });
     }
 
-    // Set batas max di calendar
     tanggalInput.max = getTodayWIB();
 
-    // VALIDASI REAL-TIME (saat user pilih tanggal)
     tanggalInput.addEventListener("input", function() {
         const inputDate = tanggalInput.value;
         const today = getTodayWIB();
@@ -910,7 +907,6 @@
     });
 
 
-    // VALIDASI SAAT SUBMIT (backup)
     document.querySelector("form").addEventListener("submit", function(e) {
 
         const inputDate = tanggalInput.value;
