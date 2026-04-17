@@ -834,6 +834,56 @@ foreach ($validasiList as $v) {
 
             transform: rotate(18deg);
         }
+
+        .status-label {
+            position: absolute;
+            right: 10px;
+            top: -8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-line {
+            height: 3px;
+            border-radius: 3px;
+            margin-top: 1px;
+        }
+
+        .status-belum {
+            color: #9ca3af;
+        }
+
+        .status-belum .status-line {
+            background: #9ca3af;
+        }
+
+        .status-menunggu {
+            color: #000000;
+        }
+
+        .status-menunggu .status-line {
+            background: #5BE0E7;
+        }
+
+        .status-ditolak {
+            color: #000000;
+        }
+
+        .status-ditolak .status-line {
+            background: #40189F;
+        }
+
+        .status-disetujui {
+            color: #000000;
+        }
+
+        .status-disetujui .status-line {
+            background: #5DADC1;
+        }
+
+        .status-label {
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -867,9 +917,36 @@ foreach ($validasiList as $v) {
         <div class="container">
 
             <div class="form-card">
-                <div class="form-group">
+                <div class="form-group" style="position:relative;">
                     <label>Nomer Nota</label>
+
                     <input type="text" name="nomer_nota" value="<?= $dataNota['nomor_nota'] ?>" readonly>
+
+                    <?php
+                    $status = $dataNota['status_laporan'];
+
+                    $text = '';
+                    $class = '';
+
+                    if ($status == 'belum_diajukan') {
+                        $text = 'Belum Diajukan';
+                        $class = 'status-belum';
+                    } elseif ($status == 'menunggu') {
+                        $text = 'Menunggu Persetujuan';
+                        $class = 'status-menunggu';
+                    } elseif ($status == 'ditolak') {
+                        $text = 'Ditolak';
+                        $class = 'status-ditolak';
+                    } elseif ($status == 'disetujui') {
+                        $text = 'Disetujui';
+                        $class = 'status-disetujui';
+                    }
+                    ?>
+
+                    <div class="status-label <?= $class ?>">
+                        <?= $text ?>
+                        <div class="status-line"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
