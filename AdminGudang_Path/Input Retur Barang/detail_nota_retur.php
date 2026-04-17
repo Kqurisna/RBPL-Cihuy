@@ -700,7 +700,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../Input Retur Barang/lihat_list_nota.php" class="back-link">
+                <a href="../Input Retur Barang/list_nota_retur.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>

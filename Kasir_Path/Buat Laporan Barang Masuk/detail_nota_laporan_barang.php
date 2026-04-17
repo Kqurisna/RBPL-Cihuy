@@ -775,15 +775,12 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             border: none;
             min-height: 120px;
             background: #ffffff;
-
-            padding: 14px 4px 10px 15px;
+            padding: 14px 10px 10px 15px;
             text-align: left;
             font-size: 12px;
             font-weight: 500;
-
             outline: none;
             resize: none;
-
             line-height: 1.4;
         }
 
