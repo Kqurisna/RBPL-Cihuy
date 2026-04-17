@@ -295,6 +295,7 @@ foreach ($validasiList as $v) {
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
+            pointer-events: none;
         }
 
         .chip.active {

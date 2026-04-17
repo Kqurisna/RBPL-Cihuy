@@ -224,6 +224,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      pointer-events: none;
     }
 
     .chip.active {
