@@ -762,14 +762,14 @@ foreach ($validasiList as $v) {
 
         .btn-retur {
             width: 80%;
-            margin-bottom: 10px;
-            padding: 11px;
+            margin-bottom: 0px;
+            padding: 5px;
             border: none;
-            border-radius: 25px;
+            border-radius: 15px;
             background-color: #67A2CD;
             color: white;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(63, 122, 163, 0.3);
             opacity: 0;
@@ -907,13 +907,31 @@ foreach ($validasiList as $v) {
         }
 
         .btn-approval {
-            padding: 2px 26px;
+            position: relative;
+            padding: 3px 30px;
             border-radius: 10px;
             border: 2px solid #ccc;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.25s ease;
             font-size: 14px;
+        }
+
+        .btn-approval::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 1px;
+            border-radius: 3px;
+            background: currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approval.active::after {
+            width: 100%;
         }
 
         .btn-approval.approve {
@@ -934,6 +952,100 @@ foreach ($validasiList as $v) {
         .btn-approval.active.reject {
             background: #e74c3c;
             color: white;
+        }
+
+        .reject-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .reject-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .reject-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dots span {
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .dots span:nth-child(1) {
+            width: 12px;
+            height: 12px;
+            background: #6AD2DE;
+            top: 7px;
+            right: 0px;
+        }
+
+        .dots span:nth-child(2) {
+            width: 18px;
+            height: 18px;
+            background: #98DFE7;
+            top: 4px;
+            right: -2px;
+        }
+
+        .dots span:nth-child(3) {
+            width: 26px;
+            height: 26px;
+            background: #ABDEE3;
+            top: 0px;
+            right: -4px;
+        }
+
+        .reject-card {
+            background: #F0F0F9;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .reject-card textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+            min-height: 120px;
+            font-weight: 400;
+        }
+
+        .action-area {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reject-box {
+            display: none;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -1190,10 +1302,38 @@ foreach ($validasiList as $v) {
                             </div>
 
                             <input type="hidden" name="status_keputusan" id="approvalInput">
+                        </div>
 
-                            <small id="errorApproval" style="color:red; display:none;">
-                                Wajib memilih approve atau reject!
+
+                        <div id="rejectBox" class="reject-box">
+
+                            <div class="reject-header">
+                                <h3>Catatan Revisi</h3>
+                                <div class="dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            <div class="reject-card">
+                                <textarea
+                                    name="alasan_reject"
+                                    id="alasanReject"
+                                    placeholder="Tuliskan catatan revisi..."></textarea>
+                            </div>
+
+                            <small id="errorReject" style="color:red; display:none;">
+                                Catatan revisi wajib diisi!
                             </small>
+
+                        </div>
+
+
+                        <div class="action-area">
+                            <button type="submit" class="btn-retur">
+                                Konfirmasi Keputusan
+                            </button>
                         </div>
                     </div>
 
@@ -1242,11 +1382,7 @@ foreach ($validasiList as $v) {
                     </div>
 
                 <?php } ?>
-                <div style="margin-top: 30px; text-align:center;">
-                    <button type="submit" class="btn-retur">
-                        Simpan Hasil Laporan
-                    </button>
-                </div>
+
             </div>
 
 
@@ -1665,21 +1801,37 @@ foreach ($validasiList as $v) {
     function setApproval(value, el) {
         const buttons = document.querySelectorAll(".btn-approval");
         const submitBtn = document.querySelector(".btn-retur");
-        const input = document.getElementById("approvalInput");
+        const rejectBox = document.getElementById("rejectBox");
+        const alasan = document.getElementById("alasanReject");
 
+        // 🔁 kalau diklik lagi → reset
         if (el.classList.contains("active")) {
-
             el.classList.remove("active");
-            input.value = "";
+
+            document.getElementById("approvalInput").value = "";
+
             submitBtn.classList.remove("show");
+            rejectBox.style.display = "none";
+            alasan.value = "";
+
             return;
         }
 
+        // reset semua tombol
         buttons.forEach(btn => btn.classList.remove("active"));
+
+        // aktifkan yang dipilih
         el.classList.add("active");
-        input.value = value;
+        document.getElementById("approvalInput").value = value;
 
         submitBtn.classList.add("show");
-        document.getElementById("errorApproval").style.display = "none";
+
+        // 🔥 kondisi utama
+        if (value === "reject") {
+            rejectBox.style.display = "block";
+        } else {
+            rejectBox.style.display = "none";
+            alasan.value = "";
+        }
     }
 </script>
