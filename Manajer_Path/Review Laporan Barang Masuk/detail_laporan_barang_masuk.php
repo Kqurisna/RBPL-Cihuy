@@ -183,6 +183,7 @@ foreach ($validasiList as $v) {
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
+            margin-bottom: 20px;
         }
 
         .form-card_2 {
@@ -761,7 +762,7 @@ foreach ($validasiList as $v) {
 
         .btn-retur {
             width: 80%;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             padding: 11px;
             border: none;
             border-radius: 25px;
@@ -770,8 +771,17 @@ foreach ($validasiList as $v) {
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s ease;
             box-shadow: 0 6px 15px rgba(63, 122, 163, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-retur.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .btn-retur:hover {
@@ -883,6 +893,47 @@ foreach ($validasiList as $v) {
 
         .status-label {
             text-align: right;
+        }
+
+        .approval-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .approval-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-approval {
+            padding: 2px 26px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 14px;
+        }
+
+        .btn-approval.approve {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+
+        .btn-approval.reject {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .btn-approval.active.approve {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-approval.active.reject {
+            background: #e74c3c;
+            color: white;
         }
     </style>
 </head>
@@ -1110,7 +1161,6 @@ foreach ($validasiList as $v) {
                                         </p>
                                     <?php } ?>
 
-                                    <!-- FOTO NOTA -->
                                     <?php if (!empty($dataNota['foto_nota']) && file_exists($pathFoto)) { ?>
                                         <div class="form-group">
                                             <label>Foto Nota</label>
@@ -1127,6 +1177,23 @@ foreach ($validasiList as $v) {
                                 </div>
                             </div>
 
+                        </div>
+                        <div class="approval-box">
+                            <div class="approval-group">
+                                <div class="btn-approval approve" onclick="setApproval('approve', this)">
+                                    Approve
+                                </div>
+
+                                <div class="btn-approval reject" onclick="setApproval('reject', this)">
+                                    Reject
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="status_keputusan" id="approvalInput">
+
+                            <small id="errorApproval" style="color:red; display:none;">
+                                Wajib memilih approve atau reject!
+                            </small>
                         </div>
                     </div>
 
@@ -1155,15 +1222,34 @@ foreach ($validasiList as $v) {
                             </div>
 
                         </div>
+                        <div class="approval-box">
+                            <div class="approval-group">
+                                <div class="btn-approval approve" onclick="setApproval('approve', this)">
+                                    Approve
+                                </div>
+
+                                <div class="btn-approval reject" onclick="setApproval('reject', this)">
+                                    Reject
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="status_keputusan" id="approvalInput">
+
+                            <small id="errorApproval" style="color:red; display:none;">
+                                Wajib memilih approve atau reject!
+                            </small>
+                        </div>
                     </div>
 
                 <?php } ?>
+                <div style="margin-top: 30px; text-align:center;">
+                    <button type="submit" class="btn-retur">
+                        Simpan Hasil Laporan
+                    </button>
+                </div>
             </div>
-            <div style="margin-top: 25px; text-align:center;">
-                <button type="submit" class="btn-retur">
-                    Simpan Hasil Laporan
-                </button>
-            </div>
+
+
         </div>
     </form>
 </body>
@@ -1575,4 +1661,14 @@ foreach ($validasiList as $v) {
         }
 
     });
+
+    function setApproval(value, el) {
+        const buttons = document.querySelectorAll(".btn-approval");
+        const submitBtn = document.querySelector(".btn-retur");
+        buttons.forEach(btn => btn.classList.remove("active"));
+        el.classList.add("active");
+        document.getElementById("approvalInput").value = value;
+        submitBtn.classList.add("show");
+        document.getElementById("errorApproval").style.display = "none";
+    };
 </script>
