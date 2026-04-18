@@ -963,7 +963,7 @@ foreach ($validasiList as $v) {
 
     </div>
 
-    <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data">
+    <form action="input_data_hasil_laporan.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <div class="container">
 
