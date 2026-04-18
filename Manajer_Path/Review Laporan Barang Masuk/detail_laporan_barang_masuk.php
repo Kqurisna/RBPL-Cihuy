@@ -1665,10 +1665,21 @@ foreach ($validasiList as $v) {
     function setApproval(value, el) {
         const buttons = document.querySelectorAll(".btn-approval");
         const submitBtn = document.querySelector(".btn-retur");
+        const input = document.getElementById("approvalInput");
+
+        if (el.classList.contains("active")) {
+
+            el.classList.remove("active");
+            input.value = "";
+            submitBtn.classList.remove("show");
+            return;
+        }
+
         buttons.forEach(btn => btn.classList.remove("active"));
         el.classList.add("active");
-        document.getElementById("approvalInput").value = value;
+        input.value = value;
+
         submitBtn.classList.add("show");
         document.getElementById("errorApproval").style.display = "none";
-    };
+    }
 </script>
