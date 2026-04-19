@@ -5,7 +5,7 @@ $id_nota = $_POST['id_nota'];
 $status = $_POST['status_keputusan'];
 $catatan = $_POST['alasan_reject'] ?? null;
 
-$id_akun = 1; // sementara // NANTI DIRUBAH MEMAKAI SESSION
+$id_akun = 1; // nanti pakai session
 
 if (!$status) {
     die("Status keputusan belum dipilih");
@@ -42,5 +42,12 @@ mysqli_query($koneksi, "
     )
 ");
 
-header("Location: list_nota_laporan_masuk.php?status=success");
+if ($status == 'approve') {
+
+    header("Location: status_sucess_review_laporan_acc.php");
+} else if ($status == 'reject') {
+
+    header("Location: status_sucess_review_laporan_reject.php");
+}
+
 exit;
