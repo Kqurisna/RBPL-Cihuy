@@ -163,8 +163,8 @@
     <div class="header">
         <div class="header-left">
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
-                    <img src="../asset_admingudang/logo_back.png" alt="">
+                <a href="../../User_Manajer.php" class="back-link">
+                    <img src="../../AdminGudang_Path/asset_admingudang/logo_back.png" alt="">
                 </a>
             </div>
             <h2>Review Laporan Barang Masuk</h2>
@@ -179,7 +179,7 @@
     <div class="success-container">
 
         <div class="success-icon">
-            <img src="../asset_admingudang/logo_done.png" alt="">
+            <img src="../../AdminGudang_Path/asset_admingudang/logo_done.png" alt="">
         </div>
 
         <div class="success-title">
