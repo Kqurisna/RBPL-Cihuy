@@ -5,7 +5,15 @@ $id_nota = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $queryNota = mysqli_query($koneksi, "SELECT * FROM nota WHERE id_nota = $id_nota");
 $dataNota = mysqli_fetch_assoc($queryNota);
-
+$queryApproval = mysqli_query($koneksi, "
+    SELECT * 
+    FROM approval_manager 
+    WHERE id_nota = $id_nota 
+    ORDER BY id_approval DESC 
+    LIMIT 1
+");
+$dataApproval = mysqli_fetch_assoc($queryApproval);
+$mode = ($dataNota['status_laporan'] === 'menunggu') ? 'edit' : 'view';
 $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota = $id_nota");
 
 $validasiList = [];
@@ -1047,6 +1055,29 @@ foreach ($validasiList as $v) {
                 transform: translateY(0);
             }
         }
+
+        .auto-height {
+            width: 100%;
+            border: none;
+            background: transparent;
+            resize: none;
+            overflow: hidden;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .textarea-dynamic {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            background: #e9edf2;
+            padding: 5px 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 120px;
+            resize: none;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -1075,7 +1106,7 @@ foreach ($validasiList as $v) {
 
     </div>
 
-    <form action="input_data_hasil_laporan.php" method="POST" enctype="multipart/form-data">
+    <form action="input_data_hasil_laporan.php" method="POST" enctype="multipart/form-data" data-mode="<?= $mode ?>">
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <div class="container">
 
@@ -1321,51 +1352,92 @@ foreach ($validasiList as $v) {
                     </div>
 
                 <?php } ?>
-                <div class="approval-box">
-                    <div class="approval-group">
-                        <div class="btn-approval approve" onclick="setApproval('approve', this)">
-                            Approve
+
+                <?php if ($mode === 'view') { ?>
+
+                    <div style="
+                    text-align:center;
+                    font-size:13px;
+                    color:#6b7280;
+                    margin-top:15px;
+                    background:#f3f4f6;
+                    padding:12px;
+                    border-radius:12px;
+                "> Laporan telah Anda tolak dan saat ini menunggu revisi dari <strong> Kasir Toko </strong> </div>
+
+                    <?php if ($dataNota['status_laporan'] === 'ditolak') { ?>
+
+                        <div id="rejectBox" class="reject-box" style="display:block; margin-top:15px;">
+
+                            <div class="reject-header">
+                                <h3>Catatan Revisi</h3>
+                                <div class="dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            <div class="reject-card">
+                                <textarea class="auto-height" readonly>
+<?= $dataApproval ? $dataApproval['catatan_revisi'] : 'Tidak ada catatan revisi' ?>
+                </textarea>
+                            </div>
+
                         </div>
 
-                        <div class="btn-approval reject" onclick="setApproval('reject', this)">
-                            Reject
+                    <?php } ?>
+
+                <?php } else { ?>
+
+                    <div class="approval-box">
+                        <div class="approval-group">
+                            <div class="btn-approval approve" onclick="setApproval('approve', this)">
+                                Approve
+                            </div>
+
+                            <div class="btn-approval reject" onclick="setApproval('reject', this)">
+                                Reject
+                            </div>
                         </div>
+
+                        <input type="hidden" name="status_keputusan" id="approvalInput">
                     </div>
 
-                    <input type="hidden" name="status_keputusan" id="approvalInput">
-                </div>
 
+                    <div id="rejectBox" class="reject-box">
 
-                <div id="rejectBox" class="reject-box">
-
-                    <div class="reject-header">
-                        <h3>Catatan Revisi</h3>
-                        <div class="dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                        <div class="reject-header">
+                            <h3>Catatan Revisi</h3>
+                            <div class="dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
                         </div>
+
+                        <div class="reject-card">
+                            <textarea
+                                name="alasan_reject"
+                                class="textarea-dynamic"
+                                id="alasanReject"
+                                placeholder="Tuliskan catatan revisi..."></textarea>
+                        </div>
+
+                        <small id="errorReject" style="color:red; display:none;">
+                            Catatan revisi wajib diisi!
+                        </small>
+
                     </div>
 
-                    <div class="reject-card">
-                        <textarea
-                            name="alasan_reject"
-                            id="alasanReject"
-                            placeholder="Tuliskan catatan revisi..."></textarea>
+
+                    <div class="action-area">
+                        <button type="submit" class="btn-retur">
+                            Konfirmasi Keputusan
+                        </button>
                     </div>
 
-                    <small id="errorReject" style="color:red; display:none;">
-                        Catatan revisi wajib diisi!
-                    </small>
-
-                </div>
-
-
-                <div class="action-area">
-                    <button type="submit" class="btn-retur">
-                        Konfirmasi Keputusan
-                    </button>
-                </div>
+                <?php } ?>
             </div>
 
 
@@ -1375,6 +1447,10 @@ foreach ($validasiList as $v) {
 
 </html>
 <script>
+    function autoResize(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
     let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
     const chips = document.querySelectorAll(".chip");
     chips.forEach(chip => {
@@ -1787,7 +1863,6 @@ foreach ($validasiList as $v) {
         const rejectBox = document.getElementById("rejectBox");
         const alasan = document.getElementById("alasanReject");
 
-        // 🔁 kalau diklik lagi → reset
         if (el.classList.contains("active")) {
             el.classList.remove("active");
 
@@ -1800,21 +1875,66 @@ foreach ($validasiList as $v) {
             return;
         }
 
-        // reset semua tombol
         buttons.forEach(btn => btn.classList.remove("active"));
 
-        // aktifkan yang dipilih
         el.classList.add("active");
         document.getElementById("approvalInput").value = value;
 
         submitBtn.classList.add("show");
 
-        // 🔥 kondisi utama
         if (value === "reject") {
             rejectBox.style.display = "block";
+
+            setTimeout(() => {
+                const textarea = document.getElementById("alasanReject");
+                if (textarea) autoResize(textarea);
+            }, 100);
+
         } else {
             rejectBox.style.display = "none";
             alasan.value = "";
         }
     }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const form = document.querySelector("form");
+        const mode = form.getAttribute("data-mode");
+
+        if (mode === "view") {
+
+            const inputs = form.querySelectorAll("input, textarea, select, button");
+
+            inputs.forEach(el => {
+                if (el.type !== "hidden") {
+                    el.disabled = true;
+                }
+            });
+
+            document.querySelectorAll(".btn-approval").forEach(btn => {
+                btn.style.pointerEvents = "none";
+                btn.style.opacity = "0.5";
+            });
+
+            const submitBtn = document.querySelector(".btn-retur");
+            if (submitBtn) submitBtn.style.display = "none";
+        }
+
+    });
+    document.querySelectorAll('.auto-height').forEach(el => {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const textarea = document.getElementById("alasanReject");
+
+        if (textarea) {
+            autoResize(textarea);
+
+            textarea.addEventListener("input", function() {
+                autoResize(this);
+            });
+        }
+
+    });
 </script>
