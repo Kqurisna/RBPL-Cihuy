@@ -1290,51 +1290,7 @@ foreach ($validasiList as $v) {
                             </div>
 
                         </div>
-                        <div class="approval-box">
-                            <div class="approval-group">
-                                <div class="btn-approval approve" onclick="setApproval('approve', this)">
-                                    Approve
-                                </div>
 
-                                <div class="btn-approval reject" onclick="setApproval('reject', this)">
-                                    Reject
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="status_keputusan" id="approvalInput">
-                        </div>
-
-
-                        <div id="rejectBox" class="reject-box">
-
-                            <div class="reject-header">
-                                <h3>Catatan Revisi</h3>
-                                <div class="dots">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                            </div>
-
-                            <div class="reject-card">
-                                <textarea
-                                    name="alasan_reject"
-                                    id="alasanReject"
-                                    placeholder="Tuliskan catatan revisi..."></textarea>
-                            </div>
-
-                            <small id="errorReject" style="color:red; display:none;">
-                                Catatan revisi wajib diisi!
-                            </small>
-
-                        </div>
-
-
-                        <div class="action-area">
-                            <button type="submit" class="btn-retur">
-                                Konfirmasi Keputusan
-                            </button>
-                        </div>
                     </div>
 
                 <?php } else { ?>
@@ -1362,27 +1318,54 @@ foreach ($validasiList as $v) {
                             </div>
 
                         </div>
-                        <div class="approval-box">
-                            <div class="approval-group">
-                                <div class="btn-approval approve" onclick="setApproval('approve', this)">
-                                    Approve
-                                </div>
-
-                                <div class="btn-approval reject" onclick="setApproval('reject', this)">
-                                    Reject
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="status_keputusan" id="approvalInput">
-
-                            <small id="errorApproval" style="color:red; display:none;">
-                                Wajib memilih approve atau reject!
-                            </small>
-                        </div>
                     </div>
 
                 <?php } ?>
+                <div class="approval-box">
+                    <div class="approval-group">
+                        <div class="btn-approval approve" onclick="setApproval('approve', this)">
+                            Approve
+                        </div>
 
+                        <div class="btn-approval reject" onclick="setApproval('reject', this)">
+                            Reject
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="status_keputusan" id="approvalInput">
+                </div>
+
+
+                <div id="rejectBox" class="reject-box">
+
+                    <div class="reject-header">
+                        <h3>Catatan Revisi</h3>
+                        <div class="dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class="reject-card">
+                        <textarea
+                            name="alasan_reject"
+                            id="alasanReject"
+                            placeholder="Tuliskan catatan revisi..."></textarea>
+                    </div>
+
+                    <small id="errorReject" style="color:red; display:none;">
+                        Catatan revisi wajib diisi!
+                    </small>
+
+                </div>
+
+
+                <div class="action-area">
+                    <button type="submit" class="btn-retur">
+                        Konfirmasi Keputusan
+                    </button>
+                </div>
             </div>
 
 
