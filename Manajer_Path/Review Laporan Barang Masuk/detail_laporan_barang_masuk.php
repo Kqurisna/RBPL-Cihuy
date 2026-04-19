@@ -1078,6 +1078,10 @@ foreach ($validasiList as $v) {
             resize: none;
             overflow: hidden;
         }
+
+        .btn-approval[style] {
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -1356,14 +1360,46 @@ foreach ($validasiList as $v) {
                 <?php if ($mode === 'view') { ?>
 
                     <div style="
-                    text-align:center;
-                    font-size:13px;
-                    color:#6b7280;
-                    margin-top:15px;
-                    background:#f3f4f6;
-                    padding:12px;
-                    border-radius:12px;
-                "> Laporan telah Anda tolak dan saat ini menunggu revisi dari <strong> Kasir Toko </strong> </div>
+                        text-align:center;
+                        font-size:13px;
+                        color:#6b7280;
+                        margin-top:15px;
+                        background:#f3f4f6;
+                        padding:12px;
+                        border-radius:12px;
+                        ">
+
+                        <?php if ($dataNota['status_laporan'] === 'ditolak') { ?>
+
+                            Laporan telah Anda tolak dan saat ini menunggu revisi dari
+                            <strong>Kasir Toko</strong>
+
+                        <?php } elseif ($dataNota['status_laporan'] === 'disetujui') { ?>
+
+                            Laporan telah Anda setujui dan akan diproses lebih lanjut oleh
+                            <strong>Admin Gudang</strong>
+
+                        <?php } ?>
+
+                    </div>
+
+                    <div class="approval-box" style="margin-top:10px;">
+                        <div class="approval-group">
+
+                            <div class="btn-approval approve 
+                                <?= $dataNota['status_laporan'] === 'disetujui' ? 'active' : '' ?>"
+                                style="pointer-events:none;">
+                                Approve
+                            </div>
+
+                            <div class="btn-approval reject 
+                                <?= $dataNota['status_laporan'] === 'ditolak' ? 'active' : '' ?>"
+                                style="pointer-events:none;">
+                                Reject
+                            </div>
+
+                        </div>
+                    </div>
 
                     <?php if ($dataNota['status_laporan'] === 'ditolak') { ?>
 
@@ -1380,8 +1416,8 @@ foreach ($validasiList as $v) {
 
                             <div class="reject-card">
                                 <textarea class="auto-height" readonly>
-<?= $dataApproval ? $dataApproval['catatan_revisi'] : 'Tidak ada catatan revisi' ?>
-                </textarea>
+                                <?= $dataApproval ? $dataApproval['catatan_revisi'] : 'Tidak ada catatan revisi' ?>
+                                </textarea>
                             </div>
 
                         </div>
@@ -1912,7 +1948,6 @@ foreach ($validasiList as $v) {
 
             document.querySelectorAll(".btn-approval").forEach(btn => {
                 btn.style.pointerEvents = "none";
-                btn.style.opacity = "0.5";
             });
 
             const submitBtn = document.querySelector(".btn-retur");
