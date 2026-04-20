@@ -169,8 +169,12 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       background: #e9edf2;
       padding: 0 15px;
       font-size: 12px;
-      font-weight: 400;
+      font-weight: 800;
       outline: none;
+    }
+
+    .form-group .input-loop {
+      font-weight: 400;
     }
 
     .form-group textarea {
@@ -704,12 +708,12 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                     <input type="hidden" name="id_detail[<?= $no ?>]" value="<?= $detail['id_detail'] ?>">
                     <div class="form-group">
                       <label>Nama Barang ke-<?= $no ?></label>
-                      <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                      <input class="input-loop" type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
                     </div>
 
                     <div class="form-group">
                       <label>Jumlah barang ke-<?= $no ?></label>
-                      <input type="number" name="jumlah[]" value="<?= $detail['jumlah_barang'] ?>" readonly>
+                      <input class="input-loop" type="number" name="jumlah[]" value="<?= $detail['jumlah_barang'] ?>" readonly>
                     </div>
                     <div class="form-group">
                       <label>Kondisi Barang</label>
