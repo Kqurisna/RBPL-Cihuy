@@ -533,4 +533,43 @@ if ($filter == 'menunggu') {
         cards.forEach(card => observer.observe(card));
 
     });
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const params = new URLSearchParams(window.location.search);
+        const filterContainer = document.querySelector(".filter-container");
+
+        if (params.has("filter") && filterContainer) {
+
+            filterContainer.addEventListener("dblclick", function() {
+
+                const cards = document.querySelectorAll(".form-card");
+
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add("exit");
+                    }, index * 40);
+                });
+
+                setTimeout(() => {
+                    window.location.href = window.location.pathname;
+                }, 250);
+
+            });
+
+        }
+
+    });
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", function(e) {
+
+            const currentFilter = new URLSearchParams(window.location.search).get("filter");
+            const targetFilter = this.getAttribute("href").split("=")[1];
+
+            if (currentFilter === targetFilter) {
+                e.preventDefault();
+                window.location.href = window.location.pathname;
+            }
+
+        });
+    });
 </script>
