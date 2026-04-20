@@ -644,7 +644,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
     <div class="container">
 
-      <h3 class="section-title">Pengecekkan Barang Fisik</h3>
       <div class="form-card">
         <div class="form-group">
           <label>Nomer Nota</label>
