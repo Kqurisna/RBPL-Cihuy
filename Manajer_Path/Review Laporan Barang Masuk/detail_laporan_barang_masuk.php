@@ -1942,7 +1942,7 @@ foreach ($validasiList as $v) {
 
             inputs.forEach(el => {
                 if (el.type !== "hidden") {
-                    el.disabled = true;
+                    el.readOnly = true;
                 }
             });
 
