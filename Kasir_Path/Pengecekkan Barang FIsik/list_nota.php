@@ -253,6 +253,14 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
             transform: translateX(-100px);
             transition: all 0.3s ease;
         }
+
+        .container h4 {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 6px 0;
+            margin-bottom: 2px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -280,13 +288,11 @@ $query = mysqli_query($koneksi, "SELECT * FROM nota WHERE status = 'menunggu' OR
 
 
     <div class="container">
-
+        <h4 class="section-title">Input Hasil Pengecekkan Fisik Barang</h4>
         <?php if (mysqli_num_rows($query) > 0) { ?>
 
             <?php while ($data = mysqli_fetch_assoc($query)) { ?>
                 <div class="form-card">
-
-                    <h3 class="section-title">Nota</h3>
 
                     <div class="form-group">
                         <label>Nomer Nota<span style="color:red">*</span></label>
