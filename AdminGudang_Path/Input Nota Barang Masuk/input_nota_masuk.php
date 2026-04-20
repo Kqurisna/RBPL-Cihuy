@@ -493,6 +493,11 @@
             font-size: 15px;
             font-weight: 700;
         }
+
+
+        .welcome-card_2 .form-group input {
+            font-weight: 400;
+        }
     </style>
 </head>
 
