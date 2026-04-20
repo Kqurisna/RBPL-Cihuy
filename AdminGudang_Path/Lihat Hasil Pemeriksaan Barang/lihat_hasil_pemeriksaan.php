@@ -175,8 +175,12 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             background: #e9edf2;
             padding: 0 15px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 400;
             outline: none;
+        }
+
+        .form-group textarea {
+            font-weight: 400;
         }
 
         .status-wrapper {
