@@ -20,7 +20,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pengecekkan Barang Fisik</title>
+    <title>Lihat Hasil Pemeriksaan Barang</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -685,7 +685,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                 </a>
             </div>
 
-            <h2>Pengecekkan Barang Fisik</h2>
+            <h2>Lihat Hasil Pemeriksaan Barang</h2>
         </div>
 
         <div class="header-circle-big"></div>
@@ -699,7 +699,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <div class="container">
 
-            <h3 class="section-title">Pengecekkan Barang Fisik</h3>
+            <h3 class="section-title">Lihat Hasil Pemeriksaan Barang</h3>
             <div class="form-card">
                 <div class="form-group">
                     <label>Nomer Nota</label>
