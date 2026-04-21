@@ -1,7 +1,8 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
-
 $filter = $_GET['filter'] ?? '';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'desc';
+$sort = ($sort === 'asc') ? 'ASC' : 'DESC';
 $chooseMenunggu = ($filter == 'menunggu') ? 'btn-choose-menunggu' : '';
 $chooseDitolak = ($filter == 'ditolak') ? 'btn-choose-ditolak' : '';
 $chooseDisetujui = ($filter == 'disetujui') ? 'btn-choose-disetujui' : '';
@@ -9,26 +10,22 @@ if ($filter == 'menunggu') {
     $query = mysqli_query($koneksi, "
         SELECT * FROM nota 
         WHERE status_laporan = 'menunggu'
-        ORDER BY created_at DESC
-    ");
+        ORDER BY created_at $sort");
 } elseif ($filter == 'ditolak') {
     $query = mysqli_query($koneksi, "
         SELECT * FROM nota 
         WHERE status_laporan = 'ditolak'
-        ORDER BY created_at DESC
-    ");
+        ORDER BY created_at $sort");
 } elseif ($filter == 'disetujui') {
     $query = mysqli_query($koneksi, "
         SELECT * FROM nota 
         WHERE status_laporan = 'disetujui'
-        ORDER BY created_at DESC
-    ");
+        ORDER BY created_at $sort");
 } else {
     $query = mysqli_query($koneksi, "
         SELECT * FROM nota 
         WHERE status_laporan IN ('menunggu','ditolak','disetujui')
-        ORDER BY created_at DESC
-    ");
+        ORDER BY created_at $sort");
 }
 ?>
 <!doctype html>
@@ -382,6 +379,26 @@ if ($filter == 'menunggu') {
             border-radius: 6px;
             padding: 2px 6px;
         }
+
+        .sort-text {
+            color: #9ca3af;
+            font-size: 13px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        .sort-text.active {
+            color: #3f7aa3;
+            font-weight: 600;
+        }
+
+        .sorting-line {
+            height: 2px;
+            width: 100%;
+            border-radius: 20px;
+            background-color: #6AD2DE;
+            margin-top: 1px;
+        }
     </style>
 </head>
 
@@ -411,6 +428,37 @@ if ($filter == 'menunggu') {
         <a href="?filter=menunggu" class="filter-btn menunggu <?= $chooseMenunggu ?>">Menunggu Persetujuan</a>
         <a href="?filter=ditolak" class="filter-btn ditolak <?= $chooseDitolak ?>">Ditolak</a>
         <a href="?filter=disetujui" class="filter-btn disetujui <?= $chooseDisetujui ?>">Sudah Disetujui</a>
+    </div>
+    <div class="sorting-wrapper" style="display:flex; justify-content:center; margin-top:6px;">
+
+        <div style="display:flex; flex-direction:column; align-items:flex-start;">
+
+            <div style="display:flex; align-items:center; gap:8px;">
+
+                <span style="color:#000; font-size:13px;">Sorting by</span>
+
+                <a href="?filter=<?= $filter ?>&sort=asc"
+                    onclick="return animSort(event, this)"
+                    style="text-decoration:none;">
+                    <span class="sort-text <?= ($sort == 'ASC') ? 'active' : '' ?>">
+                        ASC
+                    </span>
+                </a>
+
+                <a href="?filter=<?= $filter ?>&sort=desc"
+                    onclick="return animSort(event, this)"
+                    style="text-decoration:none;">
+                    <span class="sort-text <?= ($sort == 'DESC') ? 'active' : '' ?>">
+                        DESC
+                    </span>
+                </a>
+
+            </div>
+
+            <div class="sorting-line"></div>
+
+        </div>
+
     </div>
     <div class="container">
 
@@ -572,4 +620,21 @@ if ($filter == 'menunggu') {
 
         });
     });
+
+    function animSort(e, el) {
+        e.preventDefault();
+
+        const all = document.querySelectorAll('.sort-text');
+
+        all.forEach(item => item.classList.remove('active'));
+
+        const text = el.querySelector('.sort-text');
+        text.classList.add('active');
+
+        setTimeout(() => {
+            window.location.href = el.href;
+        }, 250);
+
+        return false;
+    }
 </script>
