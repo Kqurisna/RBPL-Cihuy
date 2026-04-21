@@ -615,6 +615,21 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     [id^="previewImage"] {
       cursor: zoom-in;
     }
+
+    .textarea-barang {
+      width: 100%;
+      min-height: 36px;
+      border-radius: 16px;
+      border: none;
+      background: #e9edf2;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 400;
+      margin-bottom: 10px;
+      outline: none;
+      resize: none;
+      overflow: hidden;
+    }
   </style>
 </head>
 
@@ -707,7 +722,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                     <input type="hidden" name="id_detail[<?= $no ?>]" value="<?= $detail['id_detail'] ?>">
                     <div class="form-group">
                       <label>Nama Barang ke-<?= $no ?></label>
-                      <input class="input-loop" type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                      <textarea class="input-loop textarea-barang" name="barang[]" readonly><?= $detail['nama_barang'] ?></textarea>
                     </div>
 
                     <div class="form-group">
@@ -1086,5 +1101,16 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     if (e.target === modal) {
       modal.style.display = "none";
     }
+  });
+
+  function autoResize(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".textarea-barang").forEach(textarea => {
+      autoResize(textarea);
+    });
   });
 </script>
