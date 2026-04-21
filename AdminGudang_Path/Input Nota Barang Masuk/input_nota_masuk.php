@@ -498,6 +498,21 @@
         .welcome-card_2 .form-group input {
             font-weight: 400;
         }
+
+        .textarea-barang {
+            width: 100%;
+            min-height: 36px;
+            max-height: 120px;
+            border-radius: 16px;
+            border: none;
+            background: #e9edf2;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: 400;
+            outline: none;
+            resize: none;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -591,7 +606,7 @@
 
                                 <div class="form-group">
                                     <label>Nama Barang ke-1</label>
-                                    <input type="text" name="barang[]" required>
+                                    <textarea name="barang[]" class="textarea-barang" rows="1" required></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -747,7 +762,7 @@
         div.innerHTML = `
             <div class="form-group">
                 <label>Nama Barang ke-${count + 1}</label>
-                <input type="text" name="barang[]" required>
+                <textarea name="barang[]" class="textarea-barang" rows="1" required></textarea>
             </div>
 
             <div class="form-group">
@@ -931,5 +946,16 @@
             tanggalInput.focus();
         }
 
+    });
+
+    function autoResizeTextarea(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("input", function(e) {
+        if (e.target.classList.contains("textarea-barang")) {
+            autoResizeTextarea(e.target);
+        }
     });
 </script>
