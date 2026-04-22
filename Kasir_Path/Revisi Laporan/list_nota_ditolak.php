@@ -339,7 +339,7 @@ $query = mysqli_query($koneksi, "
 
             <div class="empty-container">
                 <div class="empty-icon">
-                    <img src="../../UI_GENERAL/logo_check.png" alt="">
+                    <img src="../../UI_GENERAL/logo_x.png" alt="">
                 </div>
 
                 <div class="empty-title">
