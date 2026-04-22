@@ -401,7 +401,9 @@
         <div class="menu-title">Arsip Nota & Pembayaran</div>
       </div>
       <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
+        <a href="AdminGudang_Path/Arsip Nota Pembayaran/arsip_menu.php">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </a>
       </div>
     </div>
 
