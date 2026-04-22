@@ -1336,18 +1336,20 @@ foreach ($validasiList as $v) {
 
                                                 <label style="margin-top:10px;">Upload Foto Baru</label>
 
-                                                <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                                <div class="upload-container">
 
-                                                    <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+                                                    <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                                        <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
 
-                                                    <p class="upload-text-modern">Unggah Foto</p>
-                                                    <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
+                                                        <p class="upload-text-modern">Unggah Foto Retur</p>
+                                                        <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
 
-                                                    <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+                                                        <input type="file" name="foto_retur[]" accept="image/*" hidden>
+                                                    </div>
+
+                                                    <div class="preview-wrapper"></div>
 
                                                 </div>
-
-                                                <div class="preview-wrapper"></div>
 
                                             </div>
                                         <?php } ?>
@@ -1398,20 +1400,21 @@ foreach ($validasiList as $v) {
                                     <input type="hidden" name="lampiran_lama" value="<?= $dataTanggapan['lampiran'] ?? '' ?>">
                                     <label style="margin-top:10px;">Upload Bukti Baru</label>
 
-                                    <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                    <div class="upload-container">
 
-                                        <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+                                        <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                            <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
 
-                                        <p class="upload-text-modern-box-2">Unggah Bukti Supplier</p>
-                                        <p class="upload-subtext-modern-box-2">(JPG / PNG, maks. 5 MB)</p>
+                                            <p class="upload-text-modern">Unggah Bukti Supplier</p>
+                                            <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
 
-                                        <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+                                            <input type="file" name="foto_supplier" accept="image/*" hidden>
+                                        </div>
+
+                                        <div class="preview-wrapper"></div>
 
                                     </div>
 
-                                    <div class="preview-wrapper"></div>
-
-                                    <div class="preview-wrapper"></div>
 
                                     <label>Foto Nota Lama</label>
 
@@ -1427,23 +1430,21 @@ foreach ($validasiList as $v) {
 
                                     <label style="margin-top:10px;">Upload Foto Nota Baru</label>
 
-                                    <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                    <div class="upload-container">
 
-                                        <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+                                        <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                            <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
 
-                                        <p class="upload-text-modern-box-2">Unggah Foto Nota</p>
-                                        <p class="upload-subtext-modern-box-2">(JPG / PNG, maks. 5 MB)</p>
+                                            <p class="upload-text-modern">Unggah Foto Nota</p>
+                                            <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
 
-                                        <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+                                            <input type="file" name="foto_nota" accept="image/*" hidden>
+                                        </div>
+
+                                        <div class="preview-wrapper"></div>
 
                                     </div>
 
-                                    <div class="preview-wrapper"></div>
-
-                                    <div class="preview-wrapper">
-                                        <img id="previewNota" class="preview-img">
-                                        <span id="removeNota" class="remove-btn">×</span>
-                                    </div>
 
                                 </div>
                             </div>
@@ -1963,24 +1964,43 @@ foreach ($validasiList as $v) {
         }
 
     });
-    const notaInput = document.getElementById("notaInput");
-    const previewNota = document.getElementById("previewNota");
-    const removeNota = document.getElementById("removeNota");
 
-    notaInput.addEventListener("change", function() {
-        const file = this.files[0];
+    function triggerUpload(box) {
+        const input = box.querySelector("input[type='file']");
+        input.click();
+    }
 
-        if (file) {
-            previewNota.src = URL.createObjectURL(file);
-            previewNota.style.display = "block";
-            removeNota.style.display = "block";
-        }
-    });
+    document.querySelectorAll(".upload-container input[type='file']").forEach(input => {
 
-    removeNota.addEventListener("click", function() {
-        notaInput.value = "";
-        previewNota.style.display = "none";
-        removeNota.style.display = "none";
+        input.addEventListener("change", function() {
+
+            const file = this.files[0];
+            if (!file) return;
+
+            const container = this.closest(".upload-container");
+            const wrapper = container.querySelector(".preview-wrapper");
+
+            wrapper.innerHTML = "";
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.style.width = "100%";
+            img.style.borderRadius = "12px";
+
+            const remove = document.createElement("span");
+            remove.innerHTML = "×";
+            remove.classList.add("remove-btn");
+            remove.style.display = "block";
+
+            remove.onclick = () => {
+                wrapper.innerHTML = "";
+                input.value = "";
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(remove);
+        });
+
     });
 
     function triggerUpload(box) {
@@ -1988,16 +2008,16 @@ foreach ($validasiList as $v) {
         input.click();
     }
 
-    document.querySelectorAll(".upload-box-modern input").forEach(input => {
+    document.querySelectorAll(".upload-container input[type='file']").forEach(input => {
 
         input.addEventListener("change", function() {
 
             const file = this.files[0];
             if (!file) return;
 
-            const wrapper = this.closest(".upload-box-modern").nextElementSibling;
+            const container = this.closest(".upload-container");
+            const wrapper = container.querySelector(".preview-wrapper");
 
-            // reset biar gak numpuk
             wrapper.innerHTML = "";
 
             const img = document.createElement("img");
