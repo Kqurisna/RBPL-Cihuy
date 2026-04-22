@@ -304,7 +304,6 @@ foreach ($validasiList as $v) {
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
-            pointer-events: none;
         }
 
         .chip.active {
@@ -1304,22 +1303,20 @@ foreach ($validasiList as $v) {
                                             $dataRetur = isset($returList[$idDetail]) ? $returList[$idDetail] : null;
                                             $dataTanggapan = isset($tanggapanList[$idDetail]) ? $tanggapanList[$idDetail] : null;
                                             ?>
-                                            <input type="hidden" name="id_detail[]" value="<?= $detail['id_detail'] ?>">
 
                                             <div class="form-group">
                                                 <label>Jumlah Retur</label>
                                                 <input type="number"
-                                                    name="jumlah_retur[]"
+                                                    name="jumlah_retur[<?= $detail['id_detail'] ?>]"
                                                     value="<?= $dataRetur ? $dataRetur['jumlah_retur'] : '' ?>"
                                                     min="0"
-                                                    max="<?= $detail['jumlah_barang'] ?>"
-                                                    <?= $dataRetur ? '' : '' ?>>
+                                                    max="<?= $detail['jumlah_barang'] ?>">
                                             </div>
                                             <div class="keluhan-box" style="display:block;">
 
                                                 <div class="form-group">
                                                     <label>Keterangan / Keluhan</label>
-                                                    <textarea class="textarea_2"><?= $validasi['keterangan'] ?></textarea>
+                                                    <textarea name="keterangan[<?= $detail['id_detail'] ?>]" class="textarea_2"><?= $validasi['keterangan'] ?></textarea>
                                                 </div>
 
                                                 <label>Foto Bukti Lama</label>
@@ -1332,8 +1329,7 @@ foreach ($validasiList as $v) {
                                                     <p style="font-size:13px; color:#9ca3af;">Tidak ada foto</p>
                                                 <?php } ?>
 
-                                                <input type="hidden" name="foto_bukti_lama[]" value="<?= $validasi['foto_bukti'] ?>">
-
+                                                <input type="hidden" name="foto_bukti_lama[<?= $detail['id_detail'] ?>]" value="<?= $validasi['foto_bukti'] ?>">
                                                 <label style="margin-top:10px;">Upload Foto Baru</label>
 
                                                 <div class="upload-container">
@@ -1344,7 +1340,7 @@ foreach ($validasiList as $v) {
                                                         <p class="upload-text-modern">Unggah Foto Retur</p>
                                                         <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
 
-                                                        <input type="file" name="foto_retur[]" accept="image/*" hidden>
+                                                        <input type="file" name="foto_retur[<?= $detail['id_detail'] ?>]" accept="image/*" hidden>
                                                     </div>
 
                                                     <div class="preview-wrapper"></div>
@@ -1378,7 +1374,7 @@ foreach ($validasiList as $v) {
 
                             <div class="form-group_2">
                                 <label>Tanggapan & Tindak Lanjut Supplier</label>
-                                <textarea class="textarea" readonly>
+                                <textarea class="textarea">
 <?= $dataTanggapan ? $dataTanggapan['tanggapan'] : 'Belum ada tanggapan' ?>
                 </textarea>
                             </div>
@@ -1962,44 +1958,6 @@ foreach ($validasiList as $v) {
                 autoResize(this);
             });
         }
-
-    });
-
-    function triggerUpload(box) {
-        const input = box.querySelector("input[type='file']");
-        input.click();
-    }
-
-    document.querySelectorAll(".upload-container input[type='file']").forEach(input => {
-
-        input.addEventListener("change", function() {
-
-            const file = this.files[0];
-            if (!file) return;
-
-            const container = this.closest(".upload-container");
-            const wrapper = container.querySelector(".preview-wrapper");
-
-            wrapper.innerHTML = "";
-
-            const img = document.createElement("img");
-            img.src = URL.createObjectURL(file);
-            img.style.width = "100%";
-            img.style.borderRadius = "12px";
-
-            const remove = document.createElement("span");
-            remove.innerHTML = "×";
-            remove.classList.add("remove-btn");
-            remove.style.display = "block";
-
-            remove.onclick = () => {
-                wrapper.innerHTML = "";
-                input.value = "";
-            };
-
-            wrapper.appendChild(img);
-            wrapper.appendChild(remove);
-        });
 
     });
 
