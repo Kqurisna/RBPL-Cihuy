@@ -99,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_query($koneksi, "
         UPDATE nota 
         SET 
-            status = 'cacat',
             status_laporan = 'menunggu'
         WHERE id_nota = '$id_nota'
     ");
