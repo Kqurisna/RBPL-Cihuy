@@ -1363,6 +1363,14 @@ foreach ($validasiList as $v) {
                 $pathFoto = "../../AdminGudang_Path/Input Nota Barang Masuk/" . $dataNota['foto_nota'];
                 ?>
 
+                <?php
+                // AMANKAN DATA TANGGAPAN
+                $dataTanggapan = null;
+                if (!empty($tanggapanList)) {
+                    $dataTanggapan = reset($tanggapanList);
+                }
+                ?>
+
                 <?php if ($adaCacat) { ?>
 
                     <div class="welcome-card_3">
@@ -1385,19 +1393,22 @@ foreach ($validasiList as $v) {
 
                                     <label>Bukti Lama Supplier</label>
 
-                                    <?php if ($dataTanggapan && !empty($dataTanggapan['lampiran'])) { ?>
+                                    <?php
+                                    $pathSupplier = "../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/" . ($dataTanggapan['lampiran'] ?? '');
+                                    if ($dataTanggapan && !empty($dataTanggapan['lampiran']) && file_exists($pathSupplier)) {
+                                    ?>
                                         <div class="img-preview" onclick="openModal(this)">
-                                            <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $dataTanggapan['lampiran'] ?>">
+                                            <img src="<?= $pathSupplier ?>">
                                         </div>
                                     <?php } else { ?>
                                         <p style="font-size:13px; color:#9ca3af;">Tidak ada bukti</p>
                                     <?php } ?>
 
                                     <input type="hidden" name="lampiran_lama" value="<?= $dataTanggapan['lampiran'] ?? '' ?>">
+
                                     <label style="margin-top:10px;">Upload Bukti Baru</label>
 
                                     <div class="upload-container">
-
                                         <div class="upload-box-modern" onclick="triggerUpload(this)">
                                             <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
 
@@ -1408,75 +1419,61 @@ foreach ($validasiList as $v) {
                                         </div>
 
                                         <div class="preview-wrapper"></div>
-
                                     </div>
-
-
-                                    <label>Foto Nota Lama</label>
-
-                                    <?php if (!empty($dataNota['foto_nota'])) { ?>
-                                        <div class="img-preview" onclick="openModal(this)">
-                                            <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
-                                        </div>
-                                    <?php } else { ?>
-                                        <p style="font-size:13px; color:#9ca3af;">Tidak ada foto lama</p>
-                                    <?php } ?>
-
-                                    <input type="hidden" name="foto_nota_lama" value="<?= $dataNota['foto_nota'] ?>">
-
-                                    <label style="margin-top:10px;">Upload Foto Nota Baru</label>
-
-                                    <div class="upload-container">
-
-                                        <div class="upload-box-modern" onclick="triggerUpload(this)">
-                                            <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
-
-                                            <p class="upload-text-modern">Unggah Foto Nota</p>
-                                            <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
-
-                                            <input type="file" name="foto_nota" accept="image/*" hidden>
-                                        </div>
-
-                                        <div class="preview-wrapper"></div>
-
-                                    </div>
-
 
                                 </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                <?php } else { ?>
-
-                    <div class="welcome-card_3">
-                        <div class="form-card_2">
-
-                            <div class="box_1"></div>
-                            <div class="box_2"></div>
-                            <div class="box_3"></div>
-
-                            <div class="form-group_2">
-                                <label>Foto Nota</label>
-
-                                <?php if (!empty($dataNota['foto_nota']) && file_exists($pathFoto)) { ?>
-                                    <div class="img-preview" onclick="openModal(this)">
-                                        <img src="/RBPL/AdminGudang_Path/Input%20Nota%20Barang%20Masuk/<?= str_replace(' ', '%20', $dataNota['foto_nota']) ?>">
-                                    </div>
-                                <?php } else { ?>
-                                    <p style="font-size:13px; color:#ef4444;">
-                                        Foto nota tidak tersedia
-                                    </p>
-                                <?php } ?>
-
                             </div>
 
                         </div>
                     </div>
 
                 <?php } ?>
+
+                <!-- ===================== -->
+                <!-- FOTO NOTA (SELALU ADA) -->
+                <!-- ===================== -->
+
+                <div class="welcome-card_3">
+                    <div class="form-card_2">
+
+                        <div class="box_1"></div>
+                        <div class="box_2"></div>
+                        <div class="box_3"></div>
+
+                        <div class="form-group_2">
+                            <label>Foto Nota Lama</label>
+
+                            <?php
+                            if (!empty($dataNota['foto_nota']) && file_exists($pathFoto)) {
+                            ?>
+                                <div class="img-preview" onclick="openModal(this)">
+                                    <img src="<?= $pathFoto ?>">
+                                </div>
+                            <?php } else { ?>
+                                <p style="font-size:13px; color:#9ca3af;">Tidak ada foto lama</p>
+                            <?php } ?>
+
+                            <input type="hidden" name="foto_nota_lama" value="<?= $dataNota['foto_nota'] ?>">
+
+                            <label style="margin-top:10px;">Upload Foto Nota Baru</label>
+
+                            <div class="upload-container">
+                                <div class="upload-box-modern" onclick="triggerUpload(this)">
+                                    <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+
+                                    <p class="upload-text-modern">Unggah Foto Nota</p>
+                                    <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
+
+                                    <input type="file" name="foto_nota" accept="image/*" hidden>
+                                </div>
+
+                                <div class="preview-wrapper"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
 
             </div>
 

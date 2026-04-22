@@ -33,30 +33,35 @@ if (!empty($jenis)) {
     $updateFields[] = "jenis_barang = '$jenis'";
 }
 
-$pathFolder = "../../AdminGudang_Path/Input Nota Barang Masuk/";
+$pathFolder = "../../AdminGudang_Path/Input Nota Barang Masuk/uploads/nota/";
+$fotoNotaBaru = $_FILES['foto_nota']['name'];
+$fotoNotaLama = $_POST['foto_nota_lama'];
 
-$fotoNotaBaru = $_FILES['foto_nota']['name'] ?? '';
-$fotoNotaLama = $_POST['foto_nota_lama'] ?? '';
+$pathFolder = "../../AdminGudang_Path/Input Nota Barang Masuk/uploads/nota/";
 
-if (isset($_FILES['foto_nota']) && $_FILES['foto_nota']['error'] === 0) {
+if (!empty($fotoNotaBaru)) {
 
     $tmp = $_FILES['foto_nota']['tmp_name'];
-    $namaFile = time() . "_" . rand(1000, 9999) . "_" . $fotoNotaBaru;
+
+    $namaFile = time() . "_" . preg_replace("/[^a-zA-Z0-9.]/", "_", $fotoNotaBaru);
 
     $pathBaru = $pathFolder . $namaFile;
-    $pathLama = $pathFolder . $fotoNotaLama;
 
-    move_uploaded_file($tmp, $pathBaru);
+    $namaLama = basename($fotoNotaLama);
+    $pathLama = $pathFolder . $namaLama;
 
-    if (!empty($fotoNotaLama) && $fotoNotaLama !== $namaFile && file_exists($pathLama)) {
-        unlink($pathLama);
+    if (move_uploaded_file($tmp, $pathBaru)) {
+
+        if (!empty($namaLama) && file_exists($pathLama)) {
+            unlink($pathLama);
+        }
+        $fotoNota = "uploads/nota/" . $namaFile;
+    } else {
+        $fotoNota = $fotoNotaLama;
     }
-
-    $fotoNota = $namaFile;
 } else {
     $fotoNota = $fotoNotaLama;
 }
-
 $updateFields[] = "foto_nota = '$fotoNota'";
 
 $q1 = true;
