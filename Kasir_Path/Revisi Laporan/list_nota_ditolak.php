@@ -340,17 +340,17 @@ $query = mysqli_query($koneksi, "
 
             <div class="empty-container">
                 <div class="empty-icon">
-                    <img src="../../UI_GENERAL/logo_x.png" alt="">
+                    <img src="../../UI_GENERAL/logo_check.png" alt="">
                 </div>
 
                 <div class="empty-title">
-                    Tidak ada barang yang harus dicek
+                    Tidak ada laporan yang perlu direvisi
                 </div>
 
                 <div class="empty-line"></div>
 
                 <div class="empty-desc">
-                    Semua barang sudah diperiksa atau belum ada data masuk
+                    Semua laporan sudah disetujui atau belum ada laporan yang ditolak
                 </div>
             </div>
 
