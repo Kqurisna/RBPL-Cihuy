@@ -379,9 +379,11 @@
         </div>
         <div class="menu-title">Revisi Laporan</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="Kasir_Path/Revisi Laporan/list_nota_ditolak.php">
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">
