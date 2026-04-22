@@ -1079,6 +1079,61 @@ foreach ($validasiList as $v) {
         .btn-approval[style] {
             cursor: not-allowed;
         }
+
+        .upload-box-modern {
+            margin-top: 10px;
+            background: #e5e5e5;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .upload-text-modern {
+            font-size: 14px !important;
+            color: #9ca3af;
+        }
+
+        .upload-subtext-modern {
+            font-size: 11px !important;
+            color: #b0b0b0;
+        }
+
+        .upload-text-modern-box-2 {
+            font-size: 15px !important;
+            color: #9ca3af;
+        }
+
+        .upload-subtext-modern-box-2 {
+            font-size: 12px !important;
+            color: #b0b0b0;
+        }
+
+        .preview-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .preview-img {
+            display: none;
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .remove-btn {
+            display: none;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: white;
+            color: #5bb7c5;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -1280,7 +1335,19 @@ foreach ($validasiList as $v) {
                                                 <input type="hidden" name="foto_bukti_lama[]" value="<?= $validasi['foto_bukti'] ?>">
 
                                                 <label style="margin-top:10px;">Upload Foto Baru</label>
-                                                <input type="file" name="foto_bukti_baru[]" accept="image/*">
+
+                                                <div class="upload-box-modern" onclick="triggerUpload(this)">
+
+                                                    <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+
+                                                    <p class="upload-text-modern">Unggah Foto</p>
+                                                    <p class="upload-subtext-modern">(JPG / PNG, maks. 5 MB)</p>
+
+                                                    <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+
+                                                </div>
+
+                                                <div class="preview-wrapper"></div>
 
                                             </div>
                                         <?php } ?>
@@ -1329,9 +1396,22 @@ foreach ($validasiList as $v) {
                                     <?php } ?>
 
                                     <input type="hidden" name="lampiran_lama" value="<?= $dataTanggapan['lampiran'] ?? '' ?>">
-
                                     <label style="margin-top:10px;">Upload Bukti Baru</label>
-                                    <input type="file" name="lampiran_baru" accept="image/*">
+
+                                    <div class="upload-box-modern" onclick="triggerUpload(this)">
+
+                                        <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+
+                                        <p class="upload-text-modern-box-2">Unggah Bukti Supplier</p>
+                                        <p class="upload-subtext-modern-box-2">(JPG / PNG, maks. 5 MB)</p>
+
+                                        <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+
+                                    </div>
+
+                                    <div class="preview-wrapper"></div>
+
+                                    <div class="preview-wrapper"></div>
 
                                     <label>Foto Nota Lama</label>
 
@@ -1346,7 +1426,24 @@ foreach ($validasiList as $v) {
                                     <input type="hidden" name="foto_nota_lama" value="<?= $dataNota['foto_nota'] ?>">
 
                                     <label style="margin-top:10px;">Upload Foto Nota Baru</label>
-                                    <input type="file" name="foto_nota_baru" accept="image/*">
+
+                                    <div class="upload-box-modern" onclick="triggerUpload(this)">
+
+                                        <img src="../../UI_GENERAL/logo_plus.png" class="upload-icon-modern">
+
+                                        <p class="upload-text-modern-box-2">Unggah Foto Nota</p>
+                                        <p class="upload-subtext-modern-box-2">(JPG / PNG, maks. 5 MB)</p>
+
+                                        <input type="file" name="foto_bukti_baru[]" accept="image/*" hidden>
+
+                                    </div>
+
+                                    <div class="preview-wrapper"></div>
+
+                                    <div class="preview-wrapper">
+                                        <img id="previewNota" class="preview-img">
+                                        <span id="removeNota" class="remove-btn">×</span>
+                                    </div>
 
                                 </div>
                             </div>
@@ -1519,27 +1616,6 @@ foreach ($validasiList as $v) {
 
             firstInvalid.focus();
         }
-    });
-    document.querySelectorAll("input[type='file']").forEach(input => {
-        input.addEventListener("change", function(e) {
-
-            const file = e.target.files[0];
-            const no = this.id.replace("lampiranInput", "");
-            const preview = document.getElementById("previewImage" + no);
-
-            if (file) {
-
-                if (file.type.startsWith("image/")) {
-
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = "block";
-
-                } else {
-                    preview.style.display = "block";
-                    preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-                }
-            }
-        });
     });
     document.querySelector("form").addEventListener("submit", function(e) {
 
@@ -1887,25 +1963,61 @@ foreach ($validasiList as $v) {
         }
 
     });
-    document.querySelectorAll("input[type='file']").forEach(input => {
-        input.addEventListener("change", function() {
-            const file = this.files[0];
+    const notaInput = document.getElementById("notaInput");
+    const previewNota = document.getElementById("previewNota");
+    const removeNota = document.getElementById("removeNota");
 
+    notaInput.addEventListener("change", function() {
+        const file = this.files[0];
+
+        if (file) {
+            previewNota.src = URL.createObjectURL(file);
+            previewNota.style.display = "block";
+            removeNota.style.display = "block";
+        }
+    });
+
+    removeNota.addEventListener("click", function() {
+        notaInput.value = "";
+        previewNota.style.display = "none";
+        removeNota.style.display = "none";
+    });
+
+    function triggerUpload(box) {
+        const input = box.querySelector("input[type='file']");
+        input.click();
+    }
+
+    document.querySelectorAll(".upload-box-modern input").forEach(input => {
+
+        input.addEventListener("change", function() {
+
+            const file = this.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
+            const wrapper = this.closest(".upload-box-modern").nextElementSibling;
 
-            reader.onload = function(e) {
-                let preview = document.createElement("img");
-                preview.src = e.target.result;
-                preview.style.width = "100%";
-                preview.style.borderRadius = "12px";
-                preview.style.marginTop = "10px";
+            // reset biar gak numpuk
+            wrapper.innerHTML = "";
 
-                input.parentElement.appendChild(preview);
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.style.width = "100%";
+            img.style.borderRadius = "12px";
+
+            const remove = document.createElement("span");
+            remove.innerHTML = "×";
+            remove.classList.add("remove-btn");
+            remove.style.display = "block";
+
+            remove.onclick = () => {
+                wrapper.innerHTML = "";
+                input.value = "";
             };
 
-            reader.readAsDataURL(file);
+            wrapper.appendChild(img);
+            wrapper.appendChild(remove);
         });
+
     });
 </script>
