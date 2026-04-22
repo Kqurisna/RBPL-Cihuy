@@ -428,7 +428,7 @@ $query = $nota->getNotaDisetujui($sort);
                         <input type="date" value="<?= $data['tanggal_nota'] ?>" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Supplier<span style="color:red">*</span></label>
+                        <label>Nama Supplier<span style="color:red">*</span></label>
                         <input type="text" value="<?= $data['supplier'] ?>" readonly>
                     </div>
                     <div class="form-group">
