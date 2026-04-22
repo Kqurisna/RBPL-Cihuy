@@ -6,7 +6,6 @@ $query = mysqli_query($koneksi, "
     SELECT *
     FROM nota
     WHERE status_laporan = 'ditolak'
-    AND status_retur = 'belum'
     ORDER BY tanggal_nota $sort
 ");
 ?>
@@ -267,7 +266,7 @@ $query = mysqli_query($koneksi, "
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="../../User_Kasir.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
