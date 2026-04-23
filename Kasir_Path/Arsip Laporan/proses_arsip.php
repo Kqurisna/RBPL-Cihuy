@@ -49,7 +49,6 @@ if (!empty($nota['foto_nota'])) {
 
     $root = $_SERVER['DOCUMENT_ROOT'] . "/RBPL";
 
-    // 🔥 kalau sudah ada "uploads/" di database → jangan ditambah lagi
     if (strpos($file_nota, 'uploads/') !== false) {
         $source_nota = $root . "/AdminGudang_Path/Input Nota Barang Masuk/" . $file_nota;
     } else {
