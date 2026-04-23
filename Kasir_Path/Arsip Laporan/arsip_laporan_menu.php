@@ -374,6 +374,42 @@ $query = mysqli_query($koneksi, "
             left: 147px;
             transform: rotate(45deg);
         }
+
+        .menu-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.5s ease;
+        }
+
+        .menu-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-card:active {
+            transform: scale(0.96);
+            transition: 0.1s;
+        }
+
+        .circle {
+            transition: all 0.25s ease;
+        }
+
+        /* Hover efek */
+        .circle:hover {
+            transform: scale(1.1);
+            background: #bfc6cd;
+        }
+
+        /* Klik efek */
+        .circle:active {
+            transform: scale(0.9);
+        }
     </style>
 </head>
 
@@ -410,14 +446,13 @@ $query = mysqli_query($koneksi, "
             <div class="circle-dot-2"></div>
             <div class="circle-dot-3"></div>
             <div class="form-card menu-card"
-                onclick="location.href='list_nota_arsip_laporan.php'"
                 <p>
                 Pilih nota yang telah disetujui untuk dibuat laporan barang.
                 Laporan akan mencakup kondisi barang (sesuai atau cacat),
                 bukti foto, serta dokumentasi tambahan sebelum disimpan ke arsip.
                 </p>
 
-                <div class="circle">
+                <div class="circle" onclick="goPageCircle(this, 'list_nota_arsip_laporan.php')">
                     <img src="../../Kasir_Path/asset_kasir/logo_masuk_id.png">
                 </div>
 
@@ -435,12 +470,11 @@ $query = mysqli_query($koneksi, "
 
 
             <div class="form-card menu-card"
-                onclick="location.href='list_lihat_nota_arsip_laporan.php'"
                 <p>
                 Lihat seluruh laporan yang telah diarsipkan lengkap dengan detail barang,
                 kondisi barang (sesuai atau cacat), foto bukti, serta tanggapan dan tindak lanjut dari supplier.
                 </p>
-                <div class="circle">
+                <div class="circle" onclick="goPageCircle(this, 'list_lihat_nota_arsip_laporan.php')">
                     <img src="../../Kasir_Path/asset_kasir/logo_masuk_id.png">
                 </div>
 
@@ -451,3 +485,35 @@ $query = mysqli_query($koneksi, "
 </body>
 
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".menu-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 200);
+        });
+
+    });
+
+    function goPage(el, url) {
+
+        el.style.transform = "scale(0.9)";
+        el.style.opacity = "0.7";
+
+        setTimeout(() => {
+            window.location.href = url;
+        }, 200);
+    }
+        function goPageCircle(el, url) {
+
+            el.style.transform = "scale(0.8)";
+            el.style.background = "#9ca3af";
+
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        }
+</script>
