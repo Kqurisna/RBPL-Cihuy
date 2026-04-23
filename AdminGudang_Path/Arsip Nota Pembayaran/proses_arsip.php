@@ -14,7 +14,7 @@ $nota = new Nota($koneksi);
 $hasil = $nota->arsipkanNota($id);
 
 if ($hasil) {
-    header("Location: arsipkan_nota.php?status=sukses");
+    header("Location: status_sukses_arsip_nota.php");
 } else {
     header("Location: arsipkan_nota.php?status=gagal");
 }

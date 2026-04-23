@@ -315,13 +315,19 @@ $query = $nota->getNotaDisetujui($sort);
             cursor: pointer;
         }
 
-        .popup-btn button:first-child {
-            background: #e5e7eb;
-        }
-
         .btn-yes {
             background: #3f7aa3;
             color: white;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-yes:hover {
+            background: #356c91;
+        }
+
+        .btn-yes:active {
+            transform: scale(0.96);
         }
 
         @keyframes fadeIn {
@@ -495,6 +501,18 @@ $query = $nota->getNotaDisetujui($sort);
 
         </div>
     </div>
+    <div id="popupGagal" class="popup-overlay">
+        <div class="popup-box">
+
+            <h3 style="color:#e74c3c;">Gagal</h3>
+            <p>Nota tidak berhasil diarsipkan.<br>Silakan coba lagi.</p>
+
+            <div class="popup-btn">
+                <button class="btn-yes" onclick="tutupPopupGagal()">OK</button>
+            </div>
+
+        </div>
+    </div>
     <div id="imagePreview" class="image-preview-overlay">
         <span class="close-btn" onclick="closePreview()">×</span>
         <img id="previewImg" src="">
@@ -539,5 +557,19 @@ $query = $nota->getNotaDisetujui($sort);
         if (e.target === this) {
             this.style.display = "none";
         }
+    });
+
+    function tutupPopupGagal() {
+        document.getElementById("popupGagal").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("status") === "gagal") {
+            document.getElementById("popupGagal").style.display = "flex";
+        }
+
     });
 </script>
