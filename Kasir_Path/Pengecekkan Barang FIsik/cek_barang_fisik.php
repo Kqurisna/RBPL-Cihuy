@@ -616,7 +616,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       cursor: zoom-in;
     }
 
-    /* SESUDAH */
     .textarea-barang {
       width: 100%;
       border-radius: 16px;
@@ -630,9 +629,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       resize: none;
       line-height: 1.5;
       overflow: hidden;
-      /* sembunyikan scrollbar saat auto resize */
       min-height: 0;
-      /* biarkan JS yang tentukan tinggi */
       height: auto;
     }
   </style>
