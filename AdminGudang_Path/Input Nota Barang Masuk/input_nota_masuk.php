@@ -496,7 +496,7 @@
 
 
         .welcome-card_2 .form-group input {
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .textarea-barang {

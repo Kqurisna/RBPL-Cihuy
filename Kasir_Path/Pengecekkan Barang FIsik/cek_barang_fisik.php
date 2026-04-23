@@ -169,16 +169,16 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       background: #e9edf2;
       padding: 0 15px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 500;
       outline: none;
     }
 
     .form-group .input-loop {
-      font-weight: 400;
+      font-weight: 500;
     }
 
     .form-group textarea {
-      font-weight: 400;
+      font-weight: 500;
     }
 
     .status-wrapper {
@@ -616,19 +616,24 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       cursor: zoom-in;
     }
 
+    /* SESUDAH */
     .textarea-barang {
       width: 100%;
-      min-height: 36px;
       border-radius: 16px;
       border: none;
       background: #e9edf2;
-      padding: 10px 15px;
+      padding: 10px 4px 10px 15px;
+      text-align: left;
       font-size: 12px;
-      font-weight: 400;
-      margin-bottom: 10px;
+      font-weight: 300;
       outline: none;
       resize: none;
+      line-height: 1.5;
       overflow: hidden;
+      /* sembunyikan scrollbar saat auto resize */
+      min-height: 0;
+      /* biarkan JS yang tentukan tinggi */
+      height: auto;
     }
   </style>
 </head>
@@ -1104,7 +1109,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
   });
 
   function autoResize(el) {
-    el.style.height = "auto";
+    el.style.height = "0px";
     el.style.height = el.scrollHeight + "px";
   }
 
