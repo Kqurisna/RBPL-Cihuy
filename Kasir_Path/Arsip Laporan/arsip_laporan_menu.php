@@ -20,7 +20,7 @@ $query = mysqli_query($koneksi, "
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arsip Nota & Pembayaran</title>
+    <title>Arsip Laporan</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -384,12 +384,12 @@ $query = mysqli_query($koneksi, "
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="../../User_Kasir.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
 
-            <h2>Arsip Nota & Pembayaran</h2>
+            <h2>Arsip Laporan</h2>
         </div>
 
         <div class="header-circle-big"></div>

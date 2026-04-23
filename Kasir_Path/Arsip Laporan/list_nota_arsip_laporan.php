@@ -393,7 +393,7 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : '';
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Kasir.php" class="back-link">
+                <a href="arsip_laporan_menu.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
