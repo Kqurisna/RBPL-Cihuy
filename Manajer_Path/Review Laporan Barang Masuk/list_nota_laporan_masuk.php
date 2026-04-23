@@ -399,6 +399,33 @@ if ($filter == 'menunggu') {
             background-color: #6AD2DE;
             margin-top: 1px;
         }
+
+        .badge-arsip {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #22c55e;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
+            z-index: 5;
+            animation: fadeBadge 0.4s ease;
+        }
+
+        @keyframes fadeBadge {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -481,6 +508,11 @@ if ($filter == 'menunggu') {
                 }
                 ?>
                 <div class="form-card">
+                    <?php if (isset($data['status_arsip_laporan']) && $data['status_arsip_laporan'] == 'sudah') { ?>
+                        <div class="badge-arsip">
+                            Diarsipkan
+                        </div>
+                    <?php } ?>
                     <div class="status-label <?= $statusClass ?>">
                         <?= $statusText ?>
                     </div>
