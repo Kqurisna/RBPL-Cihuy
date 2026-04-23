@@ -507,13 +507,14 @@ $query = mysqli_query($koneksi, "
             window.location.href = url;
         }, 200);
     }
-        function goPageCircle(el, url) {
 
-            el.style.transform = "scale(0.8)";
-            el.style.background = "#9ca3af";
+    function goPageCircle(el, url) {
 
-            setTimeout(() => {
-                window.location.href = url;
-            }, 200);
-        }
+        el.style.transform = "scale(0.8)";
+        el.style.background = "#9ca3af";
+
+        setTimeout(() => {
+            window.location.href = url;
+        }, 200);
+    }
 </script>
