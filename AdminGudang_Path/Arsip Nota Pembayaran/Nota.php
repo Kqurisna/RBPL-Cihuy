@@ -116,7 +116,7 @@ class Nota
         $newPath = "C:/xampp/htdocs/RBPL/AdminGudang_Path/Arsip Nota Pembayaran/uploads/nota/" . $namaFile;
 
         if (!empty($namaFile) && file_exists($oldPath)) {
-            rename($oldPath, $newPath);
+            copy($oldPath, $newPath);
         }
 
         $insert = mysqli_query($this->koneksi, "
