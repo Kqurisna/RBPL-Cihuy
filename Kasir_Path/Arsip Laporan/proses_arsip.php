@@ -105,6 +105,9 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
 $no = 0;
 
+$id_detail_post = $_POST['id_detail'] ?? [];
+$jumlah_retur_post = $_POST['jumlah_retur'] ?? [];
+
 while ($d = mysqli_fetch_assoc($queryDetail)) {
 
     $kondisi = $validasiList[$no]['hasil'] ?? 'sesuai';
@@ -119,6 +122,29 @@ while ($d = mysqli_fetch_assoc($queryDetail)) {
             '$kondisi'
         )
     ");
+
+    $idDetailAsli = $d['id_detail'];
+
+    foreach ($id_detail_post as $index => $idPost) {
+
+        if ($idPost == $idDetailAsli) {
+
+            $jumlahRetur = $jumlah_retur_post[$index] ?? 0;
+
+            if ($jumlahRetur > 0) {
+
+                mysqli_query($koneksi, "
+                    INSERT INTO arsip_retur (
+                        id_arsip, id_detail, jumlah_retur
+                    ) VALUES (
+                        '$id_arsip',
+                        '$idDetailAsli',
+                        '$jumlahRetur'
+                    )
+                ");
+            }
+        }
+    }
 
     $no++;
 }
