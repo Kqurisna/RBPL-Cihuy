@@ -6,10 +6,11 @@ $sort = ($sort === 'asc') ? 'ASC' : 'DESC';
 
 $query = mysqli_query($koneksi, "
     SELECT * FROM nota 
-    WHERE status_laporan = 'disetujui'
-    AND (status_arsip_laporan IS NULL OR status_arsip_laporan != 'sudah')
+    WHERE status_laporan = 'disetujui' 
+    AND status_arsip_laporan = 'belum'
     ORDER BY tanggal_nota $sort
 ");
+$filter = isset($_GET['filter']) ? $_GET['filter'] : '';
 ?>
 <!doctype html>
 <html lang="id">
