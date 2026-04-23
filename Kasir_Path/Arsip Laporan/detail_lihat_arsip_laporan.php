@@ -764,7 +764,6 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
                                         <div class="form-group">
                                             <label>Foto Bukti Cacat</label>
                                             <?php foreach ($dataBukti as $bukti) {
-                                                // path_file: arsip_nota_80_xxx/bukti_cacat/bukti_2.jpg
                                                 $pathBukti = "/RBPL/Kasir_Path/Arsip Laporan/arsip/" . $bukti['path_file'];
                                             ?>
                                                 <div class="img-preview" onclick="openModal(this)">
@@ -786,9 +785,7 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
             </div>
 
             <?php
-            // Foto nota dari arsip_nota — path disimpan di kolom foto_nota
             $fotoNota = $dataNota['foto_nota'] ?? '';
-            // Path arsip nota: di folder arsip/<nama_folder>/nota.<ext>
             $namaFolder = $dataNota['nama_folder'] ?? '';
             $pathFotoArsip = "";
             if (!empty($namaFolder)) {
@@ -874,9 +871,6 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
                 <?php } ?>
             </div>
 
-            <div style="position:absolute; top:-10px; left:15px; background:#22c55e; color:white; padding:4px 10px; border-radius:12px; font-size:12px;">
-                ARSIP
-            </div>
         </div>
     </div>
 </body>
