@@ -809,7 +809,6 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                         </div>
 
                                         <?php if ($status == 'cacat') { ?>
-                                            <!-- kirim id_detail -->
                                             <input type="hidden" name="id_detail[]" value="<?= $detail['id_detail'] ?>">
 
                                             <div class="form-group">
@@ -820,6 +819,10 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
                                                     min="0"
                                                     max="<?= $detail['jumlah_barang'] ?>"
                                                     placeholder="Masukkan jumlah retur" required>
+
+                                                <small class="error-retur" style="color:red; display:none;">
+                                                    Jumlah retur tidak boleh melebihi jumlah barang!
+                                                </small>
                                             </div>
                                             <div class="keluhan-box" style="display:block;">
 
@@ -1123,5 +1126,59 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         input.addEventListener("input", function() {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
+    });
+    document.querySelectorAll(".input-number").forEach(input => {
+
+        input.addEventListener("input", function() {
+
+            const max = parseInt(this.getAttribute("max"));
+            const value = parseInt(this.value);
+
+            const errorText = this.parentElement.querySelector(".error-retur");
+
+            if (value > max) {
+                this.classList.add("error-input");
+                errorText.style.display = "block";
+            } else {
+                this.classList.remove("error-input");
+                errorText.style.display = "none";
+            }
+
+        });
+
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        let adaError = false;
+
+        document.querySelectorAll(".input-number").forEach(input => {
+
+            const max = parseInt(input.getAttribute("max"));
+            const value = parseInt(input.value);
+
+            const errorText = input.parentElement.querySelector(".error-retur");
+
+            if (value > max) {
+
+                input.classList.add("error-input");
+                errorText.style.display = "block";
+
+                if (!adaError) {
+                    input.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    input.focus();
+                }
+
+                adaError = true;
+            }
+
+        });
+
+        if (adaError) {
+            e.preventDefault();
+        }
+
     });
 </script>
