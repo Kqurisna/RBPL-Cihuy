@@ -175,16 +175,16 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             background: #e9edf2;
             padding: 0 15px;
             font-size: 12px;
-            font-weight: 800;
+            font-weight: 500;
             outline: none;
         }
 
         .form-group .input-loop {
-            font-weight: 100;
+            font-weight: 500;
         }
 
         .form-group textarea {
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .status-wrapper {
