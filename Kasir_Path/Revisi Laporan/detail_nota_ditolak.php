@@ -1364,7 +1364,6 @@ foreach ($validasiList as $v) {
                 ?>
 
                 <?php
-                // AMANKAN DATA TANGGAPAN
                 $dataTanggapan = null;
                 if (!empty($tanggapanList)) {
                     $dataTanggapan = reset($tanggapanList);
@@ -1382,9 +1381,9 @@ foreach ($validasiList as $v) {
 
                             <div class="form-group_2">
                                 <label>Tanggapan & Tindak Lanjut Supplier</label>
-                                <textarea class="textarea">
-<?= $dataTanggapan ? $dataTanggapan['tanggapan'] : 'Belum ada tanggapan' ?>
-                </textarea>
+                                <textarea name="tanggapan_supplier" class="textarea">
+<?= $dataTanggapan ? $dataTanggapan['tanggapan'] : '' ?>
+</textarea>
                             </div>
 
                             <div class="form-group">
@@ -1428,10 +1427,6 @@ foreach ($validasiList as $v) {
                     </div>
 
                 <?php } ?>
-
-                <!-- ===================== -->
-                <!-- FOTO NOTA (SELALU ADA) -->
-                <!-- ===================== -->
 
                 <div class="welcome-card_3">
                     <div class="form-card_2">

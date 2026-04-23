@@ -180,7 +180,7 @@ $q5 = true;
 
 $fotoSupplierBaru = $_FILES['foto_supplier']['name'] ?? '';
 $fotoSupplierLama = $_POST['lampiran_lama'] ?? '';
-
+$tanggapan = $_POST['tanggapan_supplier'] ?? '';
 $lampiran = '';
 
 if (!empty($fotoSupplierBaru) && $_FILES['foto_supplier']['error'] === 0) {
@@ -205,10 +205,11 @@ $qRetur = mysqli_query($koneksi, "SELECT id_retur FROM retur WHERE id_nota = $id
 $r = mysqli_fetch_assoc($qRetur);
 $id_retur = $r['id_retur'] ?? 0;
 
-if ($id_retur && !empty($lampiran)) {
+if ($id_retur) {
+
     if (!mysqli_query($koneksi, "
         UPDATE tanggapan_supplier SET
-            lampiran = '$lampiran'
+            tanggapan = IF('$tanggapan' != '', '$tanggapan', tanggapan)
         WHERE id_retur = $id_retur
     ")) {
         $q5 = false;
