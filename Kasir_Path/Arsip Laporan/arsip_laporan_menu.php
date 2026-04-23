@@ -435,7 +435,7 @@ $query = mysqli_query($koneksi, "
 
 
             <div class="form-card menu-card"
-                onclick="location.href='lihat_arsip_laporan.php'"
+                onclick="location.href='list_lihat_nota_arsip_laporan.php'"
                 <p>
                 Lihat seluruh laporan yang telah diarsipkan lengkap dengan detail barang,
                 kondisi barang (sesuai atau cacat), foto bukti, serta tanggapan dan tindak lanjut dari supplier.
