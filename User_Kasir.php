@@ -393,9 +393,12 @@
         </div>
         <div class="menu-title">Arsip Laporan</div>
       </div>
-      <div class="menu-arrow">
-        <img src="UI_GENERAL/logo_foward.png" alt="" />
-      </div>
+      <a href="Kasir_Path/Arsip Laporan/arsip_laporan_menu.php">
+
+        <div class="menu-arrow">
+          <img src="UI_GENERAL/logo_foward.png" alt="" />
+        </div>
+      </a>
     </div>
   </div>
 </body>
