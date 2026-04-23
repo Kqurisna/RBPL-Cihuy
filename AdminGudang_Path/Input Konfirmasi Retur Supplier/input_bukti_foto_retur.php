@@ -82,11 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ");
 
     mysqli_query($koneksi, "
-        UPDATE nota 
-        SET 
-            status = 'cacat',
-            status_laporan = 'belum_diajukan'
-        WHERE id_nota = '$id_nota'
+    UPDATE nota 
+    SET 
+        status = 'cacat',
+        status_laporan = 'belum_diajukan',
+        status_pemeriksaan = 'sudah'
+    WHERE id_nota = '$id_nota'
     ");
 
     header("Location: status_success_bukti_supplier.php");
