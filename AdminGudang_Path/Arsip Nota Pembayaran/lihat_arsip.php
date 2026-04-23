@@ -357,8 +357,8 @@ $query = $nota->getArsipNota($sort);
             color: white;
             cursor: pointer;
         }
-        .container p
-        {
+
+        .container p {
             font-size: 14px;
             font-weight: 600;
             color: #1f2937;
@@ -373,7 +373,7 @@ $query = $nota->getArsipNota($sort);
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="arsip_menu.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>

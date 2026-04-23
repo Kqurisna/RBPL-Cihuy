@@ -336,7 +336,6 @@ $query = $nota->getNotaDisetujui($sort);
             }
         }
 
-        /* ===== IMAGE PREVIEW ===== */
         .image-preview-overlay {
             position: fixed;
             top: 0;
@@ -381,7 +380,7 @@ $query = $nota->getNotaDisetujui($sort);
         <div class="header-left">
 
             <div class="back-btn">
-                <a href="../../User_Admin.php" class="back-link">
+                <a href="arsip_menu.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
