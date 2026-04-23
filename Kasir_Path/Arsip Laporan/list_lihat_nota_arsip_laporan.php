@@ -384,6 +384,14 @@ $chooseDisetujui = ($filter == 'disetujui') ? 'btn-choose-disetujui' : '';
             background-color: #6AD2DE;
             margin-top: 1px;
         }
+
+        .btn-choose-disetujui {
+            border: 2px solid #5DADC1;
+            border-radius: 6px;
+            padding: 2px 6px;
+            box-shadow: 0 4px 12px rgba(93, 173, 193, 0.3);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -410,7 +418,7 @@ $chooseDisetujui = ($filter == 'disetujui') ? 'btn-choose-disetujui' : '';
     </div>
 
     <div class="filter-container">
-        <a href="?filter=disetujui" class="filter-btn disetujui <?= $chooseDisetujui ?>">Sudah Disetujui</a>
+        <a href="#" class="filter-btn disetujui btn-choose-disetujui">Sudah Disetujui</a>
     </div>
     <div class="sorting-wrapper" style="display:flex; justify-content:center; margin-top:6px;">
 
