@@ -69,20 +69,29 @@ if (isset($_POST['submit'])) {
     }
 
     $finalStatus = "sesuai";
+    $semuaSesuai = true;
 
     foreach ($status_barang as $status) {
         if ($status == "cacat") {
             $finalStatus = "cacat";
+            $semuaSesuai = false;
             break;
         }
     }
 
-    mysqli_query($koneksi, "
-        UPDATE nota 
-        SET status = '$finalStatus'
-        WHERE id_nota = '$id_nota'
-    ");
+    if ($semuaSesuai) {
+        $status_pemeriksaan = "sudah";
+    } else {
+        $status_pemeriksaan = "belum";
+    }
 
+    mysqli_query($koneksi, "
+    UPDATE nota 
+    SET 
+        status = '$finalStatus',
+        status_pemeriksaan = '$status_pemeriksaan'
+    WHERE id_nota = '$id_nota'
+");
     header("Location: status_succes_cek_barang_fisik.php");
     exit;
 }
