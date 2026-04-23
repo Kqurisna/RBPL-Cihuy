@@ -357,6 +357,12 @@ $query = $nota->getArsipNota($sort);
             color: white;
             cursor: pointer;
         }
+        .container p
+        {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
     </style>
 </head>
 
@@ -384,6 +390,7 @@ $query = $nota->getArsipNota($sort);
 
 
     <div class="container">
+        <p>Lihat Arsip Nota Pembayaran</p>
         <div style="display:flex; align-items:center; gap:8px; margin:5px;">
 
             <h5 class="section-title" style="display:flex; align-items:center; gap:6px;">
