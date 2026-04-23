@@ -7,7 +7,15 @@ class Nota
     {
         $this->koneksi = $conn;
     }
+    public function getArsipNota($sort)
+    {
+        $sort = ($sort === 'ASC') ? 'ASC' : 'DESC';
 
+        return mysqli_query($this->koneksi, "
+        SELECT * FROM arsip_nota
+        ORDER BY tanggal_arsip $sort
+    ");
+    }
     public function getNotaDisetujui($sort)
     {
         $sort = ($sort === 'ASC') ? 'ASC' : 'DESC';
@@ -38,7 +46,23 @@ class Nota
 
         return $urlPath;
     }
+    public function getFotoPathArsip($foto)
+    {
+        if (empty($foto)) {
+            return null;
+        }
 
+        $namaFile = basename(trim($foto));
+
+        $serverPath = "C:/xampp/htdocs/RBPL/AdminGudang_Path/Arsip Nota Pembayaran/uploads/nota/" . $namaFile;
+        $urlPath    = "../Arsip Nota Pembayaran/uploads/nota/" . $namaFile;
+
+        if (!file_exists($serverPath)) {
+            return null;
+        }
+
+        return $urlPath;
+    }
     public function getFotoBase64($foto)
     {
         if (empty($foto)) {
