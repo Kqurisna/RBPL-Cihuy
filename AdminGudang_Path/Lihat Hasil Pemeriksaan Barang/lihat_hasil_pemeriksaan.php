@@ -238,6 +238,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
+            pointer-events: none;
         }
 
         .chip.active {
