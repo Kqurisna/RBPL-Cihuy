@@ -598,7 +598,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
     .textarea {
       width: 100%;
-      min-height: 40px;
+      min-height: 42px;
       border-radius: 16px;
       border: none;
       background: #e9edf2;
@@ -633,6 +633,46 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       overflow: hidden;
       min-height: 0;
       height: auto;
+    }
+
+    .upload-box.error {
+      border: 2px solid red;
+    }
+
+    .error-input {
+      border: 2px solid #ff6b6b !important;
+      background: #fff5f5;
+    }
+
+    .error-text {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #e74c3c;
+      font-weight: 500;
+    }
+
+    .upload-box.error {
+      border: 2px dashed #ff6b6b;
+      background: #fff5f5;
+      margin-bottom: 10px;
+    }
+
+    .error-input,
+    .upload-box.error {
+      animation: fadeError 0.25s ease;
+    }
+
+    @keyframes fadeError {
+      from {
+        transform: scale(0.97);
+        opacity: 0.7;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -752,11 +792,17 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
                       <input type="hidden" name="status_barang[<?= $no ?>]" id="statusInput<?= $no ?>" value="">
                     </div>
-
+                    <small id="errorStatus<?= $no ?>" style="color:red; display:none;">
+                      Wajib pilih kondisi barang!
+                    </small>
                     <div id="keluhanBox<?= $no ?>" class="keluhan-box">
                       <div class="form-group">
                         <label>Keterangan / Keluhan</label>
                         <textarea name="keluhan[<?= $no ?>]" rows="3" class="textarea"></textarea>
+
+                        <small class="error-keluhan" style="color:red; display:none;">
+                          Keluhan wajib diisi jika barang cacat!
+                        </small>
                       </div>
 
                       <div class="form-group">
@@ -774,7 +820,9 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
                             accept="image/*"
                             hidden>
                         </div>
-
+                        <small id="errorFoto<?= $no ?>" style="color:red; display:none;">
+                          Foto bukti wajib diupload jika barang cacat!
+                        </small>
                         <div style="position: relative; margin-top:10px;">
                           <img id="previewImage<?= $no ?>"
                             style="display:none; width:100%; border-radius:10px;">
@@ -1124,5 +1172,68 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       this.style.height = "0px";
       this.style.height = this.scrollHeight + "px";
     });
+  });
+  document.querySelector("form").addEventListener("submit", function(e) {
+
+    let firstError = null;
+    let statusInputs = document.querySelectorAll("[id^='statusInput']");
+
+    statusInputs.forEach((input, index) => {
+
+      const no = index + 1;
+
+      const errorStatus = document.getElementById("errorStatus" + no);
+      const keluhan = document.querySelector(`[name='keluhan[${no}]']`);
+      const errorKeluhan = keluhan?.nextElementSibling;
+
+      const fileInput = document.getElementById("fileInput" + no);
+      const errorFoto = document.getElementById("errorFoto" + no);
+      const uploadBox = fileInput.closest(".form-group").querySelector(".upload-box");
+
+      errorStatus.style.display = "none";
+      errorKeluhan.style.display = "none";
+      errorFoto.style.display = "none";
+
+      keluhan.classList.remove("error-input");
+      uploadBox.classList.remove("error");
+
+      if (input.value === "") {
+        errorStatus.style.display = "block";
+
+        if (!firstError) firstError = errorStatus;
+      }
+
+      if (input.value === "cacat") {
+
+        if (!keluhan.value.trim()) {
+          keluhan.classList.add("error-input");
+          errorKeluhan.style.display = "block";
+
+          if (!firstError) firstError = keluhan;
+        }
+
+        if (!fileInput.files.length) {
+          uploadBox.classList.add("error");
+          errorFoto.style.display = "block";
+
+          if (!firstError) firstError = uploadBox;
+        }
+      }
+
+    });
+
+    if (firstError) {
+      e.preventDefault();
+
+      firstError.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+      if (firstError.tagName === "TEXTAREA") {
+        firstError.focus();
+      }
+    }
+
   });
 </script>
