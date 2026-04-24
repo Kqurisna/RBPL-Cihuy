@@ -917,9 +917,19 @@
         const inputDate = tanggalInput.value;
         const today = getTodayWIB();
 
-        if (inputDate > today) {
+        const minDate = "2024-01-01";
+
+        if (inputDate > today || inputDate < minDate) {
+
             tanggalInput.classList.add("error-input");
             errorTanggal.style.display = "block";
+
+            if (inputDate < minDate) {
+                errorTanggal.innerText = "Tanggal tidak boleh sebelum tahun 2024!";
+            } else {
+                errorTanggal.innerText = "Tidak bisa menginputkan tanggal di masa depan!";
+            }
+
         } else {
             tanggalInput.classList.remove("error-input");
             errorTanggal.style.display = "none";
