@@ -1125,7 +1125,6 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
     });
 
     if (belumPilih) {
-      alert("Semua kondisi barang harus dipilih!");
       e.preventDefault();
       return;
     }
