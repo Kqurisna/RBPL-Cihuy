@@ -598,6 +598,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
     .textarea {
       width: 100%;
+      min-height: 40px;
       border-radius: 16px;
       border: none;
       background: #e9edf2;
@@ -606,6 +607,7 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
       font-weight: 500;
       outline: none;
       resize: none;
+      line-height: 1.5;
     }
 
     .section-title {
@@ -1113,6 +1115,14 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
   document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".textarea-barang").forEach(textarea => {
       autoResize(textarea);
+    });
+  });
+  document.querySelectorAll("textarea").forEach(textarea => {
+    textarea.style.height = textarea.scrollHeight + "px";
+
+    textarea.addEventListener("input", function() {
+      this.style.height = "0px";
+      this.style.height = this.scrollHeight + "px";
     });
   });
 </script>
