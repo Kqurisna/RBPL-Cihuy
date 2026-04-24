@@ -648,20 +648,20 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             display: none;
             position: fixed;
             z-index: 999;
-            padding-top: 50px;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
-            margin: auto;
-            display: block;
             max-width: 90%;
-            max-height: 85vh;
+            max-height: 85%;
             border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
 
         .close {
@@ -1064,11 +1064,16 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
 
-        modal.style.display = "block";
+        modal.style.display = "flex";
         modalImg.src = img.src;
     }
 
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
+    document.getElementById("imageModal").addEventListener("click", function(e) {
+        if (e.target === this) {
+            this.style.display = "none";
+        }
+    });
 </script>
