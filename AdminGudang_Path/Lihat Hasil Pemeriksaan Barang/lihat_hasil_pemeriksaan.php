@@ -604,6 +604,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
         .textarea {
             width: 100%;
+            height: 10px;
             border-radius: 16px;
             border: none;
             background: #e9edf2;
@@ -612,6 +613,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             font-weight: 500;
             outline: none;
             resize: none;
+            line-height: 1.5;
         }
 
         .section-title {
@@ -769,7 +771,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input class="input-loop" type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                            <textarea class="textarea input-loop" name="barang[]" readonly><?= $detail['nama_barang'] ?></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -1075,5 +1077,13 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         if (e.target === this) {
             this.style.display = "none";
         }
+    });
+    document.querySelectorAll("textarea").forEach(textarea => {
+        textarea.style.height = textarea.scrollHeight + "px";
+
+        textarea.addEventListener("input", function() {
+            this.style.height = "0x";
+            this.style.height = this.scrollHeight + "px";
+        });
     });
 </script>
