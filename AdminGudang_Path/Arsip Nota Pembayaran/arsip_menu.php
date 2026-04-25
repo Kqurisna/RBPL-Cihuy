@@ -374,6 +374,40 @@ $query = mysqli_query($koneksi, "
             left: 147px;
             transform: rotate(45deg);
         }
+
+        .menu-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.5s ease;
+        }
+
+        .menu-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-card:active {
+            transform: scale(0.96);
+            transition: 0.1s;
+        }
+
+        .circle {
+            transition: all 0.25s ease;
+        }
+
+        .circle:hover {
+            transform: scale(1.1);
+            background: #bfc6cd;
+        }
+
+        .circle:active {
+            transform: scale(0.85);
+        }
     </style>
 </head>
 
@@ -453,3 +487,25 @@ $query = mysqli_query($koneksi, "
 </body>
 
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".menu-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 200);
+        });
+
+    });
+
+    function goPage(el, url) {
+        el.style.transform = "scale(0.9)";
+        el.style.opacity = "0.7";
+
+        setTimeout(() => {
+            window.location.href = url;
+        }, 200);
+    }
+</script>
