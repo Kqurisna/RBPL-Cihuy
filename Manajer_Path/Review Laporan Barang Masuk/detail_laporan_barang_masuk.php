@@ -670,38 +670,32 @@ foreach ($validasiList as $v) {
 
         .textarea {
             width: 100%;
+            min-height: 42px;
             border-radius: 16px;
             border: none;
-            min-height: 120px;
             background: #e9edf2;
-
-            padding: 14px 4px 10px 15px;
-            text-align: left;
+            padding: 10px 15px;
             font-size: 12px;
-            font-weight: 300;
-
+            font-weight: 500;
             outline: none;
             resize: none;
-
-            line-height: 1.4;
+            line-height: 1.5;
+            overflow: hidden;
         }
 
         .textarea_2 {
             width: 100%;
+            min-height: 42px;
             border-radius: 16px;
             border: none;
-            min-height: 40px;
             background: #e9edf2;
-
-            padding: 10px 4px 10px 15px;
-            text-align: left;
+            padding: 10px 15px;
             font-size: 12px;
-            font-weight: 300;
-
+            font-weight: 500;
             outline: none;
             resize: none;
-
-            line-height: 1.4;
+            line-height: 1.5;
+            overflow: hidden;
         }
 
         .section-title {
@@ -1512,10 +1506,17 @@ foreach ($validasiList as $v) {
 
 </html>
 <script>
-    function autoResize(el) {
-        el.style.height = "auto";
-        el.style.height = el.scrollHeight + "px";
-    }
+    document.querySelectorAll("textarea").forEach(textarea => {
+
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+
+        textarea.addEventListener("input", function() {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+        });
+
+    });
     let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
     const chips = document.querySelectorAll(".chip");
     chips.forEach(chip => {
