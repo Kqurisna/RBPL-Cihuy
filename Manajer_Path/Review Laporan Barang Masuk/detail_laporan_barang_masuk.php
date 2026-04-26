@@ -668,34 +668,29 @@ foreach ($validasiList as $v) {
             transform: scale(1.05);
         }
 
-        .textarea {
+        .textarea,
+        .textarea_2,
+        .textarea-dynamic,
+        .auto-height {
             width: 100%;
-            min-height: 42px;
             border-radius: 16px;
             border: none;
             background: #e9edf2;
-            padding: 10px 15px;
-            font-size: 12px;
-            font-weight: 500;
-            outline: none;
-            resize: none;
-            line-height: 1.4;
-            overflow: hidden;
-        }
 
-        .textarea_2 {
-            width: 100%;
-            min-height: 42px;
-            border-radius: 16px;
-            border: none;
-            background: #e9edf2;
             padding: 10px 15px;
+            /* ⬅️ ambil dari referensi */
             font-size: 12px;
             font-weight: 500;
+
+            line-height: 1.5;
+            /* ⬅️ ini kunci biar gak melayang */
+
             outline: none;
             resize: none;
-            line-height: 1.4;
             overflow: hidden;
+
+            display: block;
+            /* ⬅️ penting, jangan pakai flex */
         }
 
         .textarea,
@@ -1545,28 +1540,41 @@ foreach ($validasiList as $v) {
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
-        // AUTO HEIGHT TEXTAREA
+        // ===============================
+        // AUTO HEIGHT TEXTAREA (FIX TOTAL)
+        // ===============================
         function autoResizeTextarea(el) {
-            el.style.height = "auto";
+            el.style.height = "0px";
             el.style.height = el.scrollHeight + "px";
         }
 
-        // jalan saat input
+        function initTextareaAutoHeight() {
+            const textareas = document.querySelectorAll(
+                ".textarea, .textarea_2, .textarea-dynamic, .auto-height"
+            );
+
+            textareas.forEach(el => {
+                autoResizeTextarea(el);
+            });
+        }
+
+        // resize saat input (untuk yang editable)
         document.addEventListener("input", function(e) {
-            if (e.target.classList.contains("textarea") ||
-                e.target.classList.contains("textarea_2")) {
+            if (e.target.matches(".textarea, .textarea_2, .textarea-dynamic, .auto-height")) {
                 autoResizeTextarea(e.target);
             }
         });
 
-        // jalan saat pertama load (INI PENTING)
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".textarea, .textarea_2").forEach(el => {
-                autoResizeTextarea(el);
-            });
-        });
+        // jalankan saat awal
+        initTextareaAutoHeight();
 
+        // fallback kalau ada gambar / render delay
+        window.addEventListener("load", initTextareaAutoHeight);
+
+
+        // ===============================
         // CHIP JENIS BARANG
+        // ===============================
         let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
         const chips = document.querySelectorAll(".chip");
 
@@ -1590,16 +1598,22 @@ foreach ($validasiList as $v) {
             }
         });
 
-        // BLOCK INPUT ANGKA ANEH
+
+        // ===============================
+        // BLOCK INPUT NUMBER (ANTI E,+,-)
+        // ===============================
         document.addEventListener("keydown", function(e) {
             if (e.target.classList.contains("input-number")) {
-                if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                if (["e", "E", "+", "-"].includes(e.key)) {
                     e.preventDefault();
                 }
             }
         });
 
+
+        // ===============================
         // VALIDASI FORM
+        // ===============================
         const form = document.querySelector("form");
         const errorMsg = document.getElementById("errorJenis");
 
@@ -1607,6 +1621,7 @@ foreach ($validasiList as $v) {
             let firstError = null;
 
             const inputs = document.querySelectorAll("input[required], textarea[required]");
+
             inputs.forEach(input => {
                 if (!input.value.trim()) {
                     input.classList.add("error-input");
@@ -1616,15 +1631,18 @@ foreach ($validasiList as $v) {
                 }
             });
 
+            // validasi chip
             if (selectedItems.length === 0) {
                 errorMsg.style.display = "block";
                 chips.forEach(c => c.classList.add("error"));
+
                 if (!firstError) firstError = document.querySelector(".chip-container");
             } else {
                 errorMsg.style.display = "none";
                 chips.forEach(c => c.classList.remove("error"));
             }
 
+            // validasi reject
             const approval = document.getElementById("approvalInput").value;
             const alasan = document.getElementById("alasanReject");
             const errorBox = document.getElementById("errorRejectBox");
@@ -1636,6 +1654,7 @@ foreach ($validasiList as $v) {
                 if (approval === "reject" && !alasan.value.trim()) {
                     e.preventDefault();
                     errorBox.style.display = "block";
+                    alasan.classList.add("textarea-error");
                     alasan.focus();
                     return;
                 }
@@ -1643,6 +1662,7 @@ foreach ($validasiList as $v) {
 
             if (firstError) {
                 e.preventDefault();
+
                 firstError.scrollIntoView({
                     behavior: "smooth",
                     block: "center"
@@ -1654,18 +1674,27 @@ foreach ($validasiList as $v) {
             }
         });
 
-        // ANIMASI CARD MASUK
+
+        // ===============================
+        // ANIMASI CARD
+        // ===============================
         const cards = document.querySelectorAll(".form-card");
+
         cards.forEach((card, index) => {
             setTimeout(() => {
                 card.classList.add("show");
             }, index * 100);
         });
 
+
+        // ===============================
         // MODE VIEW (READONLY)
+        // ===============================
         const mode = form.getAttribute("data-mode");
+
         if (mode === "view") {
             const inputs = form.querySelectorAll("input, textarea, select, button");
+
             inputs.forEach(el => {
                 if (el.type !== "hidden") el.readOnly = true;
             });
@@ -1678,7 +1707,10 @@ foreach ($validasiList as $v) {
             if (submitBtn) submitBtn.style.display = "none";
         }
 
-        // ===== MODAL FIX (INI YANG PENTING) =====
+
+        // ===============================
+        // MODAL GAMBAR (FIX STABLE)
+        // ===============================
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
 
@@ -1706,7 +1738,10 @@ foreach ($validasiList as $v) {
 
     });
 
-    // APPROVAL BUTTON
+
+    // ===============================
+    // APPROVAL BUTTON (GLOBAL)
+    // ===============================
     function setApproval(value, el) {
         const buttons = document.querySelectorAll(".btn-approval");
         const submitBtn = document.querySelector(".btn-retur");
