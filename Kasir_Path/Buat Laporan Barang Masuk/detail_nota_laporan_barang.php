@@ -900,7 +900,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
 
     </div>
 
-    <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data">
+    <form action="input_data_laporan_barang.php" method="POST" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <input type="hidden" name="foto_nota" value="<?= $dataNota['foto_nota'] ?>">
         <div class="container">
@@ -1077,6 +1077,9 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                                     class="textarea"
                                     placeholder="Contoh: Supplier menyetujui penggantian barang..."
                                     required><?= $tanggapanData['tanggapan'] ?? '' ?></textarea>
+                                <small id="errorTanggapan" style="color:#ef4444; display:none; font-size:13px;">
+                                    Wajib diisi!
+                                </small>
                             </div>
 
                             <div class="form-group">
@@ -1225,43 +1228,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
     const errorMsg = document.getElementById("errorJenis");
 
 
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
-
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
-            }
-        });
-
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
-
-            e.preventDefault();
-
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
     document.querySelectorAll("input[type='file']").forEach(input => {
         input.addEventListener("change", function(e) {
 
@@ -1288,6 +1255,8 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         let firstError = null;
 
         const inputs = document.querySelectorAll("input[required], textarea[required]");
+        const tanggapan = document.querySelector("textarea[name='tanggapan_supplier']");
+        const errorTanggapan = document.getElementById("errorTanggapan");
 
         inputs.forEach(input => {
             if (!input.value.trim()) {
@@ -1306,18 +1275,33 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         if (selectedItems.length === 0) {
 
             errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
             chips.forEach(c => c.classList.add("error"));
 
             if (!firstError) {
-                firstError = chipContainer;
+                firstError = document.querySelector(".chip-container");
             }
 
         } else {
             errorMsg.style.display = "none";
             chips.forEach(c => c.classList.remove("error"));
+        }
+
+        if (tanggapan) {
+
+            if (!tanggapan.value.trim()) {
+
+                tanggapan.classList.add("error-input");
+                errorTanggapan.style.display = "block";
+
+                if (!firstError) {
+                    firstError = tanggapan;
+                }
+
+            } else {
+
+                tanggapan.classList.remove("error-input");
+                errorTanggapan.style.display = "none";
+            }
         }
 
         if (firstError) {
@@ -1328,10 +1312,11 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
                 block: "center"
             });
 
-            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
+            if (firstError.focus) {
                 firstError.focus();
             }
         }
+
     });
 
     function setStatus(no, status, el) {
@@ -1364,24 +1349,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             box.style.display = 'none';
         }
     }
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let statusInputs = document.querySelectorAll("[id^='statusInput']");
-        let belumPilih = false;
-
-        statusInputs.forEach(input => {
-            if (input.value === "") {
-                belumPilih = true;
-            }
-        });
-
-        if (belumPilih) {
-            alert("Semua kondisi barang harus dipilih!");
-            e.preventDefault();
-            return;
-        }
-
-    });
 
     document.querySelectorAll('.textarea').forEach(el => {
         el.style.height = 'auto';
@@ -1658,6 +1625,33 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         modalImg.addEventListener("touchend", function() {
             isDragging = false;
         });
+
+    });
+    document.addEventListener("input", function(e) {
+        if (e.target.name === "tanggapan_supplier") {
+
+            if (e.target.value.trim()) {
+                e.target.classList.remove("error-input");
+            }
+        }
+    });
+    document.addEventListener("input", function(e) {
+
+        if (e.target.matches("input, textarea")) {
+
+            if (e.target.value.trim()) {
+                e.target.classList.remove("error-input");
+            }
+        }
+
+        if (e.target.name === "tanggapan_supplier") {
+
+            const errorTanggapan = document.getElementById("errorTanggapan");
+
+            if (e.target.value.trim()) {
+                errorTanggapan.style.display = "none";
+            }
+        }
 
     });
 </script>
