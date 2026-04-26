@@ -39,7 +39,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pengecekkan Barang Fisik</title>
+    <title>Buat Laporan Barang Masuk</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -624,7 +624,8 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             font-weight: 500;
             outline: none;
             resize: none;
-            line-height: 1.2;
+            overflow: hidden;
+            line-height: 1.4;
         }
 
         .section-title {
@@ -1494,5 +1495,24 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             }
         }
 
+    });
+
+    function autoResizeTextarea(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        document.querySelectorAll(".textarea").forEach(el => {
+            autoResizeTextarea(el);
+        });
+
+    });
+
+    document.addEventListener("input", function(e) {
+        if (e.target.classList.contains("textarea")) {
+            autoResizeTextarea(e.target);
+        }
     });
 </script>
