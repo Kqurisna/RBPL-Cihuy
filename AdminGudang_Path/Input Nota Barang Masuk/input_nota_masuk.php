@@ -553,6 +553,22 @@
                 opacity: 1;
             }
         }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .modal.hide img {
+            animation: zoomOut 0.25s ease forwards;
+        }
     </style>
 </head>
 
@@ -1002,12 +1018,25 @@
     });
 
     closeBtn.addEventListener("click", function() {
-        modal.style.display = "none";
+
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modal.style.display = "none";
+            modal.classList.remove("hide");
+        }, 250);
+
     });
 
     modal.addEventListener("click", function(e) {
         if (e.target === modal) {
-            modal.style.display = "none";
+
+            modal.classList.add("hide");
+
+            setTimeout(() => {
+                modal.style.display = "none";
+                modal.classList.remove("hide");
+            }, 250);
         }
     });
 </script>
