@@ -646,6 +646,8 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .modal-content {
@@ -654,6 +656,42 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             max-width: 90%;
             max-height: 85vh;
             border-radius: 12px;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* efek klik preview */
+        .img-preview:active {
+            transform: scale(0.96);
+        }
+
+        /* animasi klik */
+        .img-preview.clicked {
+            animation: clickZoom 0.25s ease;
+        }
+
+        @keyframes clickZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
         }
 
         .close {
@@ -1101,12 +1139,29 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
 
-        modal.style.display = "block";
+        // animasi klik preview
+        el.classList.add("clicked");
+        setTimeout(() => {
+            el.classList.remove("clicked");
+        }, 250);
+
+        modal.style.display = "flex";
+
+        setTimeout(() => {
+            modal.classList.add("show");
+        }, 10);
+
         modalImg.src = img.src;
     }
 
     function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
+        const modal = document.getElementById("imageModal");
+
+        modal.classList.remove("show");
+
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
     }
     document.addEventListener("keydown", function(e) {
         if (e.target.classList.contains("input-number")) {
@@ -1181,5 +1236,10 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             e.preventDefault();
         }
 
+    });
+    document.getElementById("imageModal").addEventListener("click", function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
     });
 </script>
