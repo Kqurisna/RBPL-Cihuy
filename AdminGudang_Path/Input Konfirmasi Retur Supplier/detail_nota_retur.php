@@ -1111,17 +1111,15 @@ foreach ($validasiList as $v) {
                                     <img src="UI_ADMIN/logo_plus.png" class="upload-icon">
 
                                     <p class="upload-text">Upload Foto / PDF</p>
-                                    <p class="upload-subtext">Format: JPG, PNG, PDF</p>
-
+                                    <p class="upload-subtext">Format: JPG, PNG (maks. 5MB)</p>
                                     <input
                                         type="file"
                                         id="fotoRetur"
                                         name="foto_retur"
-                                        accept=".jpg,.jpeg,.png,.pdf"
+                                        accept=".jpg,.jpeg,.png"
                                         hidden>
                                 </div>
 
-                                <!-- PREVIEW DI LUAR -->
                                 <div style="margin-top:15px; display:flex; justify-content:center;">
                                     <div style="position:relative; width:260px;">
 
@@ -1286,22 +1284,20 @@ foreach ($validasiList as $v) {
 
             currentURL = URL.createObjectURL(file);
 
-            if (fileType.startsWith("image/")) {
+            if (fileType === "image/jpeg" || fileType === "image/png") {
 
                 preview.src = currentURL;
                 preview.style.display = "block";
                 removeBtn.style.display = "block";
 
-            } else if (fileType === "application/pdf") {
-
-                preview.style.display = "none";
-                removeBtn.style.display = "block";
-
-                alert("File PDF berhasil dipilih");
-
             } else {
-                alert("Format tidak didukung!");
+
+                alert("Hanya boleh upload file JPG atau PNG!");
                 fileInput.value = "";
+
+                preview.src = "";
+                preview.style.display = "none";
+                removeBtn.style.display = "none";
             }
         });
 
