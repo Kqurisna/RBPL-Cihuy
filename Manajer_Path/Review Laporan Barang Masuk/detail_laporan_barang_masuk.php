@@ -679,7 +679,7 @@ foreach ($validasiList as $v) {
             font-weight: 500;
             outline: none;
             resize: none;
-            line-height: 1.5;
+            line-height: 1.4;
             overflow: hidden;
         }
 
@@ -694,8 +694,14 @@ foreach ($validasiList as $v) {
             font-weight: 500;
             outline: none;
             resize: none;
-            line-height: 1.5;
+            line-height: 1.4;
             overflow: hidden;
+        }
+
+        .textarea,
+        .textarea_2 {
+            overflow: hidden;
+            resize: none;
         }
 
         .section-title {
@@ -731,26 +737,57 @@ foreach ($validasiList as $v) {
         .modal {
             display: none;
             position: fixed;
-            z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
         }
 
-        .modal-content {
-            margin: auto;
-            transition: transform 0.15s ease;
-            display: block;
+        .modal img {
             max-width: 90%;
-            max-height: 85vh;
+            max-height: 90%;
             border-radius: 12px;
-            touch-action: manipulation;
-            transition: transform 0.3s ease;
-            transform-origin: center;
-            cursor: zoom-in;
+            object-fit: contain;
+            animation: zoomIn 0.25s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .modal.hide img {
+            animation: zoomOut 0.25s ease forwards;
         }
 
         .close {
@@ -1506,474 +1543,131 @@ foreach ($validasiList as $v) {
 
 </html>
 <script>
-    document.querySelectorAll("textarea").forEach(textarea => {
-
-        textarea.style.height = "auto";
-        textarea.style.height = textarea.scrollHeight + "px";
-
-        textarea.addEventListener("input", function() {
-            this.style.height = "auto";
-            this.style.height = this.scrollHeight + "px";
-        });
-
-    });
-    let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
-    const chips = document.querySelectorAll(".chip");
-    chips.forEach(chip => {
-        chip.addEventListener("click", () => {
-
-            const value = chip.innerText;
-
-            if (selectedItems.includes(value)) {
-                selectedItems = selectedItems.filter(item => item !== value);
-                chip.classList.remove("active");
-            } else {
-                selectedItems.push(value);
-                chip.classList.add("active");
-            }
-
-            document.getElementById("jenisBarangInput").value = selectedItems.join(",");
-        });
-    });
-    chips.forEach(chip => {
-        if (selectedItems.includes(chip.innerText)) {
-            chip.classList.add("active");
-        }
-    });
-    let count = 1;
-
-    const container = document.getElementById("inputBarangContainer");
-
-    function updateLabels() {
-        const items = container.querySelectorAll(".item");
-
-        items.forEach((item, index) => {
-            const nomor = index + 1;
-
-            const labels = item.querySelectorAll("label");
-
-            labels[0].innerText = `Nama Barang ke-${nomor}`;
-            labels[1].innerText = `Jumlah Barang ke-${nomor}`;
-        });
-
-        count = items.length;
-    }
-
-    function updateMinusState() {
-        if (count === 1) {
-            btnHapus.classList.add("disabled");
-        } else {
-            btnHapus.classList.remove("disabled");
-        }
-    }
-
-    function updateDivider() {
-        const items = container.querySelectorAll(".item");
-
-        items.forEach((item, index) => {
-            let line = item.querySelector(".success-line");
-
-            if (!line) {
-                line = document.createElement("div");
-                line.classList.add("success-line");
-                item.appendChild(line);
-            }
-
-            if (items.length > 1 && index !== items.length - 1) {
-                line.style.display = "block";
-            } else {
-                line.style.display = "none";
-            }
-        });
-    }
-
-    document.addEventListener("keydown", function(e) {
-        if (e.target.classList.contains("input-number")) {
-            if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
-                e.preventDefault();
-            }
-        }
-    });
-    const inputJenis = document.getElementById("jenisBarangInput");
-    const errorMsg = document.getElementById("errorJenis");
-
-
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
-
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
-            }
-        });
-
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
-
-            e.preventDefault();
-
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
-    document.querySelectorAll("input[type='file']").forEach(input => {
-        input.addEventListener("change", function(e) {
-
-            const file = e.target.files[0];
-            const no = this.id.replace("lampiranInput", "");
-            const preview = document.getElementById("previewImage" + no);
-
-            if (file) {
-
-                if (file.type.startsWith("image/")) {
-
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = "block";
-
-                } else {
-                    preview.style.display = "block";
-                    preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-                }
-            }
-        });
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let firstError = null;
-
-        const inputs = document.querySelectorAll("input[required], textarea[required]");
-
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-
-                input.classList.add("error-input");
-
-                if (!firstError) {
-                    firstError = input;
-                }
-
-            } else {
-                input.classList.remove("error-input");
-            }
-        });
-
-        if (selectedItems.length === 0) {
-
-            errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
-            chips.forEach(c => c.classList.add("error"));
-
-            if (!firstError) {
-                firstError = chipContainer;
-            }
-
-        } else {
-            errorMsg.style.display = "none";
-            chips.forEach(c => c.classList.remove("error"));
-        }
-
-        if (firstError) {
-            e.preventDefault();
-
-            firstError.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
-                firstError.focus();
-            }
-        }
-    });
-
-    function setStatus(no, status, el) {
-
-        let container = el.parentElement;
-        let chips = container.querySelectorAll('.chip-status');
-
-        let input = document.getElementById('statusInput' + no);
-        let box = document.getElementById('keluhanBox' + no);
-
-        if (el.classList.contains("active")) {
-
-            chips.forEach(chip => chip.classList.remove('active'));
-
-            input.value = "";
-
-            box.style.display = "none";
-
-            return;
-        }
-
-        chips.forEach(chip => chip.classList.remove('active'));
-
-        el.classList.add('active');
-        input.value = status;
-
-        if (status === 'cacat') {
-            box.style.display = 'block';
-        } else {
-            box.style.display = 'none';
-        }
-    }
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let statusInputs = document.querySelectorAll("[id^='statusInput']");
-        let belumPilih = false;
-
-        statusInputs.forEach(input => {
-            if (input.value === "") {
-                belumPilih = true;
-            }
-        });
-
-        if (belumPilih) {
-            alert("Semua kondisi barang harus dipilih!");
-            e.preventDefault();
-            return;
-        }
-
-    });
-
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
-    document.querySelectorAll('.textarea').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
     document.addEventListener("DOMContentLoaded", function() {
 
+        // AUTO HEIGHT TEXTAREA
+        function autoResizeTextarea(el) {
+            el.style.height = "auto";
+            el.style.height = el.scrollHeight + "px";
+        }
+
+        // jalan saat input
+        document.addEventListener("input", function(e) {
+            if (e.target.classList.contains("textarea") ||
+                e.target.classList.contains("textarea_2")) {
+                autoResizeTextarea(e.target);
+            }
+        });
+
+        // jalan saat pertama load (INI PENTING)
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".textarea, .textarea_2").forEach(el => {
+                autoResizeTextarea(el);
+            });
+        });
+
+        // CHIP JENIS BARANG
+        let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
+        const chips = document.querySelectorAll(".chip");
+
+        chips.forEach(chip => {
+            chip.addEventListener("click", () => {
+                const value = chip.innerText;
+
+                if (selectedItems.includes(value)) {
+                    selectedItems = selectedItems.filter(item => item !== value);
+                    chip.classList.remove("active");
+                } else {
+                    selectedItems.push(value);
+                    chip.classList.add("active");
+                }
+
+                document.getElementById("jenisBarangInput").value = selectedItems.join(",");
+            });
+
+            if (selectedItems.includes(chip.innerText)) {
+                chip.classList.add("active");
+            }
+        });
+
+        // BLOCK INPUT ANGKA ANEH
+        document.addEventListener("keydown", function(e) {
+            if (e.target.classList.contains("input-number")) {
+                if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // VALIDASI FORM
+        const form = document.querySelector("form");
+        const errorMsg = document.getElementById("errorJenis");
+
+        form.addEventListener("submit", function(e) {
+            let firstError = null;
+
+            const inputs = document.querySelectorAll("input[required], textarea[required]");
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add("error-input");
+                    if (!firstError) firstError = input;
+                } else {
+                    input.classList.remove("error-input");
+                }
+            });
+
+            if (selectedItems.length === 0) {
+                errorMsg.style.display = "block";
+                chips.forEach(c => c.classList.add("error"));
+                if (!firstError) firstError = document.querySelector(".chip-container");
+            } else {
+                errorMsg.style.display = "none";
+                chips.forEach(c => c.classList.remove("error"));
+            }
+
+            const approval = document.getElementById("approvalInput").value;
+            const alasan = document.getElementById("alasanReject");
+            const errorBox = document.getElementById("errorRejectBox");
+
+            if (errorBox) {
+                errorBox.style.display = "none";
+                alasan.classList.remove("textarea-error");
+
+                if (approval === "reject" && !alasan.value.trim()) {
+                    e.preventDefault();
+                    errorBox.style.display = "block";
+                    alasan.focus();
+                    return;
+                }
+            }
+
+            if (firstError) {
+                e.preventDefault();
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
+                    firstError.focus();
+                }
+            }
+        });
+
+        // ANIMASI CARD MASUK
         const cards = document.querySelectorAll(".form-card");
-
         cards.forEach((card, index) => {
-
             setTimeout(() => {
                 card.classList.add("show");
             }, index * 100);
-
         });
 
-    });
-
-
-    function openModal(el) {
-        const img = el.querySelector("img");
-        const modal = document.getElementById("imageModal");
-
-        modal.style.display = "block";
-        modalImg.src = img.src;
-
-        scale = 1;
-        posX = 0;
-        isZoomed = false;
-
-        modalImg.style.transform = "scale(1) translateX(0px)";
-        modalImg.style.cursor = "zoom-in";
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const modalImg = document.getElementById("modalImg");
-
-        let lastTap = 0;
-        let isZoomed = false;
-        let scale = 1;
-        let posX = 0;
-
-        modalImg.addEventListener("dblclick", function() {
-
-            if (!isZoomed) {
-
-                scale = 2;
-                posX = 0;
-
-                modalImg.style.transform = `scale(${scale}) translateX(0px)`;
-                modalImg.style.cursor = "grab";
-
-                isZoomed = true;
-
-            } else {
-
-                scale = 1;
-                posX = 0;
-
-                modalImg.style.transform = "scale(1) translateX(0px)";
-                modalImg.style.cursor = "zoom-in";
-
-                isZoomed = false;
-            }
-
-        });
-        let startX = 0;
-        let isDragging = false;
-
-        modalImg.addEventListener("mousedown", function(e) {
-            if (!isZoomed) return;
-
-            isDragging = true;
-            startX = e.clientX - posX;
-
-            modalImg.style.cursor = "grabbing";
-        });
-
-        document.addEventListener("mousemove", function(e) {
-            if (!isDragging) return;
-
-            posX = e.clientX - startX;
-
-            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
-        });
-
-        document.addEventListener("mouseup", function() {
-            isDragging = false;
-
-            if (isZoomed) {
-                modalImg.style.cursor = "grab";
-            }
-        });
-        modalImg.addEventListener("touchstart", function(e) {
-            if (!isZoomed) return;
-
-            const touch = e.touches[0];
-
-            isDragging = true;
-            startX = touch.clientX - posX;
-        });
-
-        modalImg.addEventListener("touchmove", function(e) {
-            if (!isDragging) return;
-
-            const touch = e.touches[0];
-
-            posX = touch.clientX - startX;
-
-            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
-        });
-
-        modalImg.addEventListener("touchend", function() {
-            isDragging = false;
-        });
-
-        modalImg.addEventListener("touchend", function(e) {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-
-            if (tapLength < 300 && tapLength > 0) {
-                zoomHandler(e);
-                e.preventDefault();
-            }
-
-            lastTap = currentTime;
-        });
-
-        function zoomHandler(e) {
-
-            if (!isZoomed) {
-
-                const rect = modalImg.getBoundingClientRect();
-
-                let x = 50;
-                let y = 50;
-
-                if (e.changedTouches) {
-                    const touch = e.changedTouches[0];
-                    x = ((touch.clientX - rect.left) / rect.width) * 100;
-                    y = ((touch.clientY - rect.top) / rect.height) * 100;
-                } else {
-                    x = ((e.clientX - rect.left) / rect.width) * 100;
-                    y = ((e.clientY - rect.top) / rect.height) * 100;
-                }
-
-                modalImg.style.transformOrigin = `${x}% ${y}%`;
-                modalImg.style.transform = "scale(2)";
-                modalImg.style.cursor = "zoom-out";
-
-                isZoomed = true;
-
-            } else {
-
-                modalImg.style.transform = "scale(1)";
-                modalImg.style.transformOrigin = "center";
-                modalImg.style.cursor = "zoom-in";
-
-                isZoomed = false;
-            }
-        }
-
-    });
-
-    function setApproval(value, el) {
-        const buttons = document.querySelectorAll(".btn-approval");
-        const submitBtn = document.querySelector(".btn-retur");
-        const rejectBox = document.getElementById("rejectBox");
-        const alasan = document.getElementById("alasanReject");
-
-        if (el.classList.contains("active")) {
-            el.classList.remove("active");
-
-            document.getElementById("approvalInput").value = "";
-
-            submitBtn.classList.remove("show");
-            rejectBox.style.display = "none";
-            alasan.value = "";
-
-            return;
-        }
-
-        buttons.forEach(btn => btn.classList.remove("active"));
-
-        el.classList.add("active");
-        document.getElementById("approvalInput").value = value;
-
-        submitBtn.classList.add("show");
-
-        if (value === "reject") {
-            rejectBox.style.display = "block";
-
-            setTimeout(() => {
-                const textarea = document.getElementById("alasanReject");
-                if (textarea) autoResize(textarea);
-            }, 100);
-
-        } else {
-            rejectBox.style.display = "none";
-            alasan.value = "";
-        }
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const form = document.querySelector("form");
+        // MODE VIEW (READONLY)
         const mode = form.getAttribute("data-mode");
-
         if (mode === "view") {
-
             const inputs = form.querySelectorAll("input, textarea, select, button");
-
             inputs.forEach(el => {
-                if (el.type !== "hidden") {
-                    el.readOnly = true;
-                }
+                if (el.type !== "hidden") el.readOnly = true;
             });
 
             document.querySelectorAll(".btn-approval").forEach(btn => {
@@ -1984,50 +1678,61 @@ foreach ($validasiList as $v) {
             if (submitBtn) submitBtn.style.display = "none";
         }
 
-    });
-    document.querySelectorAll('.auto-height').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
-    document.addEventListener("DOMContentLoaded", function() {
+        // ===== MODAL FIX (INI YANG PENTING) =====
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
 
-        const textarea = document.getElementById("alasanReject");
+        window.openModal = function(el) {
+            const img = el.querySelector("img");
 
-        if (textarea) {
-            autoResize(textarea);
+            modal.style.display = "flex";
+            modalImg.src = img.src;
+        };
 
-            textarea.addEventListener("input", function() {
-                autoResize(this);
-            });
-        }
+        window.closeModal = function() {
+            modal.classList.add("hide");
 
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
+            setTimeout(() => {
+                modal.style.display = "none";
+                modal.classList.remove("hide");
+            }, 250);
+        };
 
-        const approval = document.getElementById("approvalInput").value;
-        const alasan = document.getElementById("alasanReject");
-        const errorBox = document.getElementById("errorRejectBox");
-
-        errorBox.style.display = "none";
-        alasan.classList.remove("textarea-error");
-
-        if (approval === "reject") {
-
-            if (!alasan.value.trim()) {
-
-                e.preventDefault();
-
-                errorBox.style.display = "block";
-
-                errorBox.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-                alasan.focus();
-                return;
+        modal.addEventListener("click", function(e) {
+            if (e.target === modal) {
+                closeModal();
             }
-        }
+        });
 
     });
+
+    // APPROVAL BUTTON
+    function setApproval(value, el) {
+        const buttons = document.querySelectorAll(".btn-approval");
+        const submitBtn = document.querySelector(".btn-retur");
+        const rejectBox = document.getElementById("rejectBox");
+        const alasan = document.getElementById("alasanReject");
+
+        if (el.classList.contains("active")) {
+            el.classList.remove("active");
+            document.getElementById("approvalInput").value = "";
+            submitBtn.classList.remove("show");
+            rejectBox.style.display = "none";
+            alasan.value = "";
+            return;
+        }
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        el.classList.add("active");
+        document.getElementById("approvalInput").value = value;
+        submitBtn.classList.add("show");
+
+        if (value === "reject") {
+            rejectBox.style.display = "block";
+        } else {
+            rejectBox.style.display = "none";
+            alasan.value = "";
+        }
+    }
 </script>
