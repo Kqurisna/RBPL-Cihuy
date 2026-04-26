@@ -921,7 +921,6 @@ foreach ($validasiList as $v) {
             }
         }
 
-        /* tombol close */
         .close-btn {
             position: absolute;
             top: 20px;
@@ -930,6 +929,22 @@ foreach ($validasiList as $v) {
             color: white;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .modal.hide img {
+            animation: zoomOut 0.25s ease forwards;
         }
     </style>
 </head>
@@ -1240,20 +1255,29 @@ foreach ($validasiList as $v) {
     }
 
     function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
+        const modal = document.getElementById("imageModal");
+
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modal.style.display = "none";
+            modal.classList.remove("hide");
+        }, 250);
     }
 
     const modal = document.getElementById("imageModal");
     const closeBtn = document.querySelector(".close-btn");
 
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => modal.style.display = "none");
+        closeBtn.addEventListener("click", () => {
+            closeModal();
+        });
     }
 
     if (modal) {
         modal.addEventListener("click", function(e) {
             if (e.target === modal) {
-                modal.style.display = "none";
+                closeModal();
             }
         });
     }
