@@ -674,6 +674,55 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             font-size: 35px;
             cursor: pointer;
         }
+
+        .img-preview {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* efek klik (press) */
+        .img-preview:active {
+            transform: scale(0.96);
+        }
+
+        /* animasi masuk */
+        .img-preview.clicked {
+            animation: clickZoom 0.25s ease;
+        }
+
+        @keyframes clickZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .modal {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -1066,16 +1115,34 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
 
+        // animasi klik preview
+        el.classList.add("clicked");
+
+        setTimeout(() => {
+            el.classList.remove("clicked");
+        }, 250);
+
         modal.style.display = "flex";
+
+        setTimeout(() => {
+            modal.classList.add("show");
+        }, 10);
+
         modalImg.src = img.src;
     }
 
     function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
+        const modal = document.getElementById("imageModal");
+
+        modal.classList.remove("show");
+
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
     }
     document.getElementById("imageModal").addEventListener("click", function(e) {
         if (e.target === this) {
-            this.style.display = "none";
+            closeModal();
         }
     });
     document.querySelectorAll("textarea").forEach(textarea => {
