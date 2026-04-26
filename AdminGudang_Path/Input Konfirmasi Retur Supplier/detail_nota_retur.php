@@ -868,13 +868,73 @@ foreach ($validasiList as $v) {
             resize: none;
             height: auto;
         }
+
+        /* efek saat diklik */
+        .img-clicked {
+            animation: clickZoom 0.25s ease;
+        }
+
+        @keyframes clickZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* modal background */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* gambar di modal */
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            object-fit: contain;
+            animation: zoomIn 0.25s ease;
+        }
+
+        /* animasi zoom modal */
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* tombol close */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImg">
     </div>
     <div class="header">
 
@@ -1058,10 +1118,41 @@ foreach ($validasiList as $v) {
                                         id="fotoRetur"
                                         name="foto_retur"
                                         accept=".jpg,.jpeg,.png,.pdf"
-                                        style="display:none;">
+                                        hidden>
+                                </div>
 
-                                    <img id="previewRetur"
-                                        style="display:none; width:100%; margin-top:10px; border-radius:10px;">
+                                <!-- PREVIEW DI LUAR -->
+                                <div style="margin-top:15px; display:flex; justify-content:center;">
+                                    <div style="position:relative; width:260px;">
+
+                                        <img id="previewRetur"
+                                            style="
+                                            display:none;
+                                            width:100%;
+                                            border-radius:12px;
+                                            cursor:pointer;
+                                            object-fit:cover;
+                                            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                                        ">
+
+                                        <span id="removeRetur"
+                                            style="
+                                            display:none;
+                                            position:absolute;
+                                            top:8px;
+                                            right:8px;
+                                            background:white;
+                                            color:#5bb7c5;
+                                            border-radius:50%;
+                                            width:25px;
+                                            height:25px;
+                                            text-align:center;
+                                            line-height:25px;
+                                            cursor:pointer;
+                                            font-weight:bold;
+                                        ">×</span>
+
+                                    </div>
                                 </div>
 
                             </div>
@@ -1077,15 +1168,25 @@ foreach ($validasiList as $v) {
                 </button>
             </div>
     </form>
+    <div id="imageModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <img id="modalImage">
+    </div>
 </body>
 
 </html>
 <script>
     let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
     const chips = document.querySelectorAll(".chip");
-    chips.forEach(chip => {
-        chip.addEventListener("click", () => {
+    const inputJenis = document.getElementById("jenisBarangInput");
+    const errorMsg = document.getElementById("errorJenis");
 
+    chips.forEach(chip => {
+        if (selectedItems.includes(chip.innerText)) {
+            chip.classList.add("active");
+        }
+
+        chip.addEventListener("click", () => {
             const value = chip.innerText;
 
             if (selectedItems.includes(value)) {
@@ -1096,130 +1197,139 @@ foreach ($validasiList as $v) {
                 chip.classList.add("active");
             }
 
-            document.getElementById("jenisBarangInput").value = selectedItems.join(",");
+            inputJenis.value = selectedItems.join(",");
         });
     });
-    chips.forEach(chip => {
-        if (selectedItems.includes(chip.innerText)) {
-            chip.classList.add("active");
-        }
-    });
-    let count = 1;
-
-    const container = document.getElementById("inputBarangContainer");
-
-    function updateLabels() {
-        const items = container.querySelectorAll(".item");
-
-        items.forEach((item, index) => {
-            const nomor = index + 1;
-
-            const labels = item.querySelectorAll("label");
-
-            labels[0].innerText = `Nama Barang ke-${nomor}`;
-            labels[1].innerText = `Jumlah Barang ke-${nomor}`;
-        });
-
-        count = items.length;
-    }
-
-    function updateMinusState() {
-        if (count === 1) {
-            btnHapus.classList.add("disabled");
-        } else {
-            btnHapus.classList.remove("disabled");
-        }
-    }
-
-    function updateDivider() {
-        const items = container.querySelectorAll(".item");
-
-        items.forEach((item, index) => {
-            let line = item.querySelector(".success-line");
-
-            if (!line) {
-                line = document.createElement("div");
-                line.classList.add("success-line");
-                item.appendChild(line);
-            }
-
-            if (items.length > 1 && index !== items.length - 1) {
-                line.style.display = "block";
-            } else {
-                line.style.display = "none";
-            }
-        });
-    }
 
     document.addEventListener("keydown", function(e) {
         if (e.target.classList.contains("input-number")) {
-            if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+            if (['e', 'E', '+', '-'].includes(e.key)) {
                 e.preventDefault();
             }
         }
     });
-    const inputJenis = document.getElementById("jenisBarangInput");
-    const errorMsg = document.getElementById("errorJenis");
 
+    function autoResize(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
 
-    document.querySelector("form").addEventListener("submit", function(e) {
+    document.addEventListener("DOMContentLoaded", function() {
 
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
+        document.querySelectorAll(".textarea-barang, .textarea").forEach(el => {
+            autoResize(el);
+        });
 
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 100);
+        });
+    });
+
+    function openModal(el) {
+        const img = el.querySelector("img");
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+
+        modal.style.display = "flex";
+        modalImg.src = img.src;
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+
+    const modal = document.getElementById("imageModal");
+    const closeBtn = document.querySelector(".close-btn");
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => modal.style.display = "none");
+    }
+
+    if (modal) {
+        modal.addEventListener("click", function(e) {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const fileInput = document.getElementById("fotoRetur");
+        const preview = document.getElementById("previewRetur");
+        const removeBtn = document.getElementById("removeRetur");
+        const uploadBox = document.getElementById("uploadBoxRetur");
+
+        let currentURL = null;
+
+        if (!fileInput || !preview) return;
+
+        uploadBox.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", function() {
+
+            const file = this.files[0];
+            if (!file) return;
+
+            const fileType = file.type;
+
+            if (currentURL) {
+                URL.revokeObjectURL(currentURL);
+            }
+
+            currentURL = URL.createObjectURL(file);
+
+            if (fileType.startsWith("image/")) {
+
+                preview.src = currentURL;
+                preview.style.display = "block";
+                removeBtn.style.display = "block";
+
+            } else if (fileType === "application/pdf") {
+
+                preview.style.display = "none";
+                removeBtn.style.display = "block";
+
+                alert("File PDF berhasil dipilih");
+
+            } else {
+                alert("Format tidak didukung!");
+                fileInput.value = "";
             }
         });
 
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
+        preview.addEventListener("click", function() {
+            if (!this.src) return;
 
-            e.preventDefault();
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
 
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
-    document.querySelectorAll("input[type='file']").forEach(input => {
-        input.addEventListener("change", function(e) {
-
-            const file = e.target.files[0];
-            const no = this.id.replace("lampiranInput", "");
-            const preview = document.getElementById("previewImage" + no);
-
-            if (file) {
-
-                if (file.type.startsWith("image/")) {
-
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = "block";
-
-                } else {
-                    preview.style.display = "block";
-                    preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-                }
-            }
+            modal.style.display = "flex";
+            modalImg.src = this.src;
         });
+
+        removeBtn.addEventListener("click", function(e) {
+            e.stopPropagation();
+
+            if (currentURL) {
+                URL.revokeObjectURL(currentURL);
+            }
+
+            preview.src = "";
+            preview.style.display = "none";
+            removeBtn.style.display = "none";
+            fileInput.value = "";
+        });
+
     });
+
     document.querySelector("form").addEventListener("submit", function(e) {
 
         let firstError = null;
@@ -1243,18 +1353,23 @@ foreach ($validasiList as $v) {
         if (selectedItems.length === 0) {
 
             errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
             chips.forEach(c => c.classList.add("error"));
 
             if (!firstError) {
-                firstError = chipContainer;
+                firstError = document.querySelector(".chip-container");
             }
 
         } else {
             errorMsg.style.display = "none";
             chips.forEach(c => c.classList.remove("error"));
+        }
+
+        const inputFile = document.getElementById("fotoRetur");
+        const file = inputFile ? inputFile.files[0] : null;
+        if (<?= $adaCacat ? 'true' : 'false' ?> && !file) {
+            alert("Wajib upload bukti tanggapan supplier!");
+            e.preventDefault();
+            return;
         }
 
         if (firstError) {
@@ -1269,129 +1384,5 @@ foreach ($validasiList as $v) {
                 firstError.focus();
             }
         }
-    });
-
-    function setStatus(no, status, el) {
-
-        let container = el.parentElement;
-        let chips = container.querySelectorAll('.chip-status');
-
-        let input = document.getElementById('statusInput' + no);
-        let box = document.getElementById('keluhanBox' + no);
-
-        if (el.classList.contains("active")) {
-
-            chips.forEach(chip => chip.classList.remove('active'));
-
-            input.value = "";
-
-            box.style.display = "none";
-
-            return;
-        }
-
-        chips.forEach(chip => chip.classList.remove('active'));
-
-        el.classList.add('active');
-        input.value = status;
-
-        if (status === 'cacat') {
-            box.style.display = 'block';
-        } else {
-            box.style.display = 'none';
-        }
-    }
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let statusInputs = document.querySelectorAll("[id^='statusInput']");
-        let belumPilih = false;
-
-        statusInputs.forEach(input => {
-            if (input.value === "") {
-                belumPilih = true;
-            }
-        });
-
-        if (belumPilih) {
-            alert("Semua kondisi barang harus dipilih!");
-            e.preventDefault();
-            return;
-        }
-
-    });
-
-    function openModal(el) {
-        const img = el.querySelector("img");
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImg");
-
-        modal.style.display = "block";
-        modalImg.src = img.src;
-    }
-
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
-
-    function autoResize(el) {
-        el.style.height = "0px";
-        el.style.height = el.scrollHeight + "px";
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-
-        document.querySelectorAll(".textarea-barang").forEach(el => {
-            autoResize(el);
-        });
-
-        document.querySelectorAll(".textarea").forEach(el => {
-            autoResize(el);
-        });
-
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const cards = document.querySelectorAll(".form-card");
-
-        cards.forEach((card, index) => {
-
-            setTimeout(() => {
-                card.classList.add("show");
-            }, index * 100);
-
-        });
-
-    });
-    const uploadBox = document.getElementById("uploadBoxRetur");
-    const inputFile = document.getElementById("fotoRetur");
-
-    uploadBox.addEventListener("click", () => {
-        inputFile.click();
-    });
-    inputFile.addEventListener("change", function(e) {
-
-        const file = e.target.files[0];
-        const preview = document.getElementById("previewRetur");
-
-        if (file) {
-
-            if (file.type.startsWith("image/")) {
-                preview.src = URL.createObjectURL(file);
-            } else {
-                preview.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-            }
-
-            preview.style.display = "block";
-        }
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        const file = document.getElementById("fotoRetur").files[0];
-
-        if (<?= $adaCacat ? 'true' : 'false' ?> && !file) {
-            alert("Wajib upload bukti tanggapan supplier!");
-            e.preventDefault();
-        }
-
     });
 </script>
