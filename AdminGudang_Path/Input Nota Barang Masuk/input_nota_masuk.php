@@ -853,11 +853,14 @@
             preview.style.display = "block";
         }
     });
-    document.addEventListener("keydown", function(e) {
+    document.addEventListener("input", function(e) {
         if (e.target.classList.contains("input-number")) {
-            if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
-                e.preventDefault();
-            }
+
+            // Ambil hanya angka
+            let value = e.target.value.replace(/[^0-9]/g, "");
+
+            // Hindari angka kosong jadi 0 tiba-tiba
+            e.target.value = value;
         }
     });
     const inputJenis = document.getElementById("jenisBarangInput");
@@ -882,56 +885,7 @@
         });
     });
 
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        let firstError = null;
-
-        const inputs = document.querySelectorAll("input[required], textarea[required]");
-
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-
-                input.classList.add("error-input");
-
-                if (!firstError) {
-                    firstError = input;
-                }
-
-            } else {
-                input.classList.remove("error-input");
-            }
-        });
-
-        if (selectedItems.length === 0) {
-
-            errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
-            chips.forEach(c => c.classList.add("error"));
-
-            if (!firstError) {
-                firstError = chipContainer;
-            }
-
-        } else {
-            errorMsg.style.display = "none";
-            chips.forEach(c => c.classList.remove("error"));
-        }
-
-        if (firstError) {
-            e.preventDefault();
-
-            firstError.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
-                firstError.focus();
-            }
-        }
-    });
     document.addEventListener("DOMContentLoaded", function() {
 
         const cards = document.querySelectorAll(".form-card");
@@ -982,23 +936,48 @@
 
     document.querySelector("form").addEventListener("submit", function(e) {
 
+        let firstError = null;
+
+        const inputs = document.querySelectorAll("input[required], textarea[required]");
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add("error-input");
+                if (!firstError) firstError = input;
+            } else {
+                input.classList.remove("error-input");
+            }
+        });
+
+        if (selectedItems.length === 0) {
+            errorMsg.style.display = "block";
+            chips.forEach(c => c.classList.add("error"));
+            if (!firstError) firstError = document.querySelector(".chip-container");
+        } else {
+            errorMsg.style.display = "none";
+            chips.forEach(c => c.classList.remove("error"));
+        }
+
         const inputDate = tanggalInput.value;
         const today = getTodayWIB();
 
         if (inputDate > today) {
-            e.preventDefault();
-
             tanggalInput.classList.add("error-input");
             errorTanggal.style.display = "block";
+            if (!firstError) firstError = tanggalInput;
+        }
 
-            tanggalInput.scrollIntoView({
+        if (firstError) {
+            e.preventDefault();
+            firstError.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
 
-            tanggalInput.focus();
+            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
+                firstError.focus();
+            }
         }
-
     });
 
     function autoResizeTextarea(el) {
