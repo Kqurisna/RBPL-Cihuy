@@ -726,6 +726,20 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         .btn-retur:active {
             transform: scale(0.97);
         }
+
+        .textarea-barang {
+            width: 100%;
+            border-radius: 16px;
+            border: none;
+            background: #e9edf2;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+            resize: none;
+            overflow: hidden;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -824,7 +838,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                            <textarea class="textarea-barang" name="barang[]" readonly><?= $detail['nama_barang'] ?></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -1241,5 +1255,22 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         if (e.target === this) {
             closeModal();
         }
+    });
+
+    function autoResize(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".textarea-barang").forEach(textarea => {
+            autoResize(textarea);
+        });
+    });
+
+    document.querySelectorAll(".textarea-barang").forEach(textarea => {
+        textarea.addEventListener("input", function() {
+            autoResize(this);
+        });
     });
 </script>
