@@ -658,31 +658,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             border-radius: 18px;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .modal-content {
-            margin: auto;
-            transition: transform 0.15s ease;
-            display: block;
-            max-width: 90%;
-            max-height: 85vh;
-            border-radius: 12px;
-            touch-action: manipulation;
-            transition: transform 0.3s ease;
-            transform-origin: center;
-            cursor: zoom-in;
-        }
-
         .close {
             position: absolute;
             top: 20px;
@@ -824,6 +799,78 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             top: -24px;
 
             transform: rotate(18deg);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(0, 0, 0, 0);
+
+            opacity: 0;
+            visibility: hidden;
+            z-index: 99999;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 12px;
+
+            transform: scale(0.8);
+            opacity: 0;
+
+            transition: all 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .modal.show .modal-content {
+            animation: zoomIn 0.25s ease;
+            opacity: 1;
+        }
+
+        .modal.hide .modal-content {
+            animation: zoomOut 0.25s ease;
         }
     </style>
 </head>
@@ -1336,9 +1383,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
 
     });
 
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
     document.querySelectorAll('.textarea').forEach(el => {
         el.style.height = 'auto';
         el.style.height = el.scrollHeight + 'px';
@@ -1357,15 +1401,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
 
     });
 
-
-    function openModal(el) {
-        const img = el.querySelector("img");
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImg");
-
-        modal.style.display = "block";
-        modalImg.src = img.src;
-    }
     document.addEventListener("DOMContentLoaded", function() {
 
         const modalImg = document.getElementById("modalImg");
@@ -1514,5 +1549,115 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         if (e.target.classList.contains("textarea")) {
             autoResizeTextarea(e.target);
         }
+    });
+
+    function openModal(el) {
+        const img = el.querySelector("img");
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
+
+        modalImg.src = img.src;
+
+        modal.classList.remove("hide");
+        modal.classList.add("show");
+
+        resetZoom();
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+
+        modal.classList.remove("show");
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modal.classList.remove("hide");
+        }, 250);
+    }
+
+    function resetZoom() {
+        const modalImg = document.getElementById("modalImg");
+        modalImg.style.transform = "scale(1)";
+        modalImg.style.transformOrigin = "center";
+        modalImg.style.cursor = "zoom-in";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
+        const closeBtn = document.querySelector(".close");
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeModal);
+        }
+
+        modal.addEventListener("click", function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        let isZoomed = false;
+        let scale = 1;
+        let posX = 0;
+        let startX = 0;
+        let isDragging = false;
+
+        modalImg.addEventListener("dblclick", function() {
+            if (!isZoomed) {
+                scale = 2;
+                modalImg.style.transform = "scale(2)";
+                modalImg.style.cursor = "grab";
+                isZoomed = true;
+            } else {
+                scale = 1;
+                posX = 0;
+                modalImg.style.transform = "scale(1)";
+                modalImg.style.cursor = "zoom-in";
+                isZoomed = false;
+            }
+        });
+
+        modalImg.addEventListener("mousedown", function(e) {
+            if (!isZoomed) return;
+
+            isDragging = true;
+            startX = e.clientX - posX;
+            modalImg.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", function(e) {
+            if (!isDragging) return;
+
+            posX = e.clientX - startX;
+            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
+        });
+
+        document.addEventListener("mouseup", function() {
+            isDragging = false;
+            if (isZoomed) modalImg.style.cursor = "grab";
+        });
+
+        modalImg.addEventListener("touchstart", function(e) {
+            if (!isZoomed) return;
+
+            const touch = e.touches[0];
+            isDragging = true;
+            startX = touch.clientX - posX;
+        });
+
+        modalImg.addEventListener("touchmove", function(e) {
+            if (!isDragging) return;
+
+            const touch = e.touches[0];
+            posX = touch.clientX - startX;
+            modalImg.style.transform = `scale(${scale}) translateX(${posX}px)`;
+        });
+
+        modalImg.addEventListener("touchend", function() {
+            isDragging = false;
+        });
+
     });
 </script>
