@@ -674,6 +674,26 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
         opacity: 1;
       }
     }
+
+    #imageModal {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    #imageModal.active {
+      opacity: 1;
+    }
+
+    #modalImage {
+      transform: scale(0.85);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    #imageModal.active #modalImage {
+      transform: scale(1);
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -1139,18 +1159,31 @@ $queryDetail = mysqli_query($koneksi, "SELECT * FROM detail_barang WHERE id_nota
 
       if (this.src) {
         modal.style.display = "flex";
+
+        setTimeout(() => {
+          modal.classList.add("active");
+        }, 10);
+
         modalImg.src = this.src;
       }
     });
   });
 
   closeModal.addEventListener("click", function() {
-    modal.style.display = "none";
+    modal.classList.remove("active");
+
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 250);
   });
 
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
-      modal.style.display = "none";
+      modal.classList.remove("active");
+
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 250);
     }
   });
 
