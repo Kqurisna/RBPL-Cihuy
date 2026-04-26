@@ -513,6 +513,46 @@
             resize: none;
             overflow: hidden;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            object-fit: contain;
+            animation: zoomIn 0.25s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -672,7 +712,10 @@
         </div>
 
     </form>
-
+    <div id="imageModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <img id="modalImage">
+    </div>
 </body>
 
 </html>
@@ -966,6 +1009,26 @@
     document.addEventListener("input", function(e) {
         if (e.target.classList.contains("textarea-barang")) {
             autoResizeTextarea(e.target);
+        }
+    });
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const closeBtn = document.querySelector(".close-btn");
+
+    preview.addEventListener("click", function() {
+        if (this.src) {
+            modal.style.display = "flex";
+            modalImg.src = this.src;
+        }
+    });
+
+    closeBtn.addEventListener("click", function() {
+        modal.style.display = "none";
+    });
+
+    modal.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
         }
     });
 </script>
