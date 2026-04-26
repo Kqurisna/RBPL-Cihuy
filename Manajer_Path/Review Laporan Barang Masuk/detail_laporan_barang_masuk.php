@@ -1082,6 +1082,35 @@ foreach ($validasiList as $v) {
         .btn-approval[style] {
             cursor: not-allowed;
         }
+
+        .textarea-error {
+            border: 2px solid red !important;
+        }
+
+        .error-box {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            background: #fff5f5;
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            font-size: 13px;
+            font-weight: 500;
+            animation: fadeSlideError 0.3s ease;
+        }
+
+        @keyframes fadeSlideError {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -1460,9 +1489,9 @@ foreach ($validasiList as $v) {
                                 placeholder="Tuliskan catatan revisi..."></textarea>
                         </div>
 
-                        <small id="errorReject" style="color:red; display:none;">
-                            Catatan revisi wajib diisi!
-                        </small>
+                        <div id="errorRejectBox" class="error-box">
+                            <span>Catatan revisi wajib diisi!</span>
+                        </div>
 
                     </div>
 
@@ -1969,6 +1998,34 @@ foreach ($validasiList as $v) {
             textarea.addEventListener("input", function() {
                 autoResize(this);
             });
+        }
+
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        const approval = document.getElementById("approvalInput").value;
+        const alasan = document.getElementById("alasanReject");
+        const errorBox = document.getElementById("errorRejectBox");
+
+        errorBox.style.display = "none";
+        alasan.classList.remove("textarea-error");
+
+        if (approval === "reject") {
+
+            if (!alasan.value.trim()) {
+
+                e.preventDefault();
+
+                errorBox.style.display = "block";
+
+                errorBox.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                alasan.focus();
+                return;
+            }
         }
 
     });
