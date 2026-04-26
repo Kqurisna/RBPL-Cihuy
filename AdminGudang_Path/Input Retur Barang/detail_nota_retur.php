@@ -866,13 +866,13 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
                                             <div class="form-group">
                                                 <label>Jumlah Retur</label>
-                                                <input type="number"
+                                                <input type="text"
                                                     name="jumlah_retur[]"
                                                     class="input-number"
+                                                    inputmode="numeric"
                                                     min="0"
                                                     max="<?= $detail['jumlah_barang'] ?>"
                                                     placeholder="Masukkan jumlah retur" required>
-
                                                 <small class="error-retur" style="color:red; display:none;">
                                                     Jumlah retur tidak boleh melebihi jumlah barang!
                                                 </small>
@@ -987,54 +987,10 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         });
     }
 
-    document.addEventListener("keydown", function(e) {
-        if (e.target.classList.contains("input-number")) {
-            if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
-                e.preventDefault();
-            }
-        }
-    });
     const inputJenis = document.getElementById("jenisBarangInput");
     const errorMsg = document.getElementById("errorJenis");
 
 
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
-
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
-            }
-        });
-
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
-
-            e.preventDefault();
-
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
     document.querySelectorAll("input[type='file']").forEach(input => {
         input.addEventListener("change", function(e) {
 
@@ -1048,56 +1004,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             }
         });
     });
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        let firstError = null;
-
-        const inputs = document.querySelectorAll("input[required], textarea[required]");
-
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-
-                input.classList.add("error-input");
-
-                if (!firstError) {
-                    firstError = input;
-                }
-
-            } else {
-                input.classList.remove("error-input");
-            }
-        });
-
-        if (selectedItems.length === 0) {
-
-            errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
-            chips.forEach(c => c.classList.add("error"));
-
-            if (!firstError) {
-                firstError = chipContainer;
-            }
-
-        } else {
-            errorMsg.style.display = "none";
-            chips.forEach(c => c.classList.remove("error"));
-        }
-
-        if (firstError) {
-            e.preventDefault();
-
-            firstError.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
-                firstError.focus();
-            }
-        }
-    });
 
     function setStatus(no, status, el) {
 
@@ -1129,24 +1036,6 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             box.style.display = 'none';
         }
     }
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let statusInputs = document.querySelectorAll("[id^='statusInput']");
-        let belumPilih = false;
-
-        statusInputs.forEach(input => {
-            if (input.value === "") {
-                belumPilih = true;
-            }
-        });
-
-        if (belumPilih) {
-            alert("Semua kondisi barang harus dipilih!");
-            e.preventDefault();
-            return;
-        }
-
-    });
 
     function openModal(el) {
         const img = el.querySelector("img");
@@ -1177,25 +1066,29 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             modal.style.display = "none";
         }, 300);
     }
-    document.addEventListener("keydown", function(e) {
-        if (e.target.classList.contains("input-number")) {
-
-            if (
-                e.key === 'e' ||
-                e.key === 'E' ||
-                e.key === '+' ||
-                e.key === '-' ||
-                e.key === '.' ||
-                e.key === ','
-            ) {
-                e.preventDefault();
-            }
-        }
-    });
     document.querySelectorAll(".input-number").forEach(input => {
+
         input.addEventListener("input", function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
+
+            let value = this.value.replace(/[^0-9]/g, "");
+
+            this.value = value;
+
+            const max = parseInt(this.getAttribute("max")) || 0;
+            const num = parseInt(value) || 0;
+
+            const errorText = this.parentElement.querySelector(".error-retur");
+
+            if (num > max) {
+                this.classList.add("error-input");
+                errorText.style.display = "block";
+            } else {
+                this.classList.remove("error-input");
+                errorText.style.display = "none";
+            }
+
         });
+
     });
     document.querySelectorAll(".input-number").forEach(input => {
 
@@ -1217,40 +1110,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         });
 
     });
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        let adaError = false;
-
-        document.querySelectorAll(".input-number").forEach(input => {
-
-            const max = parseInt(input.getAttribute("max"));
-            const value = parseInt(input.value);
-
-            const errorText = input.parentElement.querySelector(".error-retur");
-
-            if (value > max) {
-
-                input.classList.add("error-input");
-                errorText.style.display = "block";
-
-                if (!adaError) {
-                    input.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
-                    input.focus();
-                }
-
-                adaError = true;
-            }
-
-        });
-
-        if (adaError) {
-            e.preventDefault();
-        }
-
-    });
     document.getElementById("imageModal").addEventListener("click", function(e) {
         if (e.target === this) {
             closeModal();
@@ -1272,5 +1132,40 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
         textarea.addEventListener("input", function() {
             autoResize(this);
         });
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        let adaError = false;
+        let firstError = null;
+
+        document.querySelectorAll(".input-number").forEach(input => {
+
+            const max = parseInt(input.getAttribute("max")) || 0;
+            const value = parseInt(input.value) || 0;
+
+            const errorText = input.parentElement.querySelector(".error-retur");
+
+            if (value > max || input.value === "") {
+
+                input.classList.add("error-input");
+                errorText.style.display = "block";
+
+                if (!firstError) firstError = input;
+
+                adaError = true;
+            }
+        });
+
+        if (adaError) {
+            e.preventDefault();
+
+            firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            firstError.focus();
+        }
+
     });
 </script>
