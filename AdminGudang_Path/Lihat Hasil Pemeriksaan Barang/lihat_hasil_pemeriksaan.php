@@ -680,12 +680,10 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             overflow: hidden;
         }
 
-        /* efek klik (press) */
         .img-preview:active {
             transform: scale(0.96);
         }
 
-        /* animasi masuk */
         .img-preview.clicked {
             animation: clickZoom 0.25s ease;
         }
