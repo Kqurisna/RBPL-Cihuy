@@ -623,7 +623,7 @@ foreach ($validasiList as $v) {
             font-weight: 500;
             outline: none;
             resize: none;
-            line-height: 1.2;
+            line-height: 1.4;
         }
 
         .section-title {
@@ -847,6 +847,27 @@ foreach ($validasiList as $v) {
             font-size: 13px;
             color: #b0b0b0;
         }
+
+        .textarea-barang {
+            width: 100%;
+            border-radius: 16px;
+            border: none;
+            background: #e9edf2;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+            resize: none;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .textarea-barang,
+        .textarea {
+            overflow: hidden;
+            resize: none;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -944,7 +965,7 @@ foreach ($validasiList as $v) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                            <textarea class="textarea-barang" readonly><?= $detail['nama_barang'] ?></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -1311,9 +1332,22 @@ foreach ($validasiList as $v) {
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
-    document.querySelectorAll('.textarea').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
+
+    function autoResize(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        document.querySelectorAll(".textarea-barang").forEach(el => {
+            autoResize(el);
+        });
+
+        document.querySelectorAll(".textarea").forEach(el => {
+            autoResize(el);
+        });
+
     });
     document.addEventListener("DOMContentLoaded", function() {
 
