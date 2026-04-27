@@ -1252,7 +1252,7 @@ foreach ($validasiList as $v) {
                             </div>
 
                             <div class="reject-card">
-                                <textarea class="auto-height">
+                                <textarea class="auto-height" readonly>
 <?= $dataApproval ? $dataApproval['catatan_revisi'] : 'Tidak ada catatan revisi' ?>
                                 </textarea>
                             </div>
