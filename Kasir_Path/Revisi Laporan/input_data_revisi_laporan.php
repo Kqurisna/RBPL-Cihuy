@@ -221,9 +221,11 @@ $q6 = mysqli_query($koneksi, "
     SET status_laporan = 'menunggu'
     WHERE id_nota = $id_nota
 ");
-
-if ($q1 && $q2 && $q3 && $q4 && $q5 && $q6) {
-
+$q7 = mysqli_query($koneksi, "
+    DELETE FROM approval_manager 
+    WHERE id_nota = $id_nota
+");
+if ($q1 && $q2 && $q3 && $q4 && $q5 && $q6 && $q7) {
     header("Location: input_revisi_laporan_berhasil.php");
     exit;
 } else {
