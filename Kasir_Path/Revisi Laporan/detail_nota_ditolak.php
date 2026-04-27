@@ -736,26 +736,62 @@ foreach ($validasiList as $v) {
         .modal {
             display: none;
             position: fixed;
-            z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+
+            justify-content: center;
+            align-items: center;
         }
 
-        .modal-content {
-            margin: auto;
-            transition: transform 0.15s ease;
-            display: block;
+        .modal img {
             max-width: 90%;
-            max-height: 85vh;
+            max-height: 90%;
             border-radius: 12px;
-            touch-action: manipulation;
-            transition: transform 0.3s ease;
-            transform-origin: center;
-            cursor: zoom-in;
+            object-fit: contain;
+
+            animation: zoomIn 0.25s ease;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 32px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ANIMASI MASUK */
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ANIMASI KELUAR */
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* CLASS KELUAR */
+        .modal.hide img {
+            animation: zoomOut 0.25s ease forwards;
         }
 
         .close {
@@ -1138,8 +1174,8 @@ foreach ($validasiList as $v) {
 
 <body>
     <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImg">
+        <span class="close">&times;</span>
+        <img id="modalImg">
     </div>
     <div class="header">
 
@@ -1569,93 +1605,7 @@ foreach ($validasiList as $v) {
     const errorMsg = document.getElementById("errorJenis");
 
 
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        const requiredInputs = document.querySelectorAll("input[required], textarea[required]");
-        let firstInvalid = null;
-
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                if (!firstInvalid) {
-                    firstInvalid = input;
-                }
-            }
-        });
-
-        if (typeof selectedItems !== "undefined" && selectedItems.length === 0) {
-            const chipContainer = document.querySelector(".chip-container");
-
-            e.preventDefault();
-
-            chipContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            return;
-        }
-
-        if (firstInvalid) {
-            e.preventDefault();
-
-            firstInvalid.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            firstInvalid.focus();
-        }
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
-
-        let firstError = null;
-
-        const inputs = document.querySelectorAll("input[required], textarea[required]");
-
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-
-                input.classList.add("error-input");
-
-                if (!firstError) {
-                    firstError = input;
-                }
-
-            } else {
-                input.classList.remove("error-input");
-            }
-        });
-
-        if (selectedItems.length === 0) {
-
-            errorMsg.style.display = "block";
-
-            const chipContainer = document.querySelector(".chip-container");
-
-            chips.forEach(c => c.classList.add("error"));
-
-            if (!firstError) {
-                firstError = chipContainer;
-            }
-
-        } else {
-            errorMsg.style.display = "none";
-            chips.forEach(c => c.classList.remove("error"));
-        }
-
-        if (firstError) {
-            e.preventDefault();
-
-            firstError.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
-                firstError.focus();
-            }
-        }
-    });
 
     function setStatus(no, status, el) {
 
@@ -1687,24 +1637,7 @@ foreach ($validasiList as $v) {
             box.style.display = 'none';
         }
     }
-    document.querySelector("form").addEventListener("submit", function(e) {
 
-        let statusInputs = document.querySelectorAll("[id^='statusInput']");
-        let belumPilih = false;
-
-        statusInputs.forEach(input => {
-            if (input.value === "") {
-                belumPilih = true;
-            }
-        });
-
-        if (belumPilih) {
-            alert("Semua kondisi barang harus dipilih!");
-            e.preventDefault();
-            return;
-        }
-
-    });
 
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
@@ -1731,16 +1664,10 @@ foreach ($validasiList as $v) {
     function openModal(el) {
         const img = el.querySelector("img");
         const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
 
-        modal.style.display = "block";
+        modal.style.display = "flex";
         modalImg.src = img.src;
-
-        scale = 1;
-        posX = 0;
-        isZoomed = false;
-
-        modalImg.style.transform = "scale(1) translateX(0px)";
-        modalImg.style.cursor = "zoom-in";
     }
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -1872,6 +1799,69 @@ foreach ($validasiList as $v) {
         }
 
     });
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+        let firstError = null;
+
+        const inputs = document.querySelectorAll("input[required], textarea[required]");
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add("error-input");
+
+                if (!firstError) {
+                    firstError = input;
+                }
+            } else {
+                input.classList.remove("error-input");
+            }
+        });
+
+        if (selectedItems.length === 0) {
+
+            errorMsg.style.display = "block";
+            chips.forEach(c => c.classList.add("error"));
+
+            if (!firstError) {
+                firstError = document.querySelector(".chip-container");
+            }
+
+        } else {
+            errorMsg.style.display = "none";
+            chips.forEach(c => c.classList.remove("error"));
+        }
+
+        let statusInputs = document.querySelectorAll("[id^='statusInput']");
+        let belumPilih = false;
+
+        statusInputs.forEach(input => {
+            if (input.value === "") {
+                belumPilih = true;
+            }
+        });
+
+        if (belumPilih) {
+            alert("Semua kondisi barang harus dipilih!");
+
+            if (!firstError) {
+                firstError = statusInputs[0];
+            }
+        }
+
+        if (firstError) {
+            e.preventDefault();
+
+            firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            if (firstError.tagName === "INPUT" || firstError.tagName === "TEXTAREA") {
+                firstError.focus();
+            }
+        }
+
+    });
 
     function setApproval(value, el) {
         const buttons = document.querySelectorAll(".btn-approval");
@@ -1974,7 +1964,15 @@ foreach ($validasiList as $v) {
             img.src = URL.createObjectURL(file);
             img.style.width = "100%";
             img.style.borderRadius = "12px";
+            img.style.cursor = "pointer";
 
+            img.onclick = function() {
+                const modal = document.getElementById("imageModal");
+                const modalImg = document.getElementById("modalImg");
+
+                modal.style.display = "flex";
+                modalImg.src = this.src;
+            };
             const remove = document.createElement("span");
             remove.innerHTML = "×";
             remove.classList.add("remove-btn");
@@ -1990,4 +1988,25 @@ foreach ($validasiList as $v) {
         });
 
     });
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
+    const closeBtn = document.querySelector(".close");
+
+    closeBtn.addEventListener("click", closeModalAnimated);
+
+    modal.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            closeModalAnimated();
+        }
+    });
+
+    function closeModalAnimated() {
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modal.style.display = "none";
+            modal.classList.remove("hide");
+            modalImg.src = "";
+        }, 250);
+    }
 </script>
