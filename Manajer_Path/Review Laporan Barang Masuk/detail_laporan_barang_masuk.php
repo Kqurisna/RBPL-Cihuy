@@ -676,21 +676,14 @@ foreach ($validasiList as $v) {
             border-radius: 16px;
             border: none;
             background: #e9edf2;
-
             padding: 10px 15px;
-            /* ⬅️ ambil dari referensi */
             font-size: 12px;
             font-weight: 500;
-
-            line-height: 1.5;
-            /* ⬅️ ini kunci biar gak melayang */
-
+            line-height: 1.4;
             outline: none;
             resize: none;
             overflow: hidden;
-
             display: block;
-            /* ⬅️ penting, jangan pakai flex */
         }
 
         .textarea,
@@ -1539,10 +1532,6 @@ foreach ($validasiList as $v) {
 </html>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
-        // ===============================
-        // AUTO HEIGHT TEXTAREA (FIX TOTAL)
-        // ===============================
         function autoResizeTextarea(el) {
             el.style.height = "0px";
             el.style.height = el.scrollHeight + "px";
@@ -1558,23 +1547,16 @@ foreach ($validasiList as $v) {
             });
         }
 
-        // resize saat input (untuk yang editable)
         document.addEventListener("input", function(e) {
             if (e.target.matches(".textarea, .textarea_2, .textarea-dynamic, .auto-height")) {
                 autoResizeTextarea(e.target);
             }
         });
 
-        // jalankan saat awal
         initTextareaAutoHeight();
 
-        // fallback kalau ada gambar / render delay
         window.addEventListener("load", initTextareaAutoHeight);
 
-
-        // ===============================
-        // CHIP JENIS BARANG
-        // ===============================
         let selectedItems = "<?= $dataNota['jenis_barang'] ?>".split(",");
         const chips = document.querySelectorAll(".chip");
 
@@ -1598,10 +1580,6 @@ foreach ($validasiList as $v) {
             }
         });
 
-
-        // ===============================
-        // BLOCK INPUT NUMBER (ANTI E,+,-)
-        // ===============================
         document.addEventListener("keydown", function(e) {
             if (e.target.classList.contains("input-number")) {
                 if (["e", "E", "+", "-"].includes(e.key)) {
@@ -1610,10 +1588,6 @@ foreach ($validasiList as $v) {
             }
         });
 
-
-        // ===============================
-        // VALIDASI FORM
-        // ===============================
         const form = document.querySelector("form");
         const errorMsg = document.getElementById("errorJenis");
 
@@ -1631,7 +1605,6 @@ foreach ($validasiList as $v) {
                 }
             });
 
-            // validasi chip
             if (selectedItems.length === 0) {
                 errorMsg.style.display = "block";
                 chips.forEach(c => c.classList.add("error"));
@@ -1642,7 +1615,6 @@ foreach ($validasiList as $v) {
                 chips.forEach(c => c.classList.remove("error"));
             }
 
-            // validasi reject
             const approval = document.getElementById("approvalInput").value;
             const alasan = document.getElementById("alasanReject");
             const errorBox = document.getElementById("errorRejectBox");
@@ -1674,10 +1646,6 @@ foreach ($validasiList as $v) {
             }
         });
 
-
-        // ===============================
-        // ANIMASI CARD
-        // ===============================
         const cards = document.querySelectorAll(".form-card");
 
         cards.forEach((card, index) => {
@@ -1686,10 +1654,6 @@ foreach ($validasiList as $v) {
             }, index * 100);
         });
 
-
-        // ===============================
-        // MODE VIEW (READONLY)
-        // ===============================
         const mode = form.getAttribute("data-mode");
 
         if (mode === "view") {
@@ -1708,9 +1672,6 @@ foreach ($validasiList as $v) {
         }
 
 
-        // ===============================
-        // MODAL GAMBAR (FIX STABLE)
-        // ===============================
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
 
@@ -1738,10 +1699,6 @@ foreach ($validasiList as $v) {
 
     });
 
-
-    // ===============================
-    // APPROVAL BUTTON (GLOBAL)
-    // ===============================
     function setApproval(value, el) {
         const buttons = document.querySelectorAll(".btn-approval");
         const submitBtn = document.querySelector(".btn-retur");
