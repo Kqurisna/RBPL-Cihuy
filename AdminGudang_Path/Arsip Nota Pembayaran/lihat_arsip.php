@@ -136,7 +136,7 @@ $query = $nota->getArsipNota($sort);
 
         .form-card {
             background: white;
-            padding: 20px 20px 50px;
+            padding: 20px 20px 10px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
@@ -328,18 +328,28 @@ $query = $nota->getArsipNota($sort);
             }
         }
 
-        /* ===== IMAGE PREVIEW ===== */
         .image-preview-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            visibility: hidden;
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .image-preview-overlay.hide {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .image-preview-overlay img {
@@ -347,6 +357,27 @@ $query = $nota->getArsipNota($sort);
             max-height: 85%;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+
+        .image-preview-overlay {
+            pointer-events: none;
+        }
+
+        .image-preview-overlay.show {
+            pointer-events: auto;
+        }
+
+        .image-preview-overlay.show img {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .image-preview-overlay.hide img {
+            transform: scale(0.8);
+            opacity: 0;
         }
 
         .close-btn {
@@ -514,21 +545,37 @@ $query = $nota->getArsipNota($sort);
         }
     });
 
+    let isOpen = false;
+
     function showPreview(src) {
+        if (isOpen) return;
+
         const overlay = document.getElementById("imagePreview");
         const img = document.getElementById("previewImg");
 
         img.src = src;
-        overlay.style.display = "flex";
+
+        overlay.classList.remove("hide");
+        overlay.classList.add("show");
+
+        isOpen = true;
     }
 
     function closePreview() {
-        document.getElementById("imagePreview").style.display = "none";
+        const overlay = document.getElementById("imagePreview");
+
+        overlay.classList.remove("show");
+        overlay.classList.add("hide");
+
+        setTimeout(() => {
+            overlay.classList.remove("hide");
+            isOpen = false;
+        }, 300);
     }
 
     document.getElementById("imagePreview").addEventListener("click", function(e) {
         if (e.target === this) {
-            this.style.display = "none";
+            closePreview();
         }
     });
 </script>
