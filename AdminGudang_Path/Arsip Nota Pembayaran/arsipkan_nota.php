@@ -266,7 +266,6 @@ $query = $nota->getNotaDisetujui($sort);
             height: 45px;
         }
 
-        /* ===== POPUP ===== */
 
         .popup-overlay {
             position: fixed;
