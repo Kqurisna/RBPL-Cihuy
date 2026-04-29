@@ -714,7 +714,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         .form-card_2 {
             margin-top: 10px;
             background: #8FB5D0;
-            padding: 20px 20px 30px;
+            padding: 20px 20px 10px;
             border-radius: 24px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             position: relative;
@@ -986,7 +986,7 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
 
                                             <div class="form-group">
                                                 <label>Nama Barang ke-<?= $no ?></label>
-                                                <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                                <textarea class="textarea" name="barang[]" readonly><?= $detail['nama_barang'] ?></textarea>
                                             </div>
 
                                             <div class="form-group">
@@ -1350,10 +1350,6 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         }
     }
 
-    document.querySelectorAll('.textarea').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
     document.addEventListener("DOMContentLoaded", function() {
 
         const cards = document.querySelectorAll(".form-card");
@@ -1653,5 +1649,22 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
             }
         }
 
+    });
+
+    function autoResizeTextarea(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".textarea").forEach(el => {
+            autoResizeTextarea(el);
+        });
+    });
+
+    document.addEventListener("input", function(e) {
+        if (e.target.classList.contains("textarea")) {
+            autoResizeTextarea(e.target);
+        }
     });
 </script>
