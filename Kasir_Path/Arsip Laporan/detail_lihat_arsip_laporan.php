@@ -207,7 +207,7 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
         .form-card_2 {
             margin-top: 51px;
             background: #8FB5D0;
-            padding: 1px 20px 35px;
+            padding: 1px 20px 15px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
@@ -423,26 +423,47 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
         }
 
         .modal {
-            display: none;
             position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
             z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
             background: rgba(0, 0, 0, 0.9);
         }
 
+        .modal.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
         .modal-content {
-            margin: auto;
-            display: block;
             max-width: 90%;
             max-height: 85vh;
             border-radius: 12px;
-            transition: transform 0.3s ease;
-            transform-origin: center;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.25s ease;
             cursor: zoom-in;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal.hide .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
         }
 
         .close {
@@ -877,19 +898,39 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
 
 </html>
 <script>
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
+    let isOpen = false;
 
     function openModal(el) {
+        if (isOpen) return;
+
         const img = el.querySelector("img");
+        const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImg");
-        document.getElementById("imageModal").style.display = "block";
+
         modalImg.src = img.src;
-        modalImg.style.transform = "scale(1)";
-        modalImg.style.cursor = "zoom-in";
+
+        modal.classList.remove("hide");
+        modal.classList.add("show");
+
+        isOpen = true;
     }
 
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+
+        modal.classList.remove("show");
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modal.classList.remove("hide");
+            isOpen = false;
+        }, 300);
+    }
+    document.getElementById("imageModal").addEventListener("click", function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
     document.addEventListener("DOMContentLoaded", function() {
         const cards = document.querySelectorAll(".form-card");
         cards.forEach((card, index) => {
