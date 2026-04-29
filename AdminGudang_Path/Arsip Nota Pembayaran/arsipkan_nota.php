@@ -376,6 +376,53 @@ $query = $nota->getNotaDisetujui($sort);
             font-weight: 600;
             color: #1f2937;
         }
+
+        .image-preview-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            opacity: 0;
+            visibility: hidden;
+
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .image-preview-overlay.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 12px;
+
+            transform: scale(0.8);
+            opacity: 0;
+
+            transition: all 0.25s ease;
+        }
+
+        .image-preview-overlay.show img {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .image-preview-overlay.hide img {
+            transform: scale(0.8);
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -541,21 +588,43 @@ $query = $nota->getNotaDisetujui($sort);
         }
     });
 
+    let isPreviewAnimating = false;
+
     function showPreview(src) {
+        if (isPreviewAnimating) return;
+
         const overlay = document.getElementById("imagePreview");
         const img = document.getElementById("previewImg");
 
         img.src = src;
-        overlay.style.display = "flex";
+
+        overlay.classList.remove("hide");
+        overlay.classList.remove("show");
+
+        void overlay.offsetWidth;
+
+        overlay.classList.add("show");
     }
 
     function closePreview() {
-        document.getElementById("imagePreview").style.display = "none";
+        const overlay = document.getElementById("imagePreview");
+
+        if (isPreviewAnimating) return;
+        isPreviewAnimating = true;
+
+        overlay.classList.remove("show");
+        overlay.classList.add("hide");
+
+        overlay.addEventListener("transitionend", function handler() {
+            overlay.classList.remove("hide");
+            isPreviewAnimating = false;
+            overlay.removeEventListener("transitionend", handler);
+        });
     }
 
     document.getElementById("imagePreview").addEventListener("click", function(e) {
         if (e.target === this) {
-            this.style.display = "none";
+            closePreview();
         }
     });
 
