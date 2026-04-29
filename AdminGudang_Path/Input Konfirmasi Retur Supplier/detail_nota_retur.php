@@ -732,7 +732,7 @@ foreach ($validasiList as $v) {
         .form-card_2 {
             margin-top: 10px;
             background: #8FB5D0;
-            padding: 20px 20px 30px;
+            padding: 20px 20px 10px;
             border-radius: 24px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             position: relative;
