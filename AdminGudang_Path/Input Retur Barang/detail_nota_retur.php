@@ -604,6 +604,8 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             font-weight: 500;
             outline: none;
             resize: none;
+            overflow: hidden;
+            line-height: 1.5;
         }
 
         .section-title {
@@ -1167,5 +1169,15 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
             firstError.focus();
         }
 
+    });
+
+    function autoResize(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".textarea").forEach(textarea => {
+            autoResize(textarea);
+        });
     });
 </script>
