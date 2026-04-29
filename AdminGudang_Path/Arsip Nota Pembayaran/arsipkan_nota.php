@@ -269,15 +269,47 @@ $query = $nota->getNotaDisetujui($sort);
 
         .popup-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            display: none;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            visibility: hidden;
             z-index: 999;
+            transition: all 0.25s ease;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .popup-overlay.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .popup-box {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            width: 280px;
+            text-align: center;
+            transform: scale(0.85);
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+
+        .popup-overlay.show .popup-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .popup-overlay.hide .popup-box {
+            transform: scale(0.85);
+            opacity: 0;
         }
 
         .popup-box {
@@ -568,14 +600,37 @@ $query = $nota->getNotaDisetujui($sort);
 </html>
 <script>
     let selectedId = null;
+    let isPopupAnimating = false;
 
     function showPopup(id) {
+        if (isPopupAnimating) return;
+
         selectedId = id;
-        document.getElementById("popupKonfirmasi").style.display = "flex";
+
+        const popup = document.getElementById("popupKonfirmasi");
+
+        popup.classList.remove("hide");
+        popup.classList.remove("show");
+
+        void popup.offsetWidth;
+
+        popup.classList.add("show");
     }
 
     function tutupPopup() {
-        document.getElementById("popupKonfirmasi").style.display = "none";
+        const popup = document.getElementById("popupKonfirmasi");
+
+        if (isPopupAnimating) return;
+        isPopupAnimating = true;
+
+        popup.classList.remove("show");
+        popup.classList.add("hide");
+
+        popup.addEventListener("transitionend", function handler() {
+            popup.classList.remove("hide");
+            isPopupAnimating = false;
+            popup.removeEventListener("transitionend", handler);
+        });
     }
 
     function lanjutArsip() {
@@ -583,7 +638,7 @@ $query = $nota->getNotaDisetujui($sort);
     }
     document.getElementById("popupKonfirmasi").addEventListener("click", function(e) {
         if (e.target === this) {
-            this.style.display = "none";
+            tutupPopup();
         }
     });
 
