@@ -196,7 +196,7 @@ foreach ($validasiList as $v) {
         .form-card_2 {
             margin-top: 51px;
             background: #8FB5D0;
-            padding: 1px 20px 35px;
+            padding: 1px 20px 15px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
@@ -734,28 +734,47 @@ foreach ($validasiList as $v) {
         }
 
         .modal {
-            display: none;
             position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
             z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
             background: rgba(0, 0, 0, 0.9);
         }
 
+        .modal.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
         .modal-content {
-            margin: auto;
-            transition: transform 0.15s ease;
-            display: block;
             max-width: 90%;
             max-height: 85vh;
             border-radius: 12px;
-            touch-action: manipulation;
-            transition: transform 0.3s ease;
-            transform-origin: center;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.25s ease;
             cursor: zoom-in;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal.hide .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
         }
 
         .close {
@@ -1674,9 +1693,6 @@ foreach ($validasiList as $v) {
 
     });
 
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
     document.querySelectorAll('.textarea').forEach(el => {
         el.style.height = 'auto';
         el.style.height = el.scrollHeight + 'px';
@@ -1695,20 +1711,29 @@ foreach ($validasiList as $v) {
 
     });
 
-
     function openModal(el) {
-        const img = el.querySelector("img");
         const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
 
-        modal.style.display = "block";
+        const img = el.querySelector("img");
+        if (!img) return;
+
         modalImg.src = img.src;
 
-        scale = 1;
-        posX = 0;
-        isZoomed = false;
+        modal.classList.remove("hide");
+        modal.classList.add("show");
+    }
 
-        modalImg.style.transform = "scale(1) translateX(0px)";
-        modalImg.style.cursor = "zoom-in";
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
+
+        modal.classList.remove("show");
+        modal.classList.add("hide");
+
+        setTimeout(() => {
+            modalImg.src = "";
+        }, 300);
     }
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -1927,6 +1952,15 @@ foreach ($validasiList as $v) {
 
         document.querySelectorAll(".chip, .btn-approval").forEach(el => {
             el.style.pointerEvents = "none";
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("imageModal");
+
+        modal.addEventListener("click", function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
         });
     });
 </script>
