@@ -1253,7 +1253,7 @@ foreach ($validasiList as $v) {
                             </div>
 
                             <div class="reject-card">
-                                <textarea class="auto-height" readonly>
+                                <textarea class="auto-height no-auto" readonly>
 <?= $dataApproval ? $dataApproval['catatan_revisi'] : 'Tidak ada catatan revisi' ?>
                                 </textarea>
                             </div>
@@ -1643,10 +1643,6 @@ foreach ($validasiList as $v) {
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
     }
-    document.querySelectorAll('.textarea').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
     document.addEventListener("DOMContentLoaded", function() {
 
         const cards = document.querySelectorAll(".form-card");
@@ -1926,23 +1922,7 @@ foreach ($validasiList as $v) {
         }
 
     });
-    document.querySelectorAll('.auto-height').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
-    document.addEventListener("DOMContentLoaded", function() {
 
-        const textarea = document.getElementById("alasanReject");
-
-        if (textarea) {
-            autoResize(textarea);
-
-            textarea.addEventListener("input", function() {
-                autoResize(this);
-            });
-        }
-
-    });
 
     function triggerUpload(box) {
         const input = box.querySelector("input[type='file']");
@@ -2010,4 +1990,25 @@ foreach ($validasiList as $v) {
             modalImg.src = "";
         }, 250);
     }
+
+    function autoResizeTextarea(el) {
+        el.style.height = "0px";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const textareas = document.querySelectorAll("textarea:not(.no-auto)");
+
+        textareas.forEach(el => {
+
+            autoResizeTextarea(el);
+
+            el.addEventListener("input", function() {
+                autoResizeTextarea(this);
+            });
+
+        });
+
+    });
 </script>
