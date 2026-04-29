@@ -187,7 +187,7 @@ foreach ($validasiList as $v) {
 
         .form-card {
             background: white;
-            padding: 1px 20px 35px;
+            padding: 1px 20px 20px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
@@ -197,7 +197,7 @@ foreach ($validasiList as $v) {
         .form-card_2 {
             margin-top: 51px;
             background: #8FB5D0;
-            padding: 1px 20px 35px;
+            padding: 1px 20px 10px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
@@ -234,7 +234,7 @@ foreach ($validasiList as $v) {
         }
 
         .form-group_2 label {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 800;
             display: block;
             margin-bottom: 5px;
@@ -1338,16 +1338,17 @@ foreach ($validasiList as $v) {
                             <div class="form-group_2">
                                 <label>Tanggapan & Tindak Lanjut Supplier</label>
                                 <textarea class="textarea" readonly>
-<?= $dataTanggapan ? $dataTanggapan['tanggapan'] : 'Belum ada tanggapan' ?>
-                </textarea>
+<?= isset($dataTanggapan['tanggapan'])
+                        ? $dataTanggapan['tanggapan']
+                        : 'Belum ada tanggapan' ?>
+</textarea>
                             </div>
 
                             <div class="form-group">
                                 <div class="form-group_2">
                                     <label>Bukti Tanggapan Supplier</label>
 
-                                    <?php if ($dataTanggapan && !empty($dataTanggapan['lampiran'])) { ?>
-                                        <div class="img-preview" onclick="openModal(this)">
+                                    <?php if (isset($dataTanggapan['lampiran']) && !empty($dataTanggapan['lampiran'])) { ?> <div class="img-preview" onclick="openModal(this)">
                                             <img src="../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/<?= $dataTanggapan['lampiran'] ?>">
                                         </div>
                                     <?php } else { ?>
