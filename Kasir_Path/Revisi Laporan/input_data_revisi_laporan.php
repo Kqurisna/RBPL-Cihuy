@@ -145,7 +145,6 @@ if (isset($_POST['keterangan'])) {
 
             move_uploaded_file($tmp, "../../Kasir_Path/Pengecekkan Barang FIsik/uploads/bukti/" . $namaFile);
 
-            // hapus foto lama
             $pathLama = "../../Kasir_Path/Pengecekkan Barang FIsik/uploads/bukti/" . $fotoLama;
             if (!empty($fotoLama) && $fotoLama !== $namaFile && file_exists($pathLama)) {
                 unlink($pathLama);
