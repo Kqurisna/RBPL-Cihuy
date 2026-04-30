@@ -929,8 +929,33 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         <div class="container">
 
             <div class="form-card">
+                <?php
+                $nama = $_SESSION['nama'] ?? '';
+
+                $namaParts = explode(' ', $nama, 2);
+
+                $namaDepan = $namaParts[0];
+                $namaBelakang = $namaParts[1] ?? '';
+
+                if (strlen($namaDepan) > 16) {
+                    $barisAtas = '';
+                    $barisBawah = $nama;
+                } else {
+                    $barisAtas = $namaDepan;
+                    $barisBawah = $namaBelakang;
+                }
+                ?>
+
+
                 <div class="created-by">
-                    Dibuat oleh <strong><?= $_SESSION['nama']; ?></strong>
+                    <?php if ($barisAtas !== ''): ?>
+                        Dibuat oleh
+                        <strong><?= htmlspecialchars($barisAtas); ?></strong><br>
+                        <span><?= htmlspecialchars($barisBawah); ?></span>
+                    <?php else: ?>
+                        Dibuat oleh<br> <!-- ← Tambah <br> di sini -->
+                        <strong><?= htmlspecialchars($barisBawah); ?></strong>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label>Nomer Nota</label>
