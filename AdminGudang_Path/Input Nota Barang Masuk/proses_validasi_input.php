@@ -1,6 +1,9 @@
 <?php
-include "../../koneksi.php";
+$conn = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 

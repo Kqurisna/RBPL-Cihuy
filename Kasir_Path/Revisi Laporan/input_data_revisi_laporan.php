@@ -183,20 +183,31 @@ $fotoSupplierLama = $_POST['lampiran_lama'] ?? '';
 $tanggapan = $_POST['tanggapan_supplier'] ?? '';
 $lampiran = '';
 
+$folderSupplier = "../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/";
+
 if (!empty($fotoSupplierBaru) && $_FILES['foto_supplier']['error'] === 0) {
 
     $tmp = $_FILES['foto_supplier']['tmp_name'];
-    $namaFile = time() . "_" . rand(1000, 9999) . "_" . $fotoSupplierBaru;
 
-    move_uploaded_file($tmp, "../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/" . $namaFile);
+    $ext = strtolower(pathinfo($fotoSupplierBaru, PATHINFO_EXTENSION));
 
-    // hapus lama
-    $pathLama = "../../AdminGudang_Path/Input Konfirmasi Retur Supplier/uploads/tanggapan_supplier/" . $fotoSupplierLama;
-    if (!empty($fotoSupplierLama) && $fotoSupplierLama !== $namaFile && file_exists($pathLama)) {
-        unlink($pathLama);
+    $ext = preg_replace("/[^a-z0-9]/", "", $ext);
+
+    $namaFile = "tanggapan_" . time() . "." . $ext;
+
+    $pathBaru = $folderSupplier . $namaFile;
+
+    if (move_uploaded_file($tmp, $pathBaru)) {
+
+        $pathLama = $folderSupplier . $fotoSupplierLama;
+        if (!empty($fotoSupplierLama) && file_exists($pathLama)) {
+            unlink($pathLama);
+        }
+
+        $lampiran = $namaFile;
+    } else {
+        $lampiran = $fotoSupplierLama;
     }
-
-    $lampiran = $namaFile;
 } else {
     $lampiran = $fotoSupplierLama;
 }
@@ -208,10 +219,12 @@ $id_retur = $r['id_retur'] ?? 0;
 if ($id_retur) {
 
     if (!mysqli_query($koneksi, "
-        UPDATE tanggapan_supplier SET
-            tanggapan = IF('$tanggapan' != '', '$tanggapan', tanggapan)
-        WHERE id_retur = $id_retur
-    ")) {
+    UPDATE tanggapan_supplier SET
+        tanggapan = IF('$tanggapan' != '', '$tanggapan', tanggapan),
+        lampiran = '$lampiran',
+        status_dokumentasi = 'sudah'
+    WHERE id_retur = $id_retur
+")) {
         $q5 = false;
     }
 }
