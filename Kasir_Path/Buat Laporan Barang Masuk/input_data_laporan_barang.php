@@ -12,7 +12,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'kasir_toko') {
     exit();
 }
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
-
+$id_pembuat = $_SESSION['id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!isset($_POST['id_nota']) || empty($_POST['id_nota'])) {
@@ -111,7 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_query($koneksi, "
         UPDATE nota 
         SET 
-            status_laporan = 'menunggu'
+            status_laporan = 'menunggu',
+            id_pembuat = '$id_pembuat'
         WHERE id_nota = '$id_nota'
     ");
 

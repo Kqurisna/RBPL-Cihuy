@@ -884,6 +884,17 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         .modal.hide .modal-content {
             animation: zoomOut 0.25s ease;
         }
+
+        .created-by {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 15px;
+        }
+
+        .created-by strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -918,6 +929,9 @@ $tanggapanData = mysqli_fetch_assoc($queryTanggapan);
         <div class="container">
 
             <div class="form-card">
+                <div class="created-by">
+                    Dibuat oleh <strong><?= $_SESSION['nama']; ?></strong>
+                </div>
                 <div class="form-group">
                     <label>Nomer Nota</label>
                     <input type="text" name="nomer_nota" value="<?= $dataNota['nomor_nota'] ?>" readonly>
