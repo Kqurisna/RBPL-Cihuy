@@ -670,7 +670,7 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
     <div class="header">
         <div class="header-left">
             <div class="back-btn">
-                <a href="list_nota_arsip_laporan.php" class="back-link">
+                <a href="list_lihat_nota_arsip_laporan.php" class="back-link">
                     <img src="../../UI_GENERAL/logo_back.png" alt="Back">
                 </a>
             </div>
