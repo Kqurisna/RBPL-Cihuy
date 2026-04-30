@@ -205,7 +205,6 @@ foreach ($validasiList as $v) {
 
         .form-group {
             margin-top: 15px;
-            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -230,11 +229,10 @@ foreach ($validasiList as $v) {
 
         .form-group_2 {
             margin-top: 15px;
-            margin-bottom: 15px;
         }
 
         .form-group_2 label {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 800;
             display: block;
             margin-bottom: 5px;
@@ -700,7 +698,7 @@ foreach ($validasiList as $v) {
 
             outline: none;
             resize: none;
-
+            overflow: hidden;
             line-height: 1.4;
         }
 
@@ -1170,6 +1168,23 @@ foreach ($validasiList as $v) {
             line-height: 25px;
             cursor: pointer;
         }
+
+        textarea.auto-resize-input {
+            width: 100%;
+            border-radius: 16px;
+            border: none;
+            background: #e9edf2;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+            resize: none;
+            overflow: hidden;
+            line-height: 1.5;
+            min-height: 36px;
+            font-family: "Poppins", sans-serif;
+            display: block;
+        }
     </style>
 </head>
 
@@ -1311,7 +1326,8 @@ foreach ($validasiList as $v) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>">
+                                            <textarea name="barang[]" class="textarea-dynamic auto-resize-input"
+                                                rows="1"><?= htmlspecialchars($detail['nama_barang']) ?></textarea>
                                         </div>
 
                                         <div class="form-group">
