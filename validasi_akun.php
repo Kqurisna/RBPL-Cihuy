@@ -9,6 +9,7 @@ $query = mysqli_query($conn, "SELECT * FROM akun WHERE username='$username'");
 $data = mysqli_fetch_assoc($query);
 
 if ($data && $password == $data['password']) {
+    $_SESSION['id'] = $data['id'];
     $_SESSION['username'] = $data['username'];
     $_SESSION['nama'] = $data['nama'];
     $_SESSION['role'] = $data['role'];
