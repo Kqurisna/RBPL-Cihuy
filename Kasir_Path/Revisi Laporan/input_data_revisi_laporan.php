@@ -39,25 +39,35 @@ $fotoNotaLama = $_POST['foto_nota_lama'];
 
 $pathFolder = "../../AdminGudang_Path/Input Nota Barang Masuk/uploads/nota/";
 
-if (!empty($fotoNotaBaru)) {
+if (!empty($fotoNotaBaru) && $_FILES['foto_nota']['error'] === 0) {
 
     $tmp = $_FILES['foto_nota']['tmp_name'];
 
-    $namaFile = time() . "_" . preg_replace("/[^a-zA-Z0-9.]/", "_", $fotoNotaBaru);
+    $ext = strtolower(pathinfo($fotoNotaBaru, PATHINFO_EXTENSION));
 
-    $pathBaru = $pathFolder . $namaFile;
+    $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
 
-    $namaLama = basename($fotoNotaLama);
-    $pathLama = $pathFolder . $namaLama;
+    if (in_array($ext, $allowed)) {
 
-    if (move_uploaded_file($tmp, $pathBaru)) {
+        $namaFile = "nota_" . time() . "." . $ext;
 
-        if (!empty($namaLama) && file_exists($pathLama)) {
-            unlink($pathLama);
+        $pathBaru = $pathFolder . $namaFile;
+
+        $namaLama = basename($fotoNotaLama);
+        $pathLama = $pathFolder . $namaLama;
+
+        if (move_uploaded_file($tmp, $pathBaru)) {
+
+            if (!empty($namaLama) && file_exists($pathLama)) {
+                unlink($pathLama);
+            }
+
+            $fotoNota = "uploads/nota/" . $namaFile;
+        } else {
+            $fotoNota = $fotoNotaLama;
         }
-        $fotoNota = "uploads/nota/" . $namaFile;
     } else {
-        $fotoNota = $fotoNotaLama;
+        die("Format file nota tidak diizinkan!");
     }
 } else {
     $fotoNota = $fotoNotaLama;
