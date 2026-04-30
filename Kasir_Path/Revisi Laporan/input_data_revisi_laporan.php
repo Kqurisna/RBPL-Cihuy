@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+$conn = new mysqli("localhost", "root", "", "pt_bumijaya");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'kasir_toko') {
+    header("Location: ../../index.php?error=role");
+    exit();
+}
 ob_start();
 date_default_timezone_set('Asia/Jakarta');
 
