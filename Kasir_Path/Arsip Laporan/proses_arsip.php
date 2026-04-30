@@ -220,5 +220,5 @@ mysqli_query($koneksi, "
     WHERE id_nota = $id_nota
 ");
 
-header("Location: arsipkan_laporan.php?success=1");
+header("Location: status_sukses_arsip_laporan.php");
 exit;
