@@ -44,6 +44,7 @@ $queryTanggapan = mysqli_query($koneksi, "
 while ($t = mysqli_fetch_assoc($queryTanggapan)) {
     $tanggapanList[$t['id_detail']] = $t;
 }
+$dataTanggapan = null;
 $adaCacat = false;
 foreach ($validasiList as $v) {
     if (($v['hasil'] ?? '') == 'cacat') {
