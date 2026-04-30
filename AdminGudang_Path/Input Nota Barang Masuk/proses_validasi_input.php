@@ -21,10 +21,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_file = $_FILES['foto_nota']['name'];
     $tmp_file  = $_FILES['foto_nota']['tmp_name'];
 
-    $nama_baru = time() . "_" . $nama_file;
-    $path_simpan = $folder . $nama_baru;
+    if (!empty($nama_file)) {
 
-    move_uploaded_file($tmp_file, $path_simpan);
+        $ext = strtolower(pathinfo($nama_file, PATHINFO_EXTENSION));
+
+        $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+
+        if (in_array($ext, $allowed)) {
+
+            $nama_baru = "nota_" . time() . "." . $ext;
+
+            $path_simpan = $folder . $nama_baru;
+
+            if (move_uploaded_file($tmp_file, $path_simpan)) {
+                $path_simpan = $folder . $nama_baru;
+            } else {
+                die("Gagal upload file!");
+            }
+        } else {
+            die("Format file tidak diizinkan!");
+        }
+    } else {
+        $path_simpan = "";
+    }
 
     $sql_nota = "INSERT INTO nota 
     (nomor_nota, tanggal_nota, supplier, jenis_barang, foto_nota) 
