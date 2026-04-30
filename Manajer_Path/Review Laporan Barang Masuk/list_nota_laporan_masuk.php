@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+$conn = new mysqli("localhost", "root", "", "pt_bumijaya");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'manajer') {
+    header("Location: ../../index.php?error=role");
+    exit();
+}
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 $filter = $_GET['filter'] ?? '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'desc';

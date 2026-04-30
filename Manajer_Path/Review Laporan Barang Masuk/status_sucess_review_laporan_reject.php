@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+$conn = new mysqli("localhost", "root", "", "pt_bumijaya");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'manajer') {
+    header("Location: ../../index.php?error=role");
+    exit();
+}
+?>
 <!doctype html>
 <html lang="id">
 
