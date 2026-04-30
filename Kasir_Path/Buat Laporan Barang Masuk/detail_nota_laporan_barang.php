@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+$conn = new mysqli("localhost", "root", "", "pt_bumijaya");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'kasir_toko') {
+    header("Location: ../../index.php?error=role");
+    exit();
+}
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $id_nota = isset($_GET['id']) ? intval($_GET['id']) : 0;
