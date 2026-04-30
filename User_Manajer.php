@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+  header("Location: index.php");
+  exit();
+}
+
+if ($_SESSION['role'] != 'manajer') {
+  session_destroy();
+  header("Location: index.php?error=unauthorized");
+  exit();
+}
+?>
 <!doctype html>
 <html lang="id">
 
@@ -315,8 +329,8 @@
     <div class="logout-btn"></div>
     <div class="header-circle-big"></div>
     <div class="header-circle-big_2">
-      <a href="index.php">
-        <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      <a href="logout.php">
+        <img src="UI_GENERAL/logo_out_acc.png" alt="Logout" />
       </a>
     </div>
     <div class="header-circle-small"></div>

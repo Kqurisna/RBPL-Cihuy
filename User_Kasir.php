@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+  header("Location: index.php");
+  exit();
+}
+
+if ($_SESSION['role'] != 'kasir_toko') {
+  session_destroy();
+  header("Location: index.php?error=unauthorized");
+  exit();
+}
+?>
 <!doctype html>
 <html lang="id">
 
@@ -312,11 +326,11 @@
 <body>
   <div class="header">
     <h2>Beranda</h2>
-    <div class="logout-btn">⮕</div>
+    <div class="logout-btn">aa</div>
     <div class="header-circle-big"></div>
     <div class="header-circle-big_2">
-      <a href="index.php">
-        <img src="UI_GENERAL/logo_out_acc.png" alt="" />
+      <a href="logout.php">
+        <img src="UI_GENERAL/logo_out_acc.png" alt="Logout" />
       </a>
     </div>
     <div class="header-circle-small"></div>
