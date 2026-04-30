@@ -15,7 +15,12 @@ $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $id_nota = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$queryNota = mysqli_query($koneksi, "SELECT * FROM nota WHERE id_nota = $id_nota");
+$queryNota = mysqli_query($koneksi, "
+    SELECT nota.*, akun.nama 
+    FROM nota
+    JOIN akun ON nota.id_pembuat = akun.id
+    WHERE nota.id_nota = $id_nota
+");
 $dataNota = mysqli_fetch_assoc($queryNota);
 $queryApproval = mysqli_query($koneksi, "
     SELECT * 
@@ -1142,6 +1147,18 @@ foreach ($validasiList as $v) {
                 transform: translateY(0);
             }
         }
+
+        .created-by {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .created-by strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -1176,6 +1193,49 @@ foreach ($validasiList as $v) {
 
             <div class="form-card">
                 <div class="form-group" style="position:relative;">
+                    <?php
+                    $nama = trim($dataNota['nama']);
+
+                    $punyaSpasi = strpos($nama, ' ') !== false;
+
+                    if ($punyaSpasi) {
+                        $namaParts = explode(' ', $nama, 2);
+                        $namaDepan = $namaParts[0];
+                        $namaBelakang = $namaParts[1];
+
+                        if (strlen($namaDepan) >= 8) {
+                            $barisAtas = '';
+                            $barisBawah = $nama;
+                        } else {
+                            $barisAtas = $namaDepan;
+                            $barisBawah = $namaBelakang;
+                        }
+                    } else {
+                        // TANPA SPASI
+                        if (strlen($nama) >= 8) {
+                            $barisAtas = '';
+                            $barisBawah = $nama;
+                        } else {
+                            $barisAtas = $nama;
+                            $barisBawah = '';
+                        }
+                    }
+                    ?>
+
+                    <div class="created-by">
+                        Dibuat oleh
+
+                        <?php if ($barisAtas && $barisBawah): ?>
+                            <br><strong><?= $barisAtas; ?></strong><br>
+                            <span><?= $barisBawah; ?></span>
+
+                        <?php elseif ($barisAtas): ?>
+                            <strong> <?= $barisAtas; ?> </strong>
+
+                        <?php else: ?>
+                            <br><strong><?= $barisBawah; ?></strong>
+                        <?php endif; ?>
+                    </div>
                     <label>Nomer Nota</label>
 
                     <input type="text" name="nomer_nota" value="<?= $dataNota['nomor_nota'] ?>" readonly>
