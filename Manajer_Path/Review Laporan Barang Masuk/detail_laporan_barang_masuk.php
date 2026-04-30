@@ -1254,7 +1254,7 @@ foreach ($validasiList as $v) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                            <textarea class="textarea" readonly><?= $detail['nama_barang'] ?></textarea>
                                         </div>
 
                                         <div class="form-group">
