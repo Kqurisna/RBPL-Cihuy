@@ -148,7 +148,7 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
 
         .form-card {
             background: white;
-            padding: 1px 20px 35px;
+            padding: 1px 20px 20px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
