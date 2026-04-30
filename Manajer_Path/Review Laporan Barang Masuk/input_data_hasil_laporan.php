@@ -17,8 +17,7 @@ $id_nota = $_POST['id_nota'];
 $status = $_POST['status_keputusan'];
 $catatan = $_POST['alasan_reject'] ?? null;
 
-$id_akun = 1; // nanti pakai session
-
+$id_akun = $_SESSION['id'];
 if (!$status) {
     die("Status keputusan belum dipilih");
 }
