@@ -1,9 +1,20 @@
 <?php
+session_start();
+
+$conn = new mysqli("localhost", "root", "", "pt_bumijaya");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'kasir_toko') {
+    header("Location: ../../index.php?error=role");
+    exit();
+}
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
 
 $id_nota = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Dari arsip_laporan (status & jenis barang) + arsip_nota (foto nota & info nota)
 $queryArsip = mysqli_query($koneksi, "
     SELECT al.*, an.foto_nota, an.id_arsip as id_arsip_nota, n.status_laporan
     FROM arsip_laporan al
@@ -19,14 +30,12 @@ if (!$dataNota) {
 
 $id_arsip = $dataNota['id_arsip'];
 
-// Dari arsip_detail_barang
 $queryDetail = mysqli_query($koneksi, "
     SELECT * FROM arsip_detail_barang 
     WHERE id_arsip = $id_arsip 
     ORDER BY id_arsip_detail ASC
 ");
 
-// Dari arsip_retur — key: id_detail (= id_detail dari detail_barang asli)
 $returList = [];
 $queryRetur = mysqli_query($koneksi, "
     SELECT * FROM arsip_retur WHERE id_arsip = $id_arsip
@@ -35,7 +44,6 @@ while ($r = mysqli_fetch_assoc($queryRetur)) {
     $returList[$r['id_detail']] = $r;
 }
 
-// Dari arsip_bukti_cacat — key: id_detail
 $buktiList = [];
 $queryBukti = mysqli_query($koneksi, "
     SELECT * FROM arsip_bukti_cacat WHERE id_arsip = $id_arsip
@@ -44,7 +52,6 @@ while ($b = mysqli_fetch_assoc($queryBukti)) {
     $buktiList[$b['id_detail']][] = $b;
 }
 
-// Dari arsip_tanggapan_supplier
 $tanggapanList = [];
 $queryTanggapan = mysqli_query($koneksi, "
     SELECT * FROM arsip_tanggapan_supplier WHERE id_arsip = $id_arsip
@@ -54,7 +61,6 @@ while ($t = mysqli_fetch_assoc($queryTanggapan)) {
 }
 $dataTanggapan = !empty($tanggapanList) ? $tanggapanList[0] : null;
 
-// Cek ada cacat atau tidak
 $adaCacat = false;
 mysqli_data_seek($queryDetail, 0);
 while ($d = mysqli_fetch_assoc($queryDetail)) {
@@ -65,8 +71,6 @@ while ($d = mysqli_fetch_assoc($queryDetail)) {
 }
 mysqli_data_seek($queryDetail, 0);
 
-// Karena arsip_detail_barang tidak punya id_detail asli,
-// kita ambil mapping dari detail_barang berdasarkan nama_barang
 $mappingDetail = [];
 $queryMapping = mysqli_query($koneksi, "
     SELECT db.id_detail, db.nama_barang 
@@ -746,7 +750,7 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
                             $kondisi    = $detail['kondisi'];
                             $namaBarang = $detail['nama_barang'];
 
-                            // Dapat id_detail asli dari mapping nama_barang
+
                             $idDetailAsli = isset($mappingDetail[$namaBarang]) ? $mappingDetail[$namaBarang] : null;
 
                             $dataRetur = ($idDetailAsli && isset($returList[$idDetailAsli])) ? $returList[$idDetailAsli] : null;
@@ -810,7 +814,6 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
             $namaFolder = $dataNota['nama_folder'] ?? '';
             $pathFotoArsip = "";
             if (!empty($namaFolder)) {
-                // Cari file nota di dalam folder arsip
                 $folderArsip = "C:/xampp/htdocs/RBPL/Kasir_Path/Arsip Laporan/arsip/" . $namaFolder . "/";
                 foreach (glob($folderArsip . "nota.*") as $file) {
                     $ext = pathinfo($file, PATHINFO_EXTENSION);
