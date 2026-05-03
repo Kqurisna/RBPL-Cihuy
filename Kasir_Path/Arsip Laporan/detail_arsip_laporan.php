@@ -684,37 +684,16 @@ foreach ($validasiList as $v) {
             width: 100%;
             border-radius: 16px;
             border: none;
-            min-height: 120px;
             background: #e9edf2;
-
-            padding: 14px 4px 10px 15px;
-            text-align: left;
+            padding: 10px 15px;
             font-size: 12px;
-            font-weight: 300;
-
+            font-weight: 500;
             outline: none;
             resize: none;
-
             line-height: 1.4;
+            overflow: hidden;
         }
 
-        .textarea_2 {
-            width: 100%;
-            border-radius: 16px;
-            border: none;
-            min-height: 40px;
-            background: #e9edf2;
-
-            padding: 10px 4px 10px 15px;
-            text-align: left;
-            font-size: 12px;
-            font-weight: 300;
-
-            outline: none;
-            resize: none;
-
-            line-height: 1.4;
-        }
 
         .section-title {
             margin-bottom: 10px;
@@ -1237,7 +1216,7 @@ foreach ($validasiList as $v) {
 
                                         <div class="form-group">
                                             <label>Nama Barang ke-<?= $no ?></label>
-                                            <input type="text" name="barang[]" value="<?= $detail['nama_barang'] ?>" readonly>
+                                            <textarea class="textarea input-loop" name="barang[]" readonly><?= $detail['nama_barang'] ?></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -1281,7 +1260,7 @@ foreach ($validasiList as $v) {
 
                                                 <div class="form-group">
                                                     <label>Keterangan / Keluhan</label>
-                                                    <textarea class="textarea_2" readonly><?= $validasi['keterangan'] ?></textarea>
+                                                    <textarea class="textarea" readonly><?= $validasi['keterangan'] ?></textarea>
                                                 </div>
 
                                                 <?php if ($validasi['foto_bukti']) { ?>
@@ -1706,10 +1685,6 @@ foreach ($validasiList as $v) {
 
     });
 
-    document.querySelectorAll('.textarea').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-    });
     document.addEventListener("DOMContentLoaded", function() {
 
         const cards = document.querySelectorAll(".form-card");
@@ -1941,9 +1916,22 @@ foreach ($validasiList as $v) {
         }
 
     });
-    document.querySelectorAll('.auto-height').forEach(el => {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
+    document.addEventListener("DOMContentLoaded", function() {
+
+        function autoResize(el) {
+            el.style.height = "0px";
+            el.style.height = el.scrollHeight + "px";
+        }
+
+        const textareas = document.querySelectorAll(".textarea, .textarea_2");
+        textareas.forEach(el => {
+            autoResize(el);
+
+            el.addEventListener("input", function() {
+                autoResize(this);
+            });
+        });
+
     });
     document.addEventListener("DOMContentLoaded", function() {
 

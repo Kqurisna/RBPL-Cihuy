@@ -177,7 +177,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'kasir_toko') {
     <div class="header">
         <div class="header-left">
             <div class="back-btn">
-                <a href="list_nota_arsip_laporan.php" class="back-link">
+                <a href="arsip_laporan_menu.php" class="back-link">
                     <img src="../asset_kasir/logo_back.png" alt="">
                 </a>
             </div>
