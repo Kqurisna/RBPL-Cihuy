@@ -614,7 +614,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin_gudang') {
 
             <div class="form-card">
 
-                <h3 class="section-title">Informasi Barang Masuk</h3>
+                <h4 class="section-title">Informasi Barang Masuk</h4>
 
                 <div class="form-group">
                     <label>Nomer Nota<span style="color:red">*</span></label>
