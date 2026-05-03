@@ -401,7 +401,7 @@ $jumlahData = mysqli_num_rows($query); ?>
 
     </div>
     <div class="container">
-
+        <h4 class="section-title">Daftar Nota Hasil Pemeriksaan Barang</h4>
         <?php if ($jumlahData > 0) { ?>
 
             <?php
