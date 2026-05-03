@@ -12,7 +12,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin_gudang') {
     exit();
 }
 $koneksi = mysqli_connect("localhost", "root", "", "pt_bumijaya");
-
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'desc';
+$sort = ($sort === 'asc') ? 'ASC' : 'DESC';
 $query = mysqli_query($koneksi, "
     SELECT n.*
     FROM nota n
@@ -20,8 +21,8 @@ $query = mysqli_query($koneksi, "
     LEFT JOIN tanggapan_supplier ts ON r.id_retur = ts.id_retur
     WHERE n.status_retur = 'sudah'
     AND ts.id_tanggapan IS NULL
-    ORDER BY n.tanggal_nota DESC
-"); ?>
+    ORDER BY n.tanggal_nota $sort");
+?>
 <!doctype html>
 <html lang="id">
 
@@ -314,7 +315,31 @@ $query = mysqli_query($koneksi, "
 
 
     <div class="container">
+        <h4 class="section-title">Daftar Nota Retur Menunggu Konfirmasi</h4>
 
+        <div style="display:flex; align-items:center; gap:8px; margin:5px;">
+
+            <h5 class="section-title" style="display:flex; align-items:center; gap:6px;">
+                <span style="color:#000;">Sorting by</span>
+
+                <a href="?sort=asc" style="text-decoration:none;">
+                    <span style="
+                color: <?= ($sort == 'ASC') ? '#3f7aa3' : '#9ca3af' ?>;
+                font-weight: <?= ($sort == 'ASC') ? '600' : '400' ?>;">
+                        ASC
+                    </span>
+                </a>
+
+                <a href="?sort=desc" style="text-decoration:none;">
+                    <span style="
+                color: <?= ($sort == 'DESC') ? '#3f7aa3' : '#9ca3af' ?>;
+                font-weight: <?= ($sort == 'DESC') ? '600' : '400' ?>;">
+                        DESC
+                    </span>
+                </a>
+            </h5>
+
+        </div>
         <?php if (mysqli_num_rows($query) > 0) { ?>
 
             <?php while ($data = mysqli_fetch_assoc($query)) { ?>
