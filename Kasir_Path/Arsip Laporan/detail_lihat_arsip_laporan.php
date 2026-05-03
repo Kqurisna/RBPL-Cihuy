@@ -51,7 +51,17 @@ $queryBukti = mysqli_query($koneksi, "
 while ($b = mysqli_fetch_assoc($queryBukti)) {
     $buktiList[$b['id_detail']][] = $b;
 }
+$keluhanList = [];
+$queryKeluhan = mysqli_query($koneksi, "
+    SELECT vk.*, db.id_detail
+    FROM validasi_kasir vk
+    JOIN detail_barang db ON vk.id_nota = db.id_nota
+    WHERE vk.id_nota = $id_nota
+");
 
+while ($k = mysqli_fetch_assoc($queryKeluhan)) {
+    $keluhanList[$k['id_detail']] = $k;
+}
 $tanggapanList = [];
 $queryTanggapan = mysqli_query($koneksi, "
     SELECT * FROM arsip_tanggapan_supplier WHERE id_arsip = $id_arsip
@@ -384,14 +394,14 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
             width: 100%;
             border-radius: 16px;
             border: none;
-            min-height: 80px;
             background: #e9edf2;
-            padding: 14px 4px 10px 15px;
+            padding: 10px 15px;
             font-size: 12px;
-            font-weight: 300;
+            font-weight: 500;
             outline: none;
             resize: none;
             line-height: 1.4;
+            overflow: hidden;
         }
 
         .success-line {
@@ -755,6 +765,9 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
 
                             $dataRetur = ($idDetailAsli && isset($returList[$idDetailAsli])) ? $returList[$idDetailAsli] : null;
                             $dataBukti = ($idDetailAsli && isset($buktiList[$idDetailAsli])) ? $buktiList[$idDetailAsli] : [];
+                            $dataKeluhan = ($idDetailAsli && isset($keluhanList[$idDetailAsli]))
+                                ? $keluhanList[$idDetailAsli]
+                                : null;
                         ?>
                             <div class="item">
                                 <div class="card-dots_2_1"><span></span></div>
@@ -763,7 +776,7 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
 
                                 <div class="form-group">
                                     <label>Nama Barang ke-<?= $no ?></label>
-                                    <input type="text" value="<?= htmlspecialchars($namaBarang) ?>" readonly>
+                                    <textarea class="textarea" readonly><?= htmlspecialchars($namaBarang) ?></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -784,7 +797,12 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
                                         <label>Jumlah Retur</label>
                                         <input type="number" value="<?= $dataRetur ? $dataRetur['jumlah_retur'] : '0' ?>" readonly>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label>Keterangan / Keluhan</label>
+                                        <textarea class="textarea" readonly>
+<?= $dataKeluhan ? htmlspecialchars($dataKeluhan['keterangan']) : 'Tidak ada keluhan' ?>
+    </textarea>
+                                    </div>
                                     <?php if (!empty($dataBukti)) { ?>
                                         <div class="form-group">
                                             <label>Foto Bukti Cacat</label>
@@ -942,9 +960,34 @@ while ($m = mysqli_fetch_assoc($queryMapping)) {
             }, index * 100);
         });
 
-        document.querySelectorAll('.textarea, .auto-height').forEach(el => {
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
+        function autoResizeTextarea(el) {
+            el.style.height = "0px";
+            el.style.height = el.scrollHeight + "px";
+        }
+
+        function initTextareaAutoHeight() {
+            const textareas = document.querySelectorAll('.textarea, .auto-height');
+
+            textareas.forEach(el => {
+                autoResizeTextarea(el);
+            });
+        }
+
+        // jalan saat DOM siap
+        document.addEventListener("DOMContentLoaded", function() {
+            initTextareaAutoHeight();
+        });
+
+        // jalan ulang setelah semua resource load (gambar dll)
+        window.addEventListener("load", function() {
+            initTextareaAutoHeight();
+        });
+
+        // kalau ada perubahan (opsional tapi bagus)
+        document.addEventListener("input", function(e) {
+            if (e.target.matches('.textarea, .auto-height')) {
+                autoResizeTextarea(e.target);
+            }
         });
     });
 
