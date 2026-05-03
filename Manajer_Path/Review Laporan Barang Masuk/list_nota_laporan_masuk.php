@@ -18,27 +18,23 @@ $sort = ($sort === 'asc') ? 'ASC' : 'DESC';
 $chooseMenunggu = ($filter == 'menunggu') ? 'btn-choose-menunggu' : '';
 $chooseDitolak = ($filter == 'ditolak') ? 'btn-choose-ditolak' : '';
 $chooseDisetujui = ($filter == 'disetujui') ? 'btn-choose-disetujui' : '';
+$where = "";
+
 if ($filter == 'menunggu') {
-    $query = mysqli_query($koneksi, "
-        SELECT * FROM nota 
-        WHERE status_laporan = 'menunggu'
-        ORDER BY created_at $sort");
+    $where = "WHERE status_laporan = 'menunggu'";
 } elseif ($filter == 'ditolak') {
-    $query = mysqli_query($koneksi, "
-        SELECT * FROM nota 
-        WHERE status_laporan = 'ditolak'
-        ORDER BY created_at $sort");
+    $where = "WHERE status_laporan = 'ditolak'";
 } elseif ($filter == 'disetujui') {
-    $query = mysqli_query($koneksi, "
-        SELECT * FROM nota 
-        WHERE status_laporan = 'disetujui'
-        ORDER BY created_at $sort");
+    $where = "WHERE status_laporan = 'disetujui'";
 } else {
-    $query = mysqli_query($koneksi, "
-        SELECT * FROM nota 
-        WHERE status_laporan IN ('menunggu','ditolak','disetujui')
-        ORDER BY created_at $sort");
+    $where = "WHERE status_laporan IN ('menunggu','ditolak','disetujui')";
 }
+
+$query = mysqli_query($koneksi, "
+    SELECT * FROM nota 
+    $where
+    ORDER BY created_at $sort
+");
 ?>
 <!doctype html>
 <html lang="id">
