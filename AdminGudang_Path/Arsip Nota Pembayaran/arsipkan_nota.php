@@ -161,6 +161,21 @@ $query = $nota->getNotaDisetujui($sort);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
             z-index: 1;
+            opacity: 0;
+            transform: translateY(25px) scale(0.97);
+            transition: all 0.5s ease;
+            will-change: transform, opacity;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .form-card.exit {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.3s ease;
         }
 
         .form-group {
@@ -493,7 +508,7 @@ $query = $nota->getNotaDisetujui($sort);
 
 
     <div class="container">
-        <p> Arsipkan Nota Pembayaran</p>
+        <h4> Arsipkan Nota Pembayaran</h4>
         <div style="display:flex; align-items:center; gap:8px; margin:5px;">
             <h5 class="section-title" style="display:flex; align-items:center; gap:6px;">
                 <span style="color:#000;">Sorting by</span>
@@ -705,6 +720,30 @@ $query = $nota->getNotaDisetujui($sort);
         if (params.get("status") === "gagal") {
             document.getElementById("popupGagal").style.display = "flex";
         }
+
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+
+                if (entry.isIntersecting) {
+
+                    setTimeout(() => {
+                        entry.target.classList.add("show");
+                    }, index * 80);
+
+                    observer.unobserve(entry.target);
+                }
+
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => observer.observe(card));
 
     });
 </script>
