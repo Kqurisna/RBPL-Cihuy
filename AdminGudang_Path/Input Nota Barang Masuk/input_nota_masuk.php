@@ -515,8 +515,6 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin_gudang') {
 
         .textarea-barang {
             width: 100%;
-            min-height: 36px;
-            max-height: 120px;
             border-radius: 16px;
             border: none;
             background: #e9edf2;
