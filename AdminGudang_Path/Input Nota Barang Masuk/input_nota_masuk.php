@@ -801,9 +801,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin_gudang') {
 
     function updateMinusState() {
         if (count === 1) {
-            btnHapus.classList.add("disabled");
+            btnHapus.style.opacity = "0";
+            btnHapus.style.pointerEvents = "none";
         } else {
-            btnHapus.classList.remove("disabled");
+            btnHapus.style.opacity = "1";
+            btnHapus.style.pointerEvents = "auto";
         }
     }
 
