@@ -785,8 +785,6 @@ while ($v = mysqli_fetch_assoc($queryValidasi)) {
     <form action="input_data_retur.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_nota" value="<?= $id_nota ?>">
         <div class="container">
-
-            <h3 class="section-title">Input Retur Barang</h3>
             <div class="form-card">
                 <div class="form-group">
                     <label>Nomer Nota</label>
