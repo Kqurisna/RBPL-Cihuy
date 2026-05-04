@@ -146,7 +146,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin_gudang') {
 
         .form-card {
             background: white;
-            padding: 20px 20px 35px;
+            padding: 20px 20px 25px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
             position: relative;
