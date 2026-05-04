@@ -53,14 +53,14 @@ while ($b = mysqli_fetch_assoc($queryBukti)) {
 }
 $keluhanList = [];
 $queryKeluhan = mysqli_query($koneksi, "
-    SELECT vk.*, db.id_detail
-    FROM validasi_kasir vk
-    JOIN detail_barang db ON vk.id_nota = db.id_nota
-    WHERE vk.id_nota = $id_nota
+    SELECT * FROM validasi_kasir 
+    WHERE id_nota = $id_nota
 ");
 
 while ($k = mysqli_fetch_assoc($queryKeluhan)) {
-    $keluhanList[$k['id_detail']] = $k;
+    if (!empty($k['id_detail'])) {
+        $keluhanList[$k['id_detail']] = $k;
+    }
 }
 $tanggapanList = [];
 $queryTanggapan = mysqli_query($koneksi, "
