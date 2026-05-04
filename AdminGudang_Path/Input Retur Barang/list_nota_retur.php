@@ -269,6 +269,23 @@ $query = mysqli_query($koneksi, "
 
         }
 
+        .form-card {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: all 0.5s ease;
+        }
+
+        .form-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .form-card.exit {
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: all 0.3s ease;
+        }
+
         .status-icon img {
             width: 45px;
             height: 45px;
@@ -373,6 +390,28 @@ $query = mysqli_query($koneksi, "
 </html>
 <script>
     function goToDetail(id) {
-        window.location.href = "detail_nota_retur.php?id=" + id;
+
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("exit");
+            }, index * 50);
+        });
+
+        setTimeout(() => {
+            window.location.href = "detail_nota_retur.php?id=" + id;
+        }, 300);
     }
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cards = document.querySelectorAll(".form-card");
+
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 100);
+        });
+
+    });
 </script>
