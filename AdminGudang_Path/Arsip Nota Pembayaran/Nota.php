@@ -9,6 +9,7 @@ class Nota
         $this->koneksi = $conn;
     }
 
+
     public function getArsipNota(string $sort): mysqli_result|false
     {
         $sort = ($sort === 'ASC') ? 'ASC' : 'DESC';

@@ -386,11 +386,12 @@ if ($_SESSION['role'] != 'admin_gudang') {
         </div>
         <div class="menu-title">Input Retur Barang</div>
       </div>
-      <div class="menu-arrow">
-        <a href="AdminGudang_Path/Input Retur Barang/list_nota_retur.php">
+
+      <a href="AdminGudang_Path/Input Retur Barang/list_nota_retur.php">
+        <div class="menu-arrow">
           <img src="UI_GENERAL/logo_foward.png" alt="" />
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">
@@ -400,11 +401,12 @@ if ($_SESSION['role'] != 'admin_gudang') {
         </div>
         <div class="menu-title">Lihat Hasil Pemeriksaan Barang</div>
       </div>
-      <div class="menu-arrow">
-        <a href="AdminGudang_Path/Lihat Hasil Pemeriksaan Barang/lihat_list_nota.php">
+
+      <a href="AdminGudang_Path/Lihat Hasil Pemeriksaan Barang/lihat_list_nota.php">
+        <div class="menu-arrow">
           <img src="UI_GENERAL/logo_foward.png" alt="" />
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">
@@ -414,11 +416,12 @@ if ($_SESSION['role'] != 'admin_gudang') {
         </div>
         <div class="menu-title">Arsip Nota & Pembayaran</div>
       </div>
-      <div class="menu-arrow">
-        <a href="AdminGudang_Path/Arsip Nota Pembayaran/arsip_menu.php">
+
+      <a href="AdminGudang_Path/Arsip Nota Pembayaran/arsip_menu.php">
+        <div class="menu-arrow">
           <img src="UI_GENERAL/logo_foward.png" alt="" />
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
 
     <div class="menu-card">
@@ -428,11 +431,12 @@ if ($_SESSION['role'] != 'admin_gudang') {
         </div>
         <div class="menu-title">Input Konfirmasi Retur Supplier</div>
       </div>
-      <div class="menu-arrow">
-        <a href="AdminGudang_Path/Input Konfirmasi Retur Supplier/list_nota_status_retur.php">
+
+      <a href="AdminGudang_Path/Input Konfirmasi Retur Supplier/list_nota_status_retur.php">
+        <div class="menu-arrow">
           <img src="UI_GENERAL/logo_foward.png" alt="" />
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
   </div>
 </body>
